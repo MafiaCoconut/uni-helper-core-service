@@ -4,9 +4,9 @@ import os
 
 
 load_dotenv()
-system_logger = logging.getLogger("system_logging")
-user_logger = logging.getLogger("user_logging")
-error_logger = logging.getLogger("error_logging")
+system_logger = logging.getLogger("system_logger")
+user_logger = logging.getLogger("user_logger")
+error_logger = logging.getLogger("error_logger")
 
 
 def config():

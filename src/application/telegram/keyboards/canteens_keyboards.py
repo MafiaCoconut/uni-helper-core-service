@@ -14,28 +14,28 @@ class CanteensKeyboardsBuilder:
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="Mensa Erlenring",
-                                         callback_data="canteen_mensa_erlenring"),
+                                         callback_data="canteen_menu 1"),
 
                     InlineKeyboardButton(text="Mensa Lahnberge",
-                                         callback_data="canteen_mensa_lahnberge")
+                                         callback_data="canteen_menu 2")
                 ],
 
                 [
                     InlineKeyboardButton(text="Bistro",
-                                         callback_data="canteen_bistro"),
-                    InlineKeyboardButton(text="THM",
-                                         callback_data="canteen_thm")
+                                         callback_data="canteen_menu 3"),
+                    InlineKeyboardButton(text="Cafeteria Lahnberge",
+                                         callback_data="canteen_menu 4"),
                 ],
 
                 [
-                    InlineKeyboardButton(text="Cafeteria Lahnberge",
-                                         callback_data="canteen_cafeteria_lahnberge"),
+                    InlineKeyboardButton(text="THM",
+                                         callback_data="canteen_menu 6")
 
-                    InlineKeyboardButton(text="Mo's Diner",
-                                         callback_data="canteen_mo_diner"),
+                    # InlineKeyboardButton(text="Mo's Diner",
+                    #                      callback_data="canteen_menu 5"),
 
-                    InlineKeyboardButton(text="Colibri",
-                                         callback_data="canteen_colibri")
+                    # InlineKeyboardButton(text="Colibri",
+                    #                      callback_data="canteen_menu ")
                 ],
 
                 [

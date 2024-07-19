@@ -9,7 +9,7 @@ from infrastructure.config import webhook_config, dispatcher_config
 from infrastructure.config.bot_config import bot
 import time
 
-system_logger = logging.getLogger("system_logging")
+system_logger = logging.getLogger("system_logger")
 
 
 @asynccontextmanager

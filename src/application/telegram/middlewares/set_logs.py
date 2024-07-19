@@ -16,9 +16,6 @@ class SetLogMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: Dict[str, Any],
     ) -> Any:
-        print(handler)
-        print(event)
-        print(data)
         if isinstance(event, Message):
             logs_handler.set_func_and_person(function=data['handler'].callback.__name__, message=event, status='debug')
 
