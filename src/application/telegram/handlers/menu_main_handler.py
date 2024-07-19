@@ -1,4 +1,4 @@
-from aiogram import Router
+from aiogram import Router, F
 from aiogram.enums import ParseMode
 from aiogram.types import CallbackQuery
 
@@ -21,7 +21,7 @@ class MenuMainHandler:
         pass
 
     def __register_callbacks(self, router: Router):
-        pass
+        router.callback_query.register(self.menu_main_handler, F.data == "menu_main")
 
     async def menu_main_handler(self, call: CallbackQuery, locale: str = 'ru'):
         # auxiliary.is_in_db(call)

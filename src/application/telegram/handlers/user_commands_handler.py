@@ -5,10 +5,14 @@ from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 
+from application.telegram.keyboards.menu_main_keyboards import MenuMainKeyboardsBuilder
+from application.telegram.keyboards.navigator_keyboards import NavigatorKeyboardsBuilder
+
 
 class UserCommandsHandler:
-    def __init__(self, translation_service: TranslationService):
+    def __init__(self, translation_service: TranslationService, menu_main_keyboards: MenuMainKeyboardsBuilder):
         self.translation_service = translation_service
+        self.menu_main_keyboards = menu_main_keyboards
 
     def get_router(self) -> Router:
         router = Router()
@@ -57,10 +61,11 @@ class UserCommandsHandler:
         #     else:
         #         await message.answer(l10n.format_value('reactivating-the-bot'), reply_markup=inline.get_main_menu(l10n))
 
-    async def command_main_menu_handler(self, message: Message, state: FSMContext) -> None:
+    async def command_main_menu_handler(self, message: Message, state: FSMContext, locale: str = 'ru') -> None:
         if not await state.get_data():
-            await message.answer(self.translation_service.translate('menu-main', locale='en'),
-                                 # reply_markup=inline.get_main_menu(l10n)
+            await message.answer(
+                self.translation_service.translate('menu-main', locale=locale),
+                reply_markup=self.menu_main_keyboards.get_menu_main(locale=locale)
             )
 
 

@@ -2,7 +2,7 @@ from aiogram import BaseMiddleware
 from typing import Callable, Dict, Any, Awaitable
 from aiogram.types import TelegramObject, Message, CallbackQuery
 
-from infrastructure.logging.logs_setup import set_func_and_person
+from infrastructure.config.handlers_config import logs_handler
 
 
 class SetLogMiddleware(BaseMiddleware):
@@ -16,12 +16,14 @@ class SetLogMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: Dict[str, Any],
     ) -> Any:
-
+        print(handler)
+        print(event)
+        print(data)
         if isinstance(event, Message):
-            set_func_and_person(function=data['handler'].callback.__name__, message=event, status='debug')
+            logs_handler.set_func_and_person(function=data['handler'].callback.__name__, message=event, status='debug')
 
         elif isinstance(event, CallbackQuery):
-            set_func_and_person(function=data['handler'].callback.__name__, message=event.message, status='debug')
+            logs_handler.set_func_and_person(function=data['handler'].callback.__name__, message=event.message, status='debug')
 
         return await handler(event, data)
 
