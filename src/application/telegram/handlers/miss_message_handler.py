@@ -17,11 +17,11 @@ class MissMessageHandler:
 
     def get_router(self) -> Router:
         router = Router()
-        self.__register_routers(router)
+        self.__register_handlers(router)
         return router
 
-    def __register_routers(self, router):
-        router.message()(MissMessageHandler.echo_text_handler)
+    def __register_handlers(self, router):
+        router.message()(self.echo_text_handler)
 
     async def echo_text_handler(self, message: Message) -> None:
         """Функция вывода заглушки на необъявленное сообщение/команду"""

@@ -1,6 +1,8 @@
-from application.telegram.handlers.miss_message_handlers import MissMessageHandler
+from application.telegram.handlers.miss_message_handler import MissMessageHandler
+from application.telegram.handlers.user_commands_handler import UserCommandsHandler
 from infrastructure.config.services_config import translation_service
 
 
 miss_message_handler = MissMessageHandler(translation_service=translation_service)
+user_commands_handler = UserCommandsHandler(translation_service=translation_service)
 
