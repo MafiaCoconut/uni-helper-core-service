@@ -18,7 +18,7 @@ class SetLogMiddleware(BaseMiddleware):
     ) -> Any:
 
         if isinstance(event, Message):
-            set_func_and_person(function=data['handler'].callback.__name__, message=event, status = 'debug')
+            set_func_and_person(function=data['handler'].callback.__name__, message=event, status='debug')
 
         elif isinstance(event, CallbackQuery):
             set_func_and_person(function=data['handler'].callback.__name__, message=event.message, status='debug')
