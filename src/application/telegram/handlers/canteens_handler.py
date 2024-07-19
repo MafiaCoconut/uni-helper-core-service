@@ -1,4 +1,4 @@
-from aiogram import Router
+from aiogram import Router, F
 from aiogram.enums import ParseMode
 from aiogram.types import CallbackQuery
 
@@ -21,7 +21,8 @@ class CanteensHandler:
         pass
 
     def __register_callbacks(self, router: Router):
-        pass
+        router.callback_query.register(self.menu_canteens_handler, F.data == "menu_canteens")
+        router.callback_query.register(self.canteens_handler, F.data.startswith('canteen'))
 
     async def menu_canteens_handler(self, call: CallbackQuery, locale: str = 'ru'):
         # auxiliary.is_in_db(call)
