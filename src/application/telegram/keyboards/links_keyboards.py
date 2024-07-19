@@ -45,7 +45,7 @@ class LinksKeyboardsBuilder:
                 [
                     InlineKeyboardButton(text=self.translation_service.translate(
                                             message_id='others-links', locale=locale),
-                                         callback_data="open_others_links"),
+                                         callback_data="menu_links_second_page"),
 
                     InlineKeyboardButton(text=self.translation_service.translate(
                                             message_id='to-menu-main', locale=locale),
@@ -89,7 +89,7 @@ class LinksKeyboardsBuilder:
                 [
                     InlineKeyboardButton(text=self.translation_service.translate(
                                             message_id='main-links', locale=locale),
-                                         callback_data="show_main_links"),
+                                         callback_data="menu_links_first_page"),
 
                     InlineKeyboardButton(text=self.translation_service.translate(
                                             message_id='to-menu-main', locale=locale),
