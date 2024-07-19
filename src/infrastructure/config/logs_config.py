@@ -29,40 +29,26 @@ def config():
     user_handler = logging.FileHandler("logs/user_data.log")
     user_handler.setFormatter(formatter)
 
-    error_handler = logging.FileHandler("logs/error_data.log")
-    error_handler.setFormatter(formatter)
-
     global system_logger
     global user_logger
+    global error_logger
 
     if os.getenv("DEVICE") == "Laptop" or os.getenv("DEVICE") == "Ubuntu":
-        # logging.basicConfig(
-        #     format="[%(levelname)s] %(asctime)s - %(message)s",
-        #     datefmt="%d.%m-%H:%M",
-        #     handlers=[
-        #         logging.StreamHandler()  # Вывод логов в консоль
-        #     ]
-        # )
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(formatter)
 
         system_logger.setLevel(logging.DEBUG)
         user_logger.setLevel(logging.DEBUG)
+        error_logger.setLevel(logging.DEBUG)
 
         system_logger.addHandler(console_handler)
         user_logger.addHandler(console_handler)
-
+        error_logger.addHandler(console_handler)
 
     else:
         system_logger.setLevel(logging.INFO)
         user_logger.setLevel(logging.DEBUG)
-
-        # global error_logger
-        # error_logger.setLevel(logging.ERROR)
-        # error_logger.addHandler(error_handler)
-
-        # from infrastructure.telegram.utils.registration_dispatcher import dp
-        # dp.errors.register(error_aio_handler)
+        error_logger.setLevel(logging.ERROR)
 
     system_logger.addHandler(system_handler)
 
@@ -77,6 +63,31 @@ def config():
     user_logger.setLevel(logging.DEBUG)
     user_logger.addHandler(user_handler)
 
-
+    error_logs_config(formatter=formatter)
 
     # raise RuntimeError("Test unhandled")
+
+
+
+from aiogram.types.update import Update
+async def error_aio_handler(update: Update):
+    """
+    Функция для обработки и логирования всех необработанных исключений.
+    """
+    error_logger.error(update.exception)
+    system_logger.error(update.exception)
+    # icecream.ic(update.exception)
+    # icecream.ic(update)
+
+
+def error_logs_config(formatter):
+    global error_logger
+    error_handler = logging.FileHandler("logs/error_data.log")
+    error_handler.setFormatter(formatter)
+
+    error_logger.setLevel(logging.ERROR)
+    error_logger.addHandler(error_handler)
+
+    from infrastructure.config.dispatcher_config import dp
+    dp.errors.register(error_aio_handler)
+

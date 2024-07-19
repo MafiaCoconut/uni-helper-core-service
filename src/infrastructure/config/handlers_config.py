@@ -4,10 +4,12 @@ from application.telegram.handlers.user_commands_handler import UserCommandsHand
 from application.telegram.handlers.menu_main_handler import MenuMainHandler
 from application.telegram.handlers.canteens_handler import CanteensHandler
 from application.telegram.handlers.donations_handler import DonationsHandler
+from application.telegram.handlers.stadburo_handler import StadburoHandler
 
-from infrastructure.config.keyboards_config import menu_main_keyboards, canteens_keyboards, navigator_keyboards
+from infrastructure.config.keyboards_config import menu_main_keyboards, canteens_keyboards, navigator_keyboards, \
+    stadburo_keyboards
 
-from infrastructure.config.services_config import translation_service, canteens_service
+from infrastructure.config.services_config import translation_service, canteens_service, stadburo_service
 
 miss_message_handler = MissMessageHandler(translation_service=translation_service)
 
@@ -25,6 +27,13 @@ canteens_handler = CanteensHandler(
     translation_service=translation_service,
     canteens_keyboards=canteens_keyboards,
     canteens_service=canteens_service
+)
+
+stadburo_handler = StadburoHandler(
+    translation_service=translation_service,
+    stadburo_service=stadburo_service,
+    stadburo_keyboards=stadburo_keyboards,
+    navigator_keyboards=navigator_keyboards
 )
 
 donations_handler = DonationsHandler(

@@ -18,11 +18,11 @@ class StadburoKeyboardsBuilder:
 
                 [InlineKeyboardButton(
                     text="Stadtbüro / Registration Office",
-                    callback_data="registration")],
+                    callback_data="category_of_termins 3")],
 
                 [InlineKeyboardButton(
                     text="Others",
-                    callback_data="stadtburo_others")],
+                    callback_data="category_of_termins 4")],
 
                 [InlineKeyboardButton(
                     text=self.translation_service.translate(message_id='to-menu-main', locale=locale),
@@ -31,20 +31,24 @@ class StadburoKeyboardsBuilder:
         )
         return keyboard
 
-    def get_menu_immigration_officec(self, locale: str) -> InlineKeyboardMarkup:
+    def get_menu_immigration_office(self, locale: str) -> InlineKeyboardMarkup:
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 # [InlineKeyboardButton(text="Aufenthaltstitel beantragen",
                 #                       callback_data="aufenthaltstitel")],
                 [InlineKeyboardButton(text="Adressänderung",
-                                      callback_data="adressanderung")],
+                                      callback_data="category_of_termins 1")],
                 [InlineKeyboardButton(text="eAT-Abholung",
-                                      callback_data="eat_abholung")],
+                                      callback_data="category_of_termins 2")],
 
-                [InlineKeyboardButton(text=self.translation_service.translate(message_id='back', locale=locale),
-                                      callback_data="menu_stadburo"),
-                 InlineKeyboardButton(text=self.translation_service.translate(message_id='to-menu-main', locale=locale),
-                                      callback_data="menu_main")],
+                [
+                    InlineKeyboardButton(
+                        text=self.translation_service.translate(message_id='back', locale=locale),
+                        callback_data="menu_stadburo"),
+                    InlineKeyboardButton(
+                        text=self.translation_service.translate(message_id='to-menu-main', locale=locale),
+                        callback_data="menu_main")
+                ],
             ]
         )
         return keyboard

@@ -24,3 +24,7 @@ class WebInterface(ABC):
     @abstractmethod
     async def parse_stadburo(self, category_of_termins_id: int | str):
         pass
+
+    @abstractmethod
+    async def parse_stadburo_all(self):
+        pass

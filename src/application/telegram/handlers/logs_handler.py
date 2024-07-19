@@ -94,12 +94,3 @@ class LogsHandler:
         user_logger.info(result)
         system_logger.info(result)
 
-    # @staticmethod
-    # async def error_aio_handler(update: Update):
-    #     """
-    #     Функция для обработки и логирования всех необработанных исключений.
-    #     """
-    #     error_logger.error(update.exception)
-    #     system_logger.error(update.exception)
-    #     # icecream.ic(update.exception)
-    #     # icecream.ic(update)
