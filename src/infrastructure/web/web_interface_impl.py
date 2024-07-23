@@ -5,7 +5,10 @@ from icecream import ic
 from application.interfaces.web_interface import WebInterface
 import aiohttp
 
-CANTEENMICROSVCRPORT=8001
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 error_logger = logging.getLogger('error_logger')
 
 
@@ -18,10 +21,9 @@ class WebInterfaceImpl(WebInterface):
         :param locale: Код язык на котором нужно получить меню
         :return: dict{'menu': str, 'error': {'type': str, 'text': str}}
         """
-        print("get_canteens_menu")
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"http://127.0.0.1:8001/canteens_menu/{canteen_id}",
+                    f"https://{os.getenv('CANTEEN_IP')}:{os.getenv('CANTEEN_MICRO_SVC_PORT')}/canteens_menu/{canteen_id}",
                     params={'locale': locale}
             ) as resp:
                 if resp.status == 200:
@@ -34,7 +36,7 @@ class WebInterfaceImpl(WebInterface):
         print("get_canteens_info")
         async with (aiohttp.ClientSession() as session):
             async with session.get(
-                    f"http://localhost:8001/canteens/{canteen_id}",
+                    f"https://{os.getenv('CANTEEN_IP')}:{os.getenv('CANTEEN_MICRO_SVC_PORT')}/canteens/{canteen_id}",
                     json={'locale': locale}
             ) as resp:
                 print(resp)
@@ -42,14 +44,14 @@ class WebInterfaceImpl(WebInterface):
     async def parse_canteen(self,  canteen_id: int | str):
         async with (aiohttp.ClientSession() as session):
             async with session.get(
-                    f"http://localhost:8001/parser/{canteen_id}"
+                    f"https://{os.getenv('CANTEEN_IP')}:{os.getenv('CANTEEN_MICRO_SVC_PORT')}/parser/{canteen_id}"
             ) as resp:
                 print(resp)
 
     async def parse_canteen_all(self):
         async with (aiohttp.ClientSession() as session):
             async with session.get(
-                    "http://localhost:8001/parser/all"
+                    f"https:/{os.getenv('CANTEEN_IP')}:{os.getenv('CANTEEN_MICRO_SVC_PORT')}/parser/all"
             ) as resp:
                 print(resp)
 
@@ -64,7 +66,7 @@ class WebInterfaceImpl(WebInterface):
         print("get_termins_text")
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"http://127.0.0.1:8002/category_of_termins/{category_of_termins_id}",
+                    f"https://{os.getenv('STADBURO_IP')}:{os.getenv('STADBURO_MICRO_SVC_PORT')}/category_of_termins/{category_of_termins_id}",
                     params={'locale': locale}
             ) as resp:
                 if resp.status == 200:
@@ -79,7 +81,7 @@ class WebInterfaceImpl(WebInterface):
         print("parse_stadburo")
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"http://127.0.0.1:8002/parser/{category_of_termins_id}",
+                    f"https://{os.getenv('STADBURO_IP')}:{os.getenv('STADBURO_MICRO_SVC_PORT')}/parser/{category_of_termins_id}",
                     params={'get_result': True}
             ) as resp:
                 if resp.status == 200:
@@ -92,7 +94,7 @@ class WebInterfaceImpl(WebInterface):
     async def parse_stadburo_all(self):
         async with (aiohttp.ClientSession() as session):
             async with session.get(
-                    "http://localhost:8002/parser/all"
+                    "https://{os.getenv('STADBURO_IP')}:{os.getenv('STADBURO_MICRO_SVC_PORT')}/parser/all"
             ) as resp:
                 print(resp)
 

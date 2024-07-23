@@ -9,6 +9,8 @@ from infrastructure.config import webhook_config, dispatcher_config
 from infrastructure.config.bot_config import bot
 import time
 
+from infrastructure.web.api import router
+
 system_logger = logging.getLogger("system_logger")
 
 
@@ -27,6 +29,7 @@ async def lifespan(app):
     yield
 
 app = FastAPI(lifespan=lifespan)
+app.include_router(router=router)
 
 
 def config():
