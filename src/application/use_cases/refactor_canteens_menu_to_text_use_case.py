@@ -28,14 +28,14 @@ class RefactorCanteensMenuToTextUseCase:
         :param locale: Языковая локаль
         :param test_time: Тестовое время получения меню
         :param test_day: Тестовый день получения меню
-        :return: {'error': str, 'text': str}
+        :return: {'error': MenuErrorCodes | None, 'text': str}
         """
         result = await self.check_errors(
             canteen=canteen, main_dishes=main_dishes, locale=locale,
             test_time=test_time, test_day=test_day
         )
 
-        if result.get('error') == '':
+        if result.get('error') is None:
             result['text'] = await self.set_text(
                 canteen=canteen, main_dishes=main_dishes, side_dishes=side_dishes,
                 locale=locale
@@ -57,11 +57,11 @@ class RefactorCanteensMenuToTextUseCase:
         :param locale: Языковая локаль
         :param test_time: Тестовое время получения меню
         :param test_day: Тестовый день получения меню
-        :return: {'error': str, 'text': str}
+        :return: {'error': MenuErrorCodes | None, 'text': str}
         """
         weekday = int(datetime.now().isoweekday())
         error_text = ""
-        error_type = ""
+        error_type = None
 
         if test_time is not None:
             if not (canteen.opened_time <= test_time <= canteen.closed_time):
