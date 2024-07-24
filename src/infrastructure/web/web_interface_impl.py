@@ -7,13 +7,16 @@ import aiohttp
 
 import os
 from dotenv import load_dotenv
+
+from domain.entities.user import User
+
 load_dotenv()
 
 error_logger = logging.getLogger('error_logger')
 
 
 class WebInterfaceImpl(WebInterface):
-    async def get_canteens_menu(self, canteen_id: int | str, locale: str):
+    async def get_canteens_menu(self, canteen_id: int):
         """
         Функция обращается к hessen-mensen-parser и возвращает текст меню определённой столовой в формате json
 
@@ -23,8 +26,7 @@ class WebInterfaceImpl(WebInterface):
         """
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"https://{os.getenv('CANTEEN_IP')}:{os.getenv('CANTEEN_MICRO_SVC_PORT')}/canteens_menu/{canteen_id}",
-                    params={'locale': locale}
+                    f"{os.getenv('CANTEEN_ADDRESS')}/canteens_menu/{canteen_id}",
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
@@ -32,26 +34,25 @@ class WebInterfaceImpl(WebInterface):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
-    async def get_canteens_info(self, canteen_id: int | str, locale: str):
+    async def get_canteens_info(self, canteen_id: int):
         print("get_canteens_info")
-        async with (aiohttp.ClientSession() as session):
+        async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"https://{os.getenv('CANTEEN_IP')}:{os.getenv('CANTEEN_MICRO_SVC_PORT')}/canteens/{canteen_id}",
-                    json={'locale': locale}
+                    f"{os.getenv('CANTEEN_ADDRESS')}/canteens/{canteen_id}",
             ) as resp:
                 print(resp)
 
     async def parse_canteen(self,  canteen_id: int | str):
-        async with (aiohttp.ClientSession() as session):
+        async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"https://{os.getenv('CANTEEN_IP')}:{os.getenv('CANTEEN_MICRO_SVC_PORT')}/parser/{canteen_id}"
+                    f"{os.getenv('CANTEEN_ADDRESS')}/parser/{canteen_id}"
             ) as resp:
                 print(resp)
 
     async def parse_canteen_all(self):
-        async with (aiohttp.ClientSession() as session):
+        async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"https:/{os.getenv('CANTEEN_IP')}:{os.getenv('CANTEEN_MICRO_SVC_PORT')}/parser/all"
+                    f"{os.getenv('CANTEEN_ADDRESS')}/parser/all"
             ) as resp:
                 print(resp)
 
@@ -66,7 +67,7 @@ class WebInterfaceImpl(WebInterface):
         print("get_termins_text")
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"https://{os.getenv('STADBURO_IP')}:{os.getenv('STADBURO_MICRO_SVC_PORT')}/category_of_termins/{category_of_termins_id}",
+                    f"{os.getenv('STADBURO_ADDRESS')}/category_of_termins/{category_of_termins_id}",
                     params={'locale': locale}
             ) as resp:
                 if resp.status == 200:
@@ -81,7 +82,7 @@ class WebInterfaceImpl(WebInterface):
         print("parse_stadburo")
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"https://{os.getenv('STADBURO_IP')}:{os.getenv('STADBURO_MICRO_SVC_PORT')}/parser/{category_of_termins_id}",
+                    f"{os.getenv('STADBURO_ADDRESS')}/parser/{category_of_termins_id}",
                     params={'get_result': True}
             ) as resp:
                 if resp.status == 200:
@@ -92,11 +93,137 @@ class WebInterfaceImpl(WebInterface):
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
     async def parse_stadburo_all(self):
-        async with (aiohttp.ClientSession() as session):
+        async with aiohttp.ClientSession() as session:
             async with session.get(
-                    "https://{os.getenv('STADBURO_IP')}:{os.getenv('STADBURO_MICRO_SVC_PORT')}/parser/all"
+                    f"{os.getenv('STADBURO_ADDRESS')}/parser/all"
             ) as resp:
-                print(resp)
+                if resp.status == 200:
+                    response_json = await resp.json()
+                    ic(response_json)
+                    return response_json
+                else:
+                    error_logger.error(f"Failed to get data. Response code: {resp.status}")
+
+    async def create_user(self, user: User):
+        async with aiohttp.ClientSession as session:
+            async with session.post(
+                f"{os.getenv('USERS_ADDRESS')}/users",
+                params={'user': user}
+            ) as resp:
+                if resp.status == 200:
+                    response_json = await resp.json()
+                    ic(response_json)
+                    return response_json
+                else:
+                    error_logger.error(f"Failed to get data. Response code: {resp.status}")
+
+    async def update_user_data(self, user_id: int,
+                               new_mailing_time:str = None,
+                               new_language: str = None,
+                               new_canteen_id: int = None,
+                               status: str = None,
+                               ):
+        async with aiohttp.ClientSession() as session:
+            async with session.put(
+                f"{os.getenv('USERS_ADDRESS')}/users/{user_id}",
+                params={
+                    'new_mailing_time': new_mailing_time,
+                    'new_language': new_language,
+                    'new_canteen_id': new_canteen_id,
+                }
+            ) as resp:
+                if resp.status == 200:
+                    response_json = await resp.json()
+                    ic(response_json)
+                    return response_json
+                else:
+                    error_logger.error(f"Failed to get data. Response code: {resp.status}")
+
+    async def deactivate_user(self, user_id):
+        async with aiohttp.ClientSession() as session:
+            async with session.put(
+                f"{os.getenv('USERS_ADDRESS')}/users/deactivate/{user_id}"
+            ) as resp:
+                if resp.status == 200:
+                    response_json = await resp.json()
+                    ic(response_json)
+                    return response_json
+                else:
+                    error_logger.error(f"Failed to get data. Response code: {resp.status}")
+
+    async def reactivate_user(self, user_id):
+        async with aiohttp.ClientSession() as session:
+            async with session.put(
+                f"{os.getenv('USERS_ADDRESS')}/users/reactivate/{user_id}"
+            ) as resp:
+                if resp.status == 200:
+                    response_json = await resp.json()
+                    ic(response_json)
+                    return response_json
+                else:
+                    error_logger.error(f"Failed to get data. Response code: {resp.status}")
+
+    async def get_users_all(self):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                f"{os.getenv('USERS_ADDRESS')}/users/all"
+            ) as resp:
+                if resp.status == 200:
+                    response_json = await resp.json()
+                    ic(response_json)
+                    return response_json
+                else:
+                    error_logger.error(f"Failed to get data. Response code: {resp.status}")
+
+    async def get_user(self, user_id: int):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                f"{os.getenv('USERS_ADDRESS')}/users/{user_id}"
+            ) as resp:
+                if resp.status == 200:
+                    response_json = await resp.json()
+                    ic(response_json)
+                    return response_json
+                else:
+                    error_logger.error(f"Failed to get data. Response code: {resp.status}")
+
+    async def get_users_mailing_time(self, user_id: int):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                f"{os.getenv('USERS_ADDRESS')}/users/mailing_time/{user_id}"
+            ) as resp:
+                if resp.status == 200:
+                    response_json = await resp.json()
+                    ic(response_json)
+                    return response_json
+                else:
+                    error_logger.error(f"Failed to get data. Response code: {resp.status}")
+
+    async def get_users_language(self, user_id: int):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                f"{os.getenv('USERS_ADDRESS')}/users/language/{user_id}"
+            ) as resp:
+                if resp.status == 200:
+                    response_json = await resp.json()
+                    ic(response_json)
+                    return response_json
+                else:
+                    error_logger.error(f"Failed to get data. Response code: {resp.status}")
+
+    async def get_users_canteen_id(self, user_id: int):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                f"{os.getenv('USERS_ADDRESS')}/users/canteen_id/{user_id}"
+            ) as resp:
+                if resp.status == 200:
+                    response_json = await resp.json()
+                    ic(response_json)
+                    return response_json
+                else:
+                    error_logger.error(f"Failed to get data. Response code: {resp.status}")
+
+
 
 
 """

@@ -24,3 +24,4 @@ class CanteensService:
 
     async def parse_canteen_all(self):
         await self.web_interface.parse_canteen_all()
+
