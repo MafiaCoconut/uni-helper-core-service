@@ -123,7 +123,7 @@ back = رجوع
 
 
 # Столовые (внутреннее)
-dishes =
+dishes-header =
     قائمة طعام هذا المكان <b>{$canteen_name}</b>
     وقت آخر تحديث: {$day} - {$time_last_parser}
 

@@ -1,13 +1,17 @@
 import logging
+from typing import Dict, List, Any
 
 from icecream import ic
-
+from datetime import datetime
 from application.interfaces.web_interface import WebInterface
 import aiohttp
 
 import os
 from dotenv import load_dotenv
 
+from domain.entities.canteen import Canteen
+from domain.entities.main_dish import MainDish
+from domain.entities.side_dish import SideDish
 from domain.entities.user import User
 
 load_dotenv()
@@ -16,13 +20,12 @@ error_logger = logging.getLogger('error_logger')
 
 
 class WebInterfaceImpl(WebInterface):
-    async def get_canteens_menu(self, canteen_id: int):
+    async def get_canteens_data(self, canteen_id: int) -> dict[Canteen | list[MainDish] | list[SideDish]]:
         """
         Функция обращается к hessen-mensen-parser и возвращает текст меню определённой столовой в формате json
 
         :param canteen_id: Номер столовой в бд
-        :param locale: Код язык на котором нужно получить меню
-        :return: dict{'menu': str, 'error': {'type': str, 'text': str}}
+        :return: dict{'canteen': Canteen, 'main_dishes': list[MainDish], 'side_dishes': list[SideDish]}
         """
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -30,9 +33,44 @@ class WebInterfaceImpl(WebInterface):
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
-                    return response_json
+                    canteen = Canteen(
+                        canteen_id=response_json.get('canteen').get('canteen_id'),
+                        name=response_json.get('canteen').get('name'),
+                        description=response_json.get('canteen').get('description'),
+                        opened_time=response_json.get('canteen').get('opened_time'),
+                        closed_time=response_json.get('canteen').get('closed_time'),
+                        created_at=datetime.fromisoformat(response_json.get('canteen').get('created_at')),
+                    )
+                    main_dishes = []
+                    side_dishes = []
+                    if response_json.get('main_dishes') is not None:
+                        main_dishes = [MainDish(
+                            main_dish_id=main_dish.get('main_dish_id'),
+                            canteen_id=main_dish.get('canteen_id'),
+                            name=main_dish.get('name'),
+                            type=main_dish.get('type'),
+                            price=main_dish.get('price'),
+                            properties=main_dish.get('properties'),
+                            created_at=datetime.fromisoformat(main_dish.get('created_at')),
+                            updated_at=datetime.fromisoformat(main_dish.get('updated_at')),
+                        ) for main_dish in response_json.get('main_dishes')]
+
+                    if response_json.get('side_dishes') is not None:
+                        side_dishes = [SideDish(
+                            side_dish_id=side_dish.get('updated_at'),
+                            canteen_id=side_dish.get('canteen_id'),
+                            name=side_dish.get('name'),
+                            type=side_dish.get('type'),
+                            price=side_dish.get('price'),
+                            properties=side_dish.get('properties'),
+                            created_at=datetime.fromisoformat(side_dish.get('created_at')),
+                            updated_at=datetime.fromisoformat(side_dish.get('updated_at')),
+                        ) for side_dish in response_json.get('side_dishes')]
+
+                    return {'canteen': canteen, 'main_dishes': main_dishes, 'side_dishes': side_dishes}
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
+                    raise ValueError(f"Failed to get data. Response code: {resp.status}")
 
     async def get_canteens_info(self, canteen_id: int):
         print("get_canteens_info")
@@ -42,7 +80,7 @@ class WebInterfaceImpl(WebInterface):
             ) as resp:
                 print(resp)
 
-    async def parse_canteen(self,  canteen_id: int | str):
+    async def parse_canteen(self,  canteen_id: int):
         async with aiohttp.ClientSession() as session:
             async with session.get(
                     f"{os.getenv('CANTEEN_ADDRESS')}/parser/{canteen_id}"
@@ -182,8 +220,17 @@ class WebInterfaceImpl(WebInterface):
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
-                    ic(response_json)
-                    return response_json
+                    user = User(
+                        user_id=response_json['user_id'],
+                        username=response_json['username'],
+                        mailing_time=response_json['mailing_time'],
+                        language=response_json['language'],
+                        canteen_id=response_json['canteen_id'],
+                        created_at=response_json['created_at'],
+                        updated_at=response_json['updated_at'],
+                        status=response_json['status'],
+                    )
+                    return user
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 

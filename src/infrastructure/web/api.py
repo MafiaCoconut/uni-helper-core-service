@@ -1,12 +1,13 @@
 from fastapi import APIRouter
-
+from infrastructure.config.services_config import canteens_service
 
 router = APIRouter()
 
 
 @router.post('/notification/canteens_menu/{user_id}')
 async def send_notification_canteens_menu(user_id: int):
-    return {'text': "Рассылка выполнена корректно"}
+    return await canteens_service.send_canteen_info(user_id=user_id)
+    # return {'text': "Рассылка выполнена корректно"}
 
 
 @router.post('/notification/admins_message')

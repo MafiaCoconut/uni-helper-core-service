@@ -20,7 +20,7 @@ class TranslationService:
             'ar': FluentLocalization(["ar"], ["base_ar.ftl"], self.loader),
         }
 
-    def translate(self, message_id: str, locale: str, **kwargs):
+    async def translate(self, message_id: str, locale: str, **kwargs):
         if locale in self.l10n:
             translation = self.l10n[locale].format_value(message_id, kwargs)
             if translation == message_id:

@@ -122,7 +122,7 @@ back = Zurück
 
 
 # Mensen (innere)
-dishes =
+dishes-header =
     Mensa-Speisekarte <b>{$canteen_name}</b>
     Letzte Aktualisierung: {$day} - {$time_last_parser}
 

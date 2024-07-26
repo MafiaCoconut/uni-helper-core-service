@@ -35,7 +35,7 @@ class RefactorCanteensMenuToTextUseCase:
             test_time=test_time, test_day=test_day
         )
 
-        if result.get('error') is None:
+        if result.get('error') is None or test_time is not None or test_day is not None:
             result['text'] = await self.set_text(
                 canteen=canteen, main_dishes=main_dishes, side_dishes=side_dishes,
                 locale=locale
@@ -43,12 +43,8 @@ class RefactorCanteensMenuToTextUseCase:
 
         return result
 
-    async def check_errors(
-            self,
-            canteen: Canteen, main_dishes: list,
-            locale: str,
-            test_time=None, test_day=None
-    ):
+    async def check_errors(self, canteen: Canteen, main_dishes: list, locale: str, test_time=None, test_day=None):
+
         """
         Функция проверяет работает ли сейчас столовая и есть меню вообще
 
@@ -105,11 +101,7 @@ class RefactorCanteensMenuToTextUseCase:
 
         return {'error': error_type, 'text': error_text}
 
-    async def set_text(
-            self,
-            canteen: Canteen, main_dishes: list, side_dishes: list,
-            locale: str
-    ):
+    async def set_text(self, canteen: Canteen, main_dishes: list, side_dishes: list, locale: str):
         header = await self.get_header(created_at=canteen.created_at, locale=locale, canteen=canteen)
         main_dishes_text = await self.get_main_dishes_text(main_dishes=main_dishes, locale=locale)
         side_dishes_text = await self.get_side_dishes_text(side_dishes=side_dishes, locale=locale)

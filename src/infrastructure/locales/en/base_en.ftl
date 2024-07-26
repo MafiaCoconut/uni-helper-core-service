@@ -122,7 +122,7 @@ back = Back
 
 
 # Столовые (внутреннее)
-dishes =
+dishes-header =
     Canteen menu <b>{$canteen_name}</b>
     The time of the last update: {$day} - {$time_last_parser}
 

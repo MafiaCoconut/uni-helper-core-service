@@ -5,7 +5,7 @@ from domain.entities.user import User
 
 class WebInterface(ABC):
     @abstractmethod
-    async def get_canteens_menu(self, canteen_id: int):
+    async def get_canteens_data(self, canteen_id: int):
         pass
 
     @abstractmethod

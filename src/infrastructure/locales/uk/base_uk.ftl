@@ -122,7 +122,7 @@ back = Назад
 
 
 # Їдальні (внутрішнє)
-dishes =
+dishes-header =
     Меню їдальні <b>{$canteen_name}</b>
     Час останнього оновлення: {$day} - {$time_last_parser}
 
