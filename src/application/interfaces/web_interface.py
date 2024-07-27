@@ -21,7 +21,7 @@ class WebInterface(ABC):
         pass
 
     @abstractmethod
-    async def get_termins_text(self, category_of_termins_id: int, locale: str):
+    async def get_category_of_termins_data(self, category_of_termins_id: int):
         pass
 
     @abstractmethod

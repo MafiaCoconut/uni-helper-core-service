@@ -39,18 +39,18 @@ class StadburoHandler:
 
     async def menu_stadburo_handler(self, call: CallbackQuery, locale: str = 'ru'):
         await call.message.edit_text(
-            self.translation_service.translate(message_id='menu-stadburo', locale=locale),
+            await self.translation_service.translate(message_id='menu-stadburo', locale=locale),
             reply_markup=self.stadburo_keyboards.get_menu_stadburo(locale=locale))
         await call.answer()
 
     async def menu_immigration_handler(self, call: CallbackQuery, locale: str = 'ru'):
         await call.message.edit_text(
-            self.translation_service.translate(message_id='menu-immigration', locale=locale),
+            await self.translation_service.translate(message_id='menu-immigration', locale=locale),
             reply_markup=self.stadburo_keyboards.get_menu_immigration_office(locale=locale))
         await call.answer()
 
     async def category_of_termins_handler(self, call: CallbackQuery, locale: str = 'ru'):
-        category_id = call.data[call.data.find(' ') + 1:]
+        category_id = int(call.data[call.data.find(' ') + 1:])
 
         text = await self.stadburo_service.get_termins_text(category_id=category_id, locale=locale)
         await call.message.edit_text(

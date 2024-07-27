@@ -13,6 +13,7 @@ from domain.entities.canteen import Canteen
 from domain.entities.main_dish import MainDish
 from domain.entities.side_dish import SideDish
 from domain.entities.user import User
+from infrastructure.config.logs_config import log_decorator
 
 load_dotenv()
 
@@ -20,6 +21,7 @@ error_logger = logging.getLogger('error_logger')
 
 
 class WebInterfaceImpl(WebInterface):
+    @log_decorator
     async def get_canteens_data(self, canteen_id: int) -> dict[Canteen | list[MainDish] | list[SideDish]]:
         """
         Функция обращается к hessen-mensen-parser и возвращает текст меню определённой столовой в формате json
@@ -72,6 +74,7 @@ class WebInterfaceImpl(WebInterface):
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
                     raise ValueError(f"Failed to get data. Response code: {resp.status}")
 
+    @log_decorator
     async def get_canteens_info(self, canteen_id: int):
         print("get_canteens_info")
         async with aiohttp.ClientSession() as session:
@@ -80,6 +83,7 @@ class WebInterfaceImpl(WebInterface):
             ) as resp:
                 print(resp)
 
+    @log_decorator
     async def parse_canteen(self,  canteen_id: int):
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -87,6 +91,7 @@ class WebInterfaceImpl(WebInterface):
             ) as resp:
                 print(resp)
 
+    @log_decorator
     async def parse_canteen_all(self):
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -94,19 +99,19 @@ class WebInterfaceImpl(WebInterface):
             ) as resp:
                 print(resp)
 
-    async def get_termins_text(self, category_of_termins_id: str, locale: str):
+    @log_decorator
+    async def get_category_of_termins_data(self, category_of_termins_id: int):
         """
         Функция обращается к hessen-mensen-parser и возвращает текст меню определённой столовой в формате json
 
         :param category_of_termins_id: Номер категории stadburo в бд
         :param locale: Код язык на котором нужно получить текст
-        :return: dict{'text': str, 'error': None}
+        :return: dict{'termins': list[Termin], 'error': None, 'category_of_termins_id': CategoryOfTermins}
         """
-        print("get_termins_text")
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"{os.getenv('STADBURO_ADDRESS')}/category_of_termins/{category_of_termins_id}",
-                    params={'locale': locale}
+                    f"{os.getenv('STADBURO_ADDRESS')}/category_of_termins",
+                    params={'category_of_termins_id': category_of_termins_id}
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
@@ -114,22 +119,7 @@ class WebInterfaceImpl(WebInterface):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
-    "/category_of_termins/{category_of_termins}"
-
-    async def parse_stadburo(self, category_of_termins_id: int | str):
-        print("parse_stadburo")
-        async with aiohttp.ClientSession() as session:
-            async with session.get(
-                    f"{os.getenv('STADBURO_ADDRESS')}/parser/{category_of_termins_id}",
-                    params={'get_result': True}
-            ) as resp:
-                if resp.status == 200:
-                    response_json = await resp.json()
-                    ic(response_json)
-                    return response_json
-                else:
-                    error_logger.error(f"Failed to get data. Response code: {resp.status}")
-
+    @log_decorator
     async def parse_stadburo_all(self):
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -142,6 +132,22 @@ class WebInterfaceImpl(WebInterface):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
+    @log_decorator
+    async def parse_stadburo(self, category_of_termins_id: int | str):
+        print("parse_stadburo")
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                    f"{os.getenv('STADBURO_ADDRESS')}/parser",
+                    params={'category_of_termins_id': category_of_termins_id, 'get_result': True}
+            ) as resp:
+                if resp.status == 200:
+                    response_json = await resp.json()
+                    ic(response_json)
+                    return response_json
+                else:
+                    error_logger.error(f"Failed to get data. Response code: {resp.status}")
+
+    @log_decorator
     async def create_user(self, user: User):
         async with aiohttp.ClientSession as session:
             async with session.post(
@@ -155,6 +161,7 @@ class WebInterfaceImpl(WebInterface):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
+    @log_decorator
     async def update_user_data(self, user_id: int,
                                new_mailing_time:str = None,
                                new_language: str = None,
@@ -177,6 +184,7 @@ class WebInterfaceImpl(WebInterface):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
+    @log_decorator
     async def deactivate_user(self, user_id):
         async with aiohttp.ClientSession() as session:
             async with session.put(
@@ -189,6 +197,7 @@ class WebInterfaceImpl(WebInterface):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
+    @log_decorator
     async def reactivate_user(self, user_id):
         async with aiohttp.ClientSession() as session:
             async with session.put(
@@ -201,6 +210,7 @@ class WebInterfaceImpl(WebInterface):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
+    @log_decorator
     async def get_users_all(self):
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -213,6 +223,7 @@ class WebInterfaceImpl(WebInterface):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
+    @log_decorator
     async def get_user(self, user_id: int):
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -234,6 +245,7 @@ class WebInterfaceImpl(WebInterface):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
+    @log_decorator
     async def get_users_mailing_time(self, user_id: int):
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -246,6 +258,7 @@ class WebInterfaceImpl(WebInterface):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
+    @log_decorator
     async def get_users_language(self, user_id: int):
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -258,6 +271,7 @@ class WebInterfaceImpl(WebInterface):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
+    @log_decorator
     async def get_users_canteen_id(self, user_id: int):
         async with aiohttp.ClientSession() as session:
             async with session.get(

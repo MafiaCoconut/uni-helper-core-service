@@ -1,4 +1,6 @@
 import logging
+from functools import wraps
+
 from dotenv import load_dotenv
 import os
 
@@ -91,3 +93,18 @@ def error_logs_config(formatter):
     from infrastructure.config.dispatcher_config import dp
     dp.errors.register(error_aio_handler)
 
+
+def log_decorator(func, log_level=logging.DEBUG):
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        system_logger.log(level=log_level, msg=f"Called function: {func.__name__}. Args: {args}. Kwargs: {kwargs}")
+
+        # Выполнение функции и получение результата
+        result = await func(*args, **kwargs)
+
+        # Запись результата выполнения функции
+        # system_logger.log(level=log_level, msg=f"Result: {result}")
+
+        return result
+
+    return wrapper
