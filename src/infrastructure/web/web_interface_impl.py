@@ -127,9 +127,9 @@ class WebInterfaceImpl(WebInterface):
                     ) for termin in response_json.get('termins')]
 
                     result['category_of_termins'] = CategoryOfTermins(
-                        category_id=response_json.get('category_of_termins').category_id,
-                        name=response_json.get('category_of_termins').category_id,
-                        created_at=response_json.get('category_of_termins').created_at,
+                        category_id=response_json.get('category_of_termins').get('category_id'),
+                        name=response_json.get('category_of_termins').get('name'),
+                        created_at=response_json.get('category_of_termins').get('created_at'),
                     )
                     return result
                 else:

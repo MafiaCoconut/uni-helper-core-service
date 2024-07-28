@@ -29,11 +29,10 @@ class StadburoService:
         """
         return await self.generate_termins_list_use_case.execute(category_of_termins_id=category_id, locale=locale)
 
-
-
-
+    @log_decorator
     async def parse_category(self, category_id: str):
         pass
 
+    @log_decorator
     async def parse_all(self):
         pass

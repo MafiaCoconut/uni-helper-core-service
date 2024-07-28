@@ -77,34 +77,3 @@ class StadburoHandler:
             reply_markup=self.navigator_keyboards.get_go_to(locale=locale, where='stadburo')
         )
         await call.answer()
-
-
-    # async def adressanderung_handler(self, call: CallbackQuery, locale: str = 'ru'):
-    #     await call.message.edit_text(
-    #         await self.stadburo_service.get_termins_text(category_id=1, locale=locale),
-    #         reply_markup=self.navigator_keyboards.get_go_to(locale=locale, where='stadburo'))
-    #
-    # async def eat_abholung_handler(self, call: CallbackQuery, locale: str = 'ru'):
-    #     await call.message.edit_text(
-    #         await self.stadburo_service.get_termins_text(category_id=2, locale=locale),
-    #         reply_markup=self.navigator_keyboards.get_go_to(locale=locale, where='stadburo'))
-    #
-    # async def registration_office_handler(self, call: CallbackQuery, locale: str = 'ru'):
-    #     await call.message.edit_text(
-    #         await self.stadburo_service.get_termins_text(category_id=3, locale=locale),
-    #         reply_markup=self.navigator_keyboards.get_go_to(locale=locale, where='stadburo')
-    #     )
-    #
-    # async def stadtburo_others_handler(self, call: CallbackQuery, locale: str = 'ru'):
-    #     await call.message.edit_text(
-    #         await self.stadburo_service.get_termins_text(category_id=4, locale=locale),
-    #         reply_markup=self.navigator_keyboards.get_go_to(locale=locale, where='stadburo'))
-
-    # async def send_termins(self, call: CallbackQuery, data, locale: str = 'ru'):
-    #     """Функция отправки списка терминов"""
-    #
-    #     if len(data) <= 50:
-    #         await call.message.edit_text(self.translation_service.translate(message_id='lack-of-terms'),
-    #                                      reply_markup=inline.get_go_to(l10n, 'immigration'))
-    #     else:
-    #         await call.message.edit_text(data, reply_markup=inline.get_go_to(l10n, 'immigration'))
