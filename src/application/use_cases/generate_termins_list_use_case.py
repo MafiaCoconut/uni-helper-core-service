@@ -13,14 +13,22 @@ class GenerateTerminsListUseCase:
             translation_service=translation_service
         )
 
-    async def execute(self, category_of_termins: int, locale: str):
-        result = await self.web_interface.get_category_of_termins_data(category_of_termins)
+    async def execute(self, category_of_termins_id: int, locale: str) -> str:
+        data = await self.web_interface.get_category_of_termins_data(category_of_termins_id=category_of_termins_id)
 
-        termins = result.get('termins')
+        termins = data.get('termins')
+        category_of_termins = data.get('category_of_termins')
 
-        await self.refactor_stadburo_termins_to_text_use_case.execute(
+        result = await self.refactor_stadburo_termins_to_text_use_case.execute(
             termins=termins, category_of_termins=category_of_termins, locale=locale
         )
+
+        if result.get('error') is not None:
+            pass
+        else:
+            return result.get('text')
+
+
 
 
 

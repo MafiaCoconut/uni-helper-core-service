@@ -10,13 +10,13 @@ class RefactorStadburoTerminsToTextUseCase:
                  ):
         self.translation_service = translation_service
 
-    async def execute(self, termins: list[Termin], category_of_termins: CategoryOfTermins, locale: str):
+    async def execute(self, termins: list[Termin], category_of_termins: CategoryOfTermins, locale: str) -> dict:
         """
 
         :param termins: Объект списка терминов
         :param category_of_termins: Объект категории терминов
         :param locale: Языковая локаль
-        :return: {'error': TerminsErrorCodes, 'text': str}
+        :return: {'error': None|TerminsErrorCodes, 'text': str}
         """
         text = ""
         error = None

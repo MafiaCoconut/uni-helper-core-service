@@ -4,6 +4,7 @@ from application.interfaces.web_interface import WebInterface
 from application.services.translation_service import TranslationService
 from application.use_cases.generate_termins_list_use_case import GenerateTerminsListUseCase
 from application.use_cases.refactor_stadburo_termins_to_text_use_case import RefactorStadburoTerminsToTextUseCase
+from infrastructure.config.logs_config import log_decorator
 
 
 class StadburoService:
@@ -18,11 +19,15 @@ class StadburoService:
             translation_service=translation_service
         )
 
-
-    async def get_termins_text(self, category_id: int, locale: str):
-        await self.refactor_stadburo_termins_to_text_use_case.execute(category_of_termins=category_id, locale=locale)
-        # json_data = await self.web_interface.get_termins_text(category_of_termins_id=category_id, locale=locale)
-        # return json_data.get('text')
+    @log_decorator
+    async def get_termins_text(self, category_id: int, locale: str) -> str:
+        """
+        Функция возвращает текст терминов выбранной столовой на выбранном языке
+        :param category_id: ID столовой в базе данных
+        :param locale: Языковая локаль
+        :return: Текст со списком терминов категории
+        """
+        return await self.generate_termins_list_use_case.execute(category_of_termins_id=category_id, locale=locale)
 
 
 

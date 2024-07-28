@@ -10,8 +10,10 @@ import os
 from dotenv import load_dotenv
 
 from domain.entities.canteen import Canteen
+from domain.entities.category_of_termin import CategoryOfTermins
 from domain.entities.main_dish import MainDish
 from domain.entities.side_dish import SideDish
+from domain.entities.termin import Termin
 from domain.entities.user import User
 from infrastructure.config.logs_config import log_decorator
 
@@ -76,7 +78,6 @@ class WebInterfaceImpl(WebInterface):
 
     @log_decorator
     async def get_canteens_info(self, canteen_id: int):
-        print("get_canteens_info")
         async with aiohttp.ClientSession() as session:
             async with session.get(
                     f"{os.getenv('CANTEEN_ADDRESS')}/canteens/{canteen_id}",
@@ -106,16 +107,31 @@ class WebInterfaceImpl(WebInterface):
 
         :param category_of_termins_id: Номер категории stadburo в бд
         :param locale: Код язык на котором нужно получить текст
-        :return: dict{'termins': list[Termin], 'error': None, 'category_of_termins_id': CategoryOfTermins}
+        :return: dict{'termins': list[Termin], 'category_of_termins': CategoryOfTermins, 'error': None}
         """
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"{os.getenv('STADBURO_ADDRESS')}/category_of_termins",
+                    f"{os.getenv('STADBURO_ADDRESS')}/category_of_termins/getData",
                     params={'category_of_termins_id': category_of_termins_id}
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
-                    return response_json
+
+                    result = {'error': response_json.get('error')}
+
+                    result['termins'] = [Termin(
+                        termin_id=termin.termin_id,
+                        category_id=termin.category_id,
+                        time=termin.time,
+                        created_at=termin.created_at
+                    ) for termin in response_json.get('termins')]
+
+                    result['category_of_termins'] = CategoryOfTermins(
+                        category_id=response_json.get('category_of_termins').category_id,
+                        name=response_json.get('category_of_termins').category_id,
+                        created_at=response_json.get('category_of_termins').created_at,
+                    )
+                    return result
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
