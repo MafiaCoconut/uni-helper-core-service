@@ -7,6 +7,6 @@ class SendCanteensMenuUseCase:
                  ):
         self.telegram_interface = telegram_interface
 
-    def execute(self, user_id: int, message: str, keyboard):
-        self.telegram_interface.send_message(user_id=user_id, message=message, keyboard=keyboard)
+    async def execute(self, user_id: int, message: str, keyboard):
+        await self.telegram_interface.send_message(user_id=user_id, message=message, keyboard=keyboard)
 

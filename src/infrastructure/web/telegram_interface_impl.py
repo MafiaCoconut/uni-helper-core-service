@@ -5,7 +5,7 @@ from application.interfaces.telegram_interface import TelegramInterface
 
 class TelegramInterfaceImpl(TelegramInterface):
     @staticmethod
-    def send_message(user_id: int, message: str, keyboard: None):
+    async def send_message(user_id: int, message: str, keyboard: None):
         url = f"https://api.telegram.org/bot{os.getenv('BOT_TOKEN')}/sendMessage"
         payload = {
             'chat_id': user_id,
