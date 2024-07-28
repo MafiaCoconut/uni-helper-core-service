@@ -8,6 +8,7 @@ from icecream import ic
 from application.services.canteens_service import CanteensService
 from application.services.translation_service import TranslationService
 from application.telegram.keyboards.canteens_keyboards import CanteensKeyboardsBuilder
+from infrastructure.config.logs_config import log_decorator
 
 
 class CanteensHandler:
@@ -33,13 +34,25 @@ class CanteensHandler:
         router.callback_query.register(self.menu_canteens_handler, F.data == "menu_canteens")
         router.callback_query.register(self.canteens_handler, F.data.startswith('canteen'))
 
+    @log_decorator
     async def menu_canteens_handler(self, call: CallbackQuery, locale: str = 'ru'):
+        """
+        Меню выбора столовой для получения меню этой столовой
+        :param call: Объект CallbackQuery
+        :param locale:
+        """
         await call.message.edit_text(
-            self.translation_service.translate(message_id='menu-canteens', locale=locale),
+            await self.translation_service.translate(message_id='menu-canteens', locale=locale),
             reply_markup=self.canteens_keyboards.get_canteens(locale=locale)
         )
 
+    @log_decorator
     async def canteens_handler(self, call: CallbackQuery, locale: str = 'ru'):
+        """
+        Вывод информацию о меню конкретной столовой
+        :param call: Объект CallbackQuery
+        :param locale: Языковая локаль
+        """
         canteen_id = call.data[call.data.find(' ')+1:]
         ic(canteen_id)
 
