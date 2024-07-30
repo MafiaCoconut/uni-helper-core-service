@@ -9,7 +9,7 @@ class CanteensKeyboardsBuilder:
     def __init__(self, translation_service: TranslationService):
         self.translation_service = translation_service
 
-    def get_canteens(self, locale: str):
+    async def get_canteens(self, locale: str):
         canteens = InlineKeyboardMarkup(
             inline_keyboard=[
                 [
@@ -40,7 +40,7 @@ class CanteensKeyboardsBuilder:
 
                 [
                     InlineKeyboardButton(
-                        text=self.translation_service.translate(message_id='to-menu-main', locale=locale),
+                        text=await self.translation_service.translate(message_id='to-menu-main', locale=locale),
                         callback_data="menu_main")
                 ],
             ]

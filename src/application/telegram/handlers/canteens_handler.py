@@ -34,7 +34,6 @@ class CanteensHandler:
         router.callback_query.register(self.menu_canteens_handler, F.data == "menu_canteens")
         router.callback_query.register(self.canteens_handler, F.data.startswith('canteen'))
 
-    @log_decorator
     async def menu_canteens_handler(self, call: CallbackQuery, locale: str = 'ru'):
         """
         Меню выбора столовой для получения меню этой столовой
@@ -43,10 +42,9 @@ class CanteensHandler:
         """
         await call.message.edit_text(
             await self.translation_service.translate(message_id='menu-canteens', locale=locale),
-            reply_markup=self.canteens_keyboards.get_canteens(locale=locale)
+            reply_markup=await self.canteens_keyboards.get_canteens(locale=locale)
         )
 
-    @log_decorator
     async def canteens_handler(self, call: CallbackQuery, locale: str = 'ru'):
         """
         Вывод информацию о меню конкретной столовой
@@ -61,7 +59,7 @@ class CanteensHandler:
         try:
             await call.message.edit_text(
                 text=canteen_menu,
-                reply_markup=self.canteens_keyboards.get_canteens(locale=locale))
+                reply_markup=await self.canteens_keyboards.get_canteens(locale=locale))
         except Exception as e:
             error_logger = logging.getLogger('error_logger')
             error_logger.error('The text canteens menu has not changed')

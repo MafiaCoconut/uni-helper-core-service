@@ -55,7 +55,7 @@ class LogsHandler:
         :return: None
         """
         # result = f"User: {message.chat.username}/{message.chat.id} Tag: [{tag}]  Function: ({function})"
-        result = f"User: {message.chat.username}/{message.chat.id} Function: ({function})"
+        result = f"User: {message.chat.username}/{message.chat.id} Called function: ({function})"
         if status == "info":
             user_logger.info(result)
             system_logger.info(result)

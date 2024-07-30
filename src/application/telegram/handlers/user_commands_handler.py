@@ -64,8 +64,8 @@ class UserCommandsHandler:
     async def command_main_menu_handler(self, message: Message, state: FSMContext, locale: str = 'ru') -> None:
         if not await state.get_data():
             await message.answer(
-                self.translation_service.translate('menu-main', locale=locale),
-                reply_markup=self.menu_main_keyboards.get_menu_main(locale=locale)
+                await self.translation_service.translate('menu-main', locale=locale),
+                reply_markup=await self.menu_main_keyboards.get_menu_main(locale=locale)
             )
 
 

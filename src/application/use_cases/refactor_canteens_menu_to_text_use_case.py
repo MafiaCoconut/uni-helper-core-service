@@ -1,3 +1,5 @@
+from icecream import ic
+
 from application.services.translation_service import TranslationService
 from domain.entities.canteen import Canteen
 from datetime import datetime
@@ -58,6 +60,9 @@ class RefactorCanteensMenuToTextUseCase:
         weekday = int(datetime.now().isoweekday())
         error_text = ""
         error_type = None
+        ic(canteen.opened_time)
+        ic(canteen.closed_time)
+        ic(datetime.now().hour*60+datetime.now().minute)
 
         if test_time is not None:
             if not (canteen.opened_time <= test_time <= canteen.closed_time):
@@ -85,6 +90,8 @@ class RefactorCanteensMenuToTextUseCase:
                 locale=locale,
                 canteen_name=canteen.name)
             error_text += '\n' + canteen.description
+        if error_type is not None:
+            return {'error': error_type, 'text': error_text}
 
         if not main_dishes:
             error_type = MenuErrorCodes.MENU_IS_NONE
