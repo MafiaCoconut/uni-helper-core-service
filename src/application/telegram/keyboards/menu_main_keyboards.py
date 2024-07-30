@@ -27,9 +27,9 @@ class MenuMainKeyboardsBuilder:
                 [InlineKeyboardButton(
                     text=await self.translation_service.translate(message_id='main-menu-donation', locale=locale),
                     callback_data="menu_donations")],
-                [InlineKeyboardButton(
-                    text=await self.translation_service.translate(message_id='menu-feedback-button', locale=locale),
-                    callback_data="menu_feedback")],
+                # [InlineKeyboardButton(
+                #     text=await self.translation_service.translate(message_id='menu-feedback-button', locale=locale),
+                #     callback_data="menu_feedback")],
 
                 # [InlineKeyboardButton(text=l10n.format_value('main-menu-additionally'), callback_data="menu_additionally")],
             ]

@@ -33,14 +33,14 @@ class LinksHandler:
 
     async def menu_links_first_page(self, call: CallbackQuery, locale: str = 'ru'):
         await call.message.edit_text(
-            text=self.translation_service.translate(message_id='menu-links', locale=locale),
-            reply_markup=self.links_keyboards.get_first_page_links(locale=locale))
+            text=await self.translation_service.translate(message_id='menu-links', locale=locale),
+            reply_markup=await self.links_keyboards.get_first_page_links(locale=locale))
         await call.answer()
 
     async def menu_links_second_page(self, call: CallbackQuery, locale: str = 'ru'):
         await call.message.edit_text(
-            text=self.translation_service.translate(message_id='menu-links', locale=locale),
-            reply_markup=self.links_keyboards.get_second_page_links(locale=locale))
+            text=await self.translation_service.translate(message_id='menu-links', locale=locale),
+            reply_markup=await self.links_keyboards.get_second_page_links(locale=locale))
         await call.answer()
 
     # async def show_main_links_handler(self, call: CallbackQuery, locale: str = 'ru'):

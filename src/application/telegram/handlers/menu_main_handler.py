@@ -27,7 +27,7 @@ class MenuMainHandler:
         # auxiliary.is_in_db(call)
         await call.message.edit_text(
             await self.translation_service.translate(message_id='menu-main', locale=locale),
-            reply_markup=self.menu_main_keyboards.get_menu_main(locale=locale),
+            reply_markup=await self.menu_main_keyboards.get_menu_main(locale=locale),
             parse_mode=ParseMode.HTML
         )
         await call.answer()

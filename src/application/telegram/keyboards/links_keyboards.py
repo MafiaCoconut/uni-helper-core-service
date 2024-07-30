@@ -10,7 +10,7 @@ class LinksKeyboardsBuilder:
     def __init__(self, translation_service: TranslationService):
         self.translation_service = translation_service
 
-    def get_first_page_links(self, locale: str):
+    async def get_first_page_links(self, locale: str):
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 [
@@ -43,11 +43,11 @@ class LinksKeyboardsBuilder:
                                          url="https://termine-reservieren.de/termine/marburg/")
                 ],
                 [
-                    InlineKeyboardButton(text=self.translation_service.translate(
+                    InlineKeyboardButton(text=await self.translation_service.translate(
                                             message_id='others-links', locale=locale),
                                          callback_data="menu_links_second_page"),
 
-                    InlineKeyboardButton(text=self.translation_service.translate(
+                    InlineKeyboardButton(text=await self.translation_service.translate(
                                             message_id='to-menu-main', locale=locale),
                                          callback_data="menu_main"),
                 ],
@@ -56,8 +56,7 @@ class LinksKeyboardsBuilder:
         )
         return keyboard
 
-
-    def get_second_page_links(self, locale: str):
+    async def get_second_page_links(self, locale: str):
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 [
@@ -87,11 +86,11 @@ class LinksKeyboardsBuilder:
                     #                      url=""),
                 ],
                 [
-                    InlineKeyboardButton(text=self.translation_service.translate(
+                    InlineKeyboardButton(text=await self.translation_service.translate(
                                             message_id='main-links', locale=locale),
                                          callback_data="menu_links_first_page"),
 
-                    InlineKeyboardButton(text=self.translation_service.translate(
+                    InlineKeyboardButton(text=await self.translation_service.translate(
                                             message_id='to-menu-main', locale=locale),
                                          callback_data="menu_main"),
                 ]

@@ -25,8 +25,8 @@ class DonationsHandler:
 
     async def menu_donations(self, call: CallbackQuery, locale: str = 'ru'):
         await call.message.edit_text(
-            self.translation_service.translate(message_id='menu-donations', locale=locale),
-            reply_markup=self.navigator_keyboards.get_go_to_menu_main(locale=locale),
+            await self.translation_service.translate(message_id='menu-donations', locale=locale),
+            reply_markup=await self.navigator_keyboards.get_go_to_menu_main(locale=locale),
             parse_mode=ParseMode.MARKDOWN
         )
         await call.answer()
