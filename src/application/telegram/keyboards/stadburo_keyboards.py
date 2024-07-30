@@ -9,7 +9,7 @@ class StadburoKeyboardsBuilder:
     def __init__(self, translation_service: TranslationService):
         self.translation_service = translation_service
 
-    def get_menu_stadburo(self, locale: str) -> InlineKeyboardMarkup:
+    async def get_menu_stadburo(self, locale: str) -> InlineKeyboardMarkup:
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 [InlineKeyboardButton(
@@ -25,13 +25,13 @@ class StadburoKeyboardsBuilder:
                     callback_data="category_of_termins 4")],
 
                 [InlineKeyboardButton(
-                    text=self.translation_service.translate(message_id='to-menu-main', locale=locale),
+                    text=await self.translation_service.translate(message_id='to-menu-main', locale=locale),
                     callback_data="menu_main")],
             ]
         )
         return keyboard
 
-    def get_menu_immigration_office(self, locale: str) -> InlineKeyboardMarkup:
+    async def get_menu_immigration_office(self, locale: str) -> InlineKeyboardMarkup:
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 # [InlineKeyboardButton(text="Aufenthaltstitel beantragen",
@@ -43,10 +43,10 @@ class StadburoKeyboardsBuilder:
 
                 [
                     InlineKeyboardButton(
-                        text=self.translation_service.translate(message_id='back', locale=locale),
+                        text=await self.translation_service.translate(message_id='back', locale=locale),
                         callback_data="menu_stadburo"),
                     InlineKeyboardButton(
-                        text=self.translation_service.translate(message_id='to-menu-main', locale=locale),
+                        text=await self.translation_service.translate(message_id='to-menu-main', locale=locale),
                         callback_data="menu_main")
                 ],
             ]

@@ -33,7 +33,7 @@ class WebInterfaceImpl(WebInterface):
         """
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"{os.getenv('CANTEEN_ADDRESS')}/canteen/getDishes/{canteen_id}",
+                    f"{os.getenv('CANTEEN_ADDRESS')}/canteen{canteen_id}/getDishes",
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
@@ -88,7 +88,7 @@ class WebInterfaceImpl(WebInterface):
     async def parse_canteen(self,  canteen_id: int):
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"{os.getenv('CANTEEN_ADDRESS')}/parser/{canteen_id}"
+                    f"{os.getenv('CANTEEN_ADDRESS')}/canteen{canteen_id}/startParser"
             ) as resp:
                 print(resp)
 
@@ -96,40 +96,39 @@ class WebInterfaceImpl(WebInterface):
     async def parse_canteen_all(self):
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"{os.getenv('CANTEEN_ADDRESS')}/parser/all"
+                    f"{os.getenv('CANTEEN_ADDRESS')}/canteen/startParsersAll"
             ) as resp:
                 print(resp)
 
     @log_decorator
     async def get_category_of_termins_data(self, category_of_termins_id: int):
         """
-        Функция обращается к hessen-mensen-parser и возвращает текст меню определённой столовой в формате json
+        Функция обращается к marburg-stadburo-parser и возвращает данные о категории и терминах
 
         :param category_of_termins_id: Номер категории stadburo в бд
-        :param locale: Код язык на котором нужно получить текст
         :return: dict{'termins': list[Termin], 'category_of_termins': CategoryOfTermins, 'error': None}
         """
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"{os.getenv('STADBURO_ADDRESS')}/category_of_termins/getData",
-                    params={'category_of_termins_id': category_of_termins_id}
+                    f"{os.getenv('STADBURO_ADDRESS')}/category_of_termins{category_of_termins_id}/getData"
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
-
+                    # ic(response_json)
                     result = {'error': response_json.get('error')}
-
+                    ic(response_json.get('termins')[0].get('created_at'))
+                    ic(type(response_json.get('termins')[0].get('created_at')))
                     result['termins'] = [Termin(
-                        termin_id=termin.termin_id,
-                        category_id=termin.category_id,
-                        time=termin.time,
-                        created_at=termin.created_at
+                        termin_id=termin.get('termin_id'),
+                        category_id=termin.get('category_id'),
+                        time=datetime.fromisoformat(termin.get('time')),
+                        created_at=datetime.fromisoformat(termin.get('created_at'))
                     ) for termin in response_json.get('termins')]
 
                     result['category_of_termins'] = CategoryOfTermins(
                         category_id=response_json.get('category_of_termins').get('category_id'),
                         name=response_json.get('category_of_termins').get('name'),
-                        created_at=response_json.get('category_of_termins').get('created_at'),
+                        # created_at=datetime.fromisoformat(response_json.get('category_of_termins').get('created_at')),
                     )
                     return result
                 else:
@@ -139,7 +138,7 @@ class WebInterfaceImpl(WebInterface):
     async def parse_stadburo_all(self):
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"{os.getenv('STADBURO_ADDRESS')}/parser/all"
+                    f"{os.getenv('STADBURO_ADDRESS')}/category_of_termins/startParsersAll"
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
@@ -153,8 +152,8 @@ class WebInterfaceImpl(WebInterface):
         print("parse_stadburo")
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"{os.getenv('STADBURO_ADDRESS')}/parser",
-                    params={'category_of_termins_id': category_of_termins_id, 'get_result': True}
+                    f"{os.getenv('STADBURO_ADDRESS')}//category_of_termins{category_of_termins_id}/startParser",
+                    params={'get_result': True}
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
@@ -253,8 +252,8 @@ class WebInterfaceImpl(WebInterface):
                         mailing_time=response_json['mailing_time'],
                         locale=response_json['locale'],
                         canteen_id=response_json['canteen_id'],
-                        created_at=response_json['created_at'],
-                        updated_at=response_json['updated_at'],
+                        created_at=datetime.fromisoformat(response_json['created_at']),
+                        updated_at=datetime.fromisoformat(response_json['updated_at']),
                         status=response_json['status'],
                     )
                     return user

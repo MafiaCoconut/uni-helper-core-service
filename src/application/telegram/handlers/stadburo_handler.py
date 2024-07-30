@@ -38,7 +38,6 @@ class StadburoHandler:
         router.callback_query.register(self.menu_immigration_handler, F.data.startswith('menu_immigration'))
         router.callback_query.register(self.category_of_termins_handler, F.data.startswith('category_of_termins'))
 
-    @log_decorator
     async def menu_stadburo_handler(self, call: CallbackQuery, locale: str = 'ru'):
         """
         Вывод главного меню разделов staburo: Immigration Office, Registration Office, Others
@@ -47,10 +46,9 @@ class StadburoHandler:
         """
         await call.message.edit_text(
             await self.translation_service.translate(message_id='menu-stadburo', locale=locale),
-            reply_markup=self.stadburo_keyboards.get_menu_stadburo(locale=locale))
+            reply_markup=await self.stadburo_keyboards.get_menu_stadburo(locale=locale))
         await call.answer()
 
-    @log_decorator
     async def menu_immigration_handler(self, call: CallbackQuery, locale: str = 'ru'):
         """
         Функция выводит меню разделов Immigration Office: Adressanderung, eAT-Abholung
@@ -59,10 +57,9 @@ class StadburoHandler:
         """
         await call.message.edit_text(
             await self.translation_service.translate(message_id='menu-immigration', locale=locale),
-            reply_markup=self.stadburo_keyboards.get_menu_immigration_office(locale=locale))
+            reply_markup=await self.stadburo_keyboards.get_menu_immigration_office(locale=locale))
         await call.answer()
 
-    @log_decorator
     async def category_of_termins_handler(self, call: CallbackQuery, locale: str = 'ru'):
         """
         Функция выводит информацию о терминах конкретного раздела
@@ -70,10 +67,12 @@ class StadburoHandler:
         :param locale: Языковая локаль
         """
         category_id = int(call.data[call.data.find(' ') + 1:])
+        print(category_id)
+        where = 'stadburo' if 3 <= category_id <= 4 else 'immigration'
 
         text = await self.stadburo_service.get_termins_text(category_id=category_id, locale=locale)
         await call.message.edit_text(
             text=text,
-            reply_markup=self.navigator_keyboards.get_go_to(locale=locale, where='stadburo')
+            reply_markup=await self.navigator_keyboards.get_go_to(locale=locale, where=where)
         )
         await call.answer()
