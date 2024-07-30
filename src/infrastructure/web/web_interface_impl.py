@@ -26,14 +26,14 @@ class WebInterfaceImpl(WebInterface):
     @log_decorator
     async def get_canteens_data(self, canteen_id: int) -> dict[Canteen | list[MainDish] | list[SideDish]]:
         """
-        Функция обращается к hessen-mensen-parser и возвращает текст меню определённой столовой в формате json
+        Функция обращается к hessen-mensen-parser и возвращает данные о столовой и её меню формате json
 
         :param canteen_id: Номер столовой в бд
         :return: dict{'canteen': Canteen, 'main_dishes': list[MainDish], 'side_dishes': list[SideDish]}
         """
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"{os.getenv('CANTEEN_ADDRESS')}/canteens_menu/{canteen_id}",
+                    f"{os.getenv('CANTEEN_ADDRESS')}/canteen/getDishes/{canteen_id}",
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
@@ -179,8 +179,8 @@ class WebInterfaceImpl(WebInterface):
 
     @log_decorator
     async def update_user_data(self, user_id: int,
-                               new_mailing_time:str = None,
-                               new_language: str = None,
+                               new_mailing_time: str = None,
+                               new_locale: str = None,
                                new_canteen_id: int = None,
                                status: str = None,
                                ):
@@ -189,7 +189,7 @@ class WebInterfaceImpl(WebInterface):
                 f"{os.getenv('USERS_ADDRESS')}/users/{user_id}",
                 params={
                     'new_mailing_time': new_mailing_time,
-                    'new_language': new_language,
+                    'new_locale': new_locale,
                     'new_canteen_id': new_canteen_id,
                 }
             ) as resp:
@@ -251,7 +251,7 @@ class WebInterfaceImpl(WebInterface):
                         user_id=response_json['user_id'],
                         username=response_json['username'],
                         mailing_time=response_json['mailing_time'],
-                        language=response_json['language'],
+                        locale=response_json['locale'],
                         canteen_id=response_json['canteen_id'],
                         created_at=response_json['created_at'],
                         updated_at=response_json['updated_at'],

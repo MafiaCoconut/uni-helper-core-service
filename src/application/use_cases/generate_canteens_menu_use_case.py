@@ -53,6 +53,7 @@ class GenerateCanteenMenuUseCase:
         if result.get('error') is None:
             return result.get('text')
         else:
+            return result.get('text')
             # TODO сделать реакцию функции если она получила ошибку при попытке собрать текст
             pass
 

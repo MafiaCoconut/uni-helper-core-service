@@ -21,19 +21,20 @@ from infrastructure.config import webhook_config, logs_config, uvicorn_config
 #     await dispatcher_config.dp._process_update(bot=bot, update=telegram_update, call_answer=True)
 
 
-def start_bot():
-    try:
-        uvicorn_config.config()
-    except Exception as e:
-        print(e)
-        logging.warning(e)
-    finally:
-        pass
-        # close_all_connections()
+# def start_bot():
+#     try:
+#         uvicorn_config.config()
+#     except Exception as e:
+#         print(e)
+#         logging.warning(e)
+#     finally:
+#         pass
+#         # close_all_connections()
+#
+#
+# if __name__ == "__main__":
+#     # logs_config.config()
+#
+#     start_bot()
 
-
-if __name__ == "__main__":
-    # logs_config.config()
-
-    start_bot()
-
+from infrastructure.config.uvicorn_config import app
