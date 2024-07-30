@@ -2,11 +2,13 @@ from aiogram import Bot, types
 import os
 
 from aiogram.client.default import DefaultBotProperties
+from aiogram.client.session.aiohttp import AiohttpSession
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
+import aiohttp
 
 load_dotenv()
-
+session = AiohttpSession(timeout=aiohttp.ClientTimeout(total=5))
 bot = Bot(token=os.getenv("BOT_TOKEN"), default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 
 

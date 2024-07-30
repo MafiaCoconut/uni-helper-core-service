@@ -26,7 +26,7 @@ class MenuMainHandler:
     async def menu_main_handler(self, call: CallbackQuery, locale: str = 'ru'):
         # auxiliary.is_in_db(call)
         await call.message.edit_text(
-            self.translation_service.translate(message_id='menu-main', locale=locale),
+            await self.translation_service.translate(message_id='menu-main', locale=locale),
             reply_markup=self.menu_main_keyboards.get_menu_main(locale=locale),
             parse_mode=ParseMode.HTML
         )

@@ -11,7 +11,7 @@ from application.use_cases.refactor_canteens_menu_to_text_use_case import Refact
 class CanteensService:
     def __init__(self,
                  web_interface: WebInterface,
-                 telegram_interface: TelegramInterface ,
+                 telegram_interface: TelegramInterface,
                  translation_service: TranslationService,
                  ):
         self.web_interface = web_interface
@@ -23,7 +23,9 @@ class CanteensService:
             translation_service=self.translation_service,
         )
         self.notification_send_canteens_menu_use_case = NotificationSendCanteensMenuUseCase(
-
+            web_interface=web_interface,
+            telegram_interface=telegram_interface,
+            translation_service=translation_service,
         )
 
     async def get_canteens_menu(self, canteen_id: int, locale: str) -> str:

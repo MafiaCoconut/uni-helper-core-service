@@ -10,6 +10,9 @@ canteens_service = CanteensService(
     telegram_interface=telegram_interface,
     translation_service=translation_service
 )
-stadburo_service = StadburoService(web_interface=web_interface)
+stadburo_service = StadburoService(
+    web_interface=web_interface,
+    translation_service=translation_service
+)
 
 

@@ -58,7 +58,7 @@ def config():
     apscheduler_logger.setLevel(logging.DEBUG)
     apscheduler_logger.addHandler(system_handler)
 
-    aiogram_logger = logging.getLogger("aiogram")
+    aiogram_logger = logging.getLogger("aiogram.events")
     aiogram_logger.setLevel(logging.DEBUG)
     aiogram_logger.addHandler(system_handler)
 

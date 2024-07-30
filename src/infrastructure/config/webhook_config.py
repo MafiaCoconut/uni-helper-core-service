@@ -1,15 +1,21 @@
+import logging
+import requests
+
 import ngrok
 import os
+
+from aiogram.webhook.aiohttp_server import SimpleRequestHandler
 from aiohttp import web
 
 from aiogram import Dispatcher, Bot
 
+system_logger = logging.getLogger('system_logger')
 
-async def config(bot: Bot):
-    print("начала конфигурации webhook")
-    listener = await ngrok.forward(
-    int(os.getenv("WEBAPP_PORT")), authtoken=os.getenv("NGROK_AUTH_TOKEN"), 
-    )
-    print(listener.url())
-    print(listener)
-    await bot.set_webhook(f"{listener.url()}/webhook", drop_pending_updates=True)
+
+async def config(bot: Bot, dp: Dispatcher):
+    system_logger.info("Start webhook configuration")
+
+    requests.post(f"https://api.telegram.org/bot{os.getenv('BOT_TOKEN')}/setWebhook?url={os.getenv('NGROK_LINK')}/webhook")
+
+    system_logger.info("После установки webhook")
+
