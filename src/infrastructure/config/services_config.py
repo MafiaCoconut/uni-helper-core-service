@@ -1,5 +1,6 @@
 from application.services.canteens_service import CanteensService
 from application.services.stadburo_service import StadburoService
+from application.services.users_service import UsersService
 from infrastructure.config.interfaces_config import web_interface, telegram_interface
 from application.services.translation_service import TranslationService
 
@@ -15,4 +16,6 @@ stadburo_service = StadburoService(
     translation_service=translation_service
 )
 
-
+users_service = UsersService(
+    web_interface=web_interface
+)
