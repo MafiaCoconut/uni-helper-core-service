@@ -1,3 +1,4 @@
+from application.telegram.keyboards.admin_keyboards import AdminKeyboardsBuilder
 from application.telegram.keyboards.authorization_keyboards import AuthorizationKeyboardsBuilder
 from application.telegram.keyboards.canteens_keyboards import CanteensKeyboardsBuilder
 from application.telegram.keyboards.links_keyboards import LinksKeyboardsBuilder
@@ -5,7 +6,7 @@ from application.telegram.keyboards.menu_main_keyboards import MenuMainKeyboards
 from application.telegram.keyboards.navigator_keyboards import NavigatorKeyboardsBuilder
 from application.telegram.keyboards.settings_keyboards import SettingsKeyboardsBuilder
 from application.telegram.keyboards.stadburo_keyboards import StadburoKeyboardsBuilder
-from infrastructure.config.services_config import translation_service
+from infrastructure.config.translation_config import translation_service
 
 canteens_keyboards = CanteensKeyboardsBuilder(translation_service=translation_service)
 stadburo_keyboards = StadburoKeyboardsBuilder(translation_service=translation_service)
@@ -18,6 +19,9 @@ authorization_keyboards = AuthorizationKeyboardsBuilder(
     translation_service=translation_service,
     settings_keyboards=settings_keyboards,
 )
+
+admin_keyboards = AdminKeyboardsBuilder(translation_service=translation_service)
+
 
 
 

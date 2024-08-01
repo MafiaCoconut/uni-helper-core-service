@@ -4,14 +4,10 @@ from icecream import ic
 
 class TranslationService:
     def __init__(self, status='Production'):
-        # self.locales = locales
-        # self.loader = FluentResourceLoader("../../infrastructure/locales/{locale}")
         if status == "Production":
             self.loader = FluentResourceLoader("infrastructure/locales/{locale}")
         elif status == "Tests":
             self.loader = FluentResourceLoader("src/infrastructure/locales/{locale}")
-        # print(self.loader.localize_path())
-        # self.loader.localize_path()
         self.l10n = {
             'en': FluentLocalization(["en"], ["base_en.ftl"], self.loader),
             'ru': FluentLocalization(["ru"], ["base_ru.ftl"], self.loader),
@@ -29,6 +25,9 @@ class TranslationService:
         else:
             print(f"Locale '{locale}' not supported.")
             return f"[{message_id}]"
+
+    async def get_list_of_languages(self):
+        return ['en', 'ru', 'uk', 'de', 'ar']
 
     # def translate(self, message_id: str, locale: str, **kwargs):
     #

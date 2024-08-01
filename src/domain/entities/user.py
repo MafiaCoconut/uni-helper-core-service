@@ -6,11 +6,12 @@ from pydantic import BaseModel, Field
 class User(BaseModel):
     user_id: int
     username: str = Field(default="-")
+    name: str = Field(default="-")
     mailing_time: str = Field(default="-")
     locale: str = Field(default="-")
     canteen_id: int = Field(default=0)
-    created_at: datetime = Field(default=None)
-    updated_at: datetime = Field(default=None)
+    created_at: datetime | None = Field(default=None)
+    updated_at: datetime | None = Field(default=None)
     status: str = Field(default="active")
 
     # username: str = Field(default="-")

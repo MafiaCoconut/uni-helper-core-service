@@ -9,14 +9,17 @@ from application.telegram.handlers.donations_handler import DonationsHandler
 from application.telegram.handlers.stadburo_handler import StadburoHandler
 
 from infrastructure.config.keyboards_config import menu_main_keyboards, canteens_keyboards, navigator_keyboards, \
-    stadburo_keyboards, links_keyboards
+    stadburo_keyboards, links_keyboards, authorization_keyboards
 
-from infrastructure.config.services_config import translation_service, canteens_service, stadburo_service, users_service
+from infrastructure.config.services_config import translation_service, canteens_service, stadburo_service, \
+    users_service, authorization_service
 
 miss_message_handler = MissMessageHandler(translation_service=translation_service)
 
 authorization_handler = AuthorizationHandler(
-    users_service=users_service
+    users_service=users_service,
+    translation_service=translation_service,
+    authorization_service=authorization_service
 )
 
 user_commands_handler = UserCommandsHandler(

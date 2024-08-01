@@ -32,9 +32,12 @@ class CheckLocaleMiddleware(BaseMiddleware):
             locale = self.redis_client.get(locale_key)
             ic(f"From redis: {locale}")
             if not locale:
-
-                locale = await self.users_service.get_users_locale(user_id=user_id)
-                ic(f"From DB: {locale}")
+                try:
+                    locale = await self.users_service.get_users_locale(user_id=user_id)
+                    ic(f"From DB: {locale}")
+                except ValueError:
+                    error_logger.error("Пользователь отсутствует")
+                    locale = "en"
                 if locale:
                     self.redis_client.setex(name=locale_key, time=3600, value=locale)
                 else:

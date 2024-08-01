@@ -164,10 +164,10 @@ class WebInterfaceImpl(WebInterface):
 
     @log_decorator
     async def create_user(self, user: User):
-        async with aiohttp.ClientSession as session:
+        async with aiohttp.ClientSession() as session:
             async with session.post(
                 f"{os.getenv('USERS_ADDRESS')}/users/createUser",
-                params={'user': user}
+                json={'user': user.model_dump()}
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
@@ -246,17 +246,21 @@ class WebInterfaceImpl(WebInterface):
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
-                    user = User(
-                        user_id=response_json['user_id'],
-                        username=response_json['username'],
-                        mailing_time=response_json['mailing_time'],
-                        locale=response_json['locale'],
-                        canteen_id=response_json['canteen_id'],
-                        created_at=datetime.fromisoformat(response_json['created_at']),
-                        updated_at=datetime.fromisoformat(response_json['updated_at']),
-                        status=response_json['status'],
-                    )
-                    return user
+                    if response_json is not None:
+                        user = User(
+                            user_id=response_json.get('user_id'),
+                            username=response_json.get('username'),
+                            name=response_json.get('name'),
+                            mailing_time=response_json.get('mailing_time'),
+                            locale=response_json.get('locale'),
+                            canteen_id=response_json.get('canteen_id'),
+                            created_at=datetime.fromisoformat(response_json.get('created_at')),
+                            updated_at=datetime.fromisoformat(response_json.get('updated_at')),
+                            status=response_json.get('status'),
+                        )
+                        return user
+                    else:
+                        raise ValueError('The user is missing')
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 

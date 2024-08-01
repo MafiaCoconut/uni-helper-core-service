@@ -2,15 +2,25 @@ from aiogram import Router, F
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery, Message
 from aiogram.filters import CommandStart, Command
+from icecream import ic
 
+from application.providers.keyboards_provider import KeyboardsProvider
+from application.services.authorization_service import AuthorizationService
+from application.services.translation_service import TranslationService
 from application.services.users_service import UsersService
+from application.telegram.keyboards.authorization_keyboards import AuthorizationKeyboardsBuilder
+from domain.entities.user import User
 
 
 class AuthorizationHandler:
     def __init__(self,
                  users_service: UsersService,
+                 translation_service: TranslationService,
+                 authorization_service: AuthorizationService,
                  ):
         self.users_service = users_service
+        self.translation_service = translation_service
+        self.authorization_service = authorization_service
 
     def get_router(self) -> Router:
         router = Router()
@@ -27,22 +37,27 @@ class AuthorizationHandler:
         # router.callback_query.register(self.canteens_handler, F.data.startswith('canteen'))
 
     async def start_authorization(self, message: Message, state: FSMContext, locale: str):
-
         user_id = message.chat.id
-        print(await self.users_service.check_existence(user_id=user_id))
+
         if not await self.users_service.check_existence(user_id=user_id):
-            print('Пользователя не существует')
+            users_language = message.from_user.language_code
+            users_username = message.from_user.username
+            users_name = message.from_user.first_name + " " + (
+                message.from_user.last_name if message.from_user.last_name is not None else ""
+            )
+
+            user = User(
+                user_id=user_id,
+                username=users_username if users_username is not None else "-",
+                name=users_name if users_name is not None else "-",
+                mailing_time="11:45",
+                locale=users_language if users_language in await self.translation_service.get_list_of_languages() else 'en',
+            )
+            await self.authorization_service.start_authorization(user=user)
+
         else:
-            print('Пользователь существует')
-        """
-        1. Проверка что пользователь зарегестрирован
-            1. Если пользователь не зарегестрирован, то добавлять в бд
-            2. Если пользователь зарегестрирован, то отправлять сообщение пользователю 
-               что тот уже зареган и предлагать открыть главное меню
-        2. Отправлять сообщение админу о добавлении пользователя
-        3. Предложить пользователю выбрать язык
-        4. Предложить пользователю выбрать столовую
-        """
+            await message.answer(await self.translation_service.translate(message_id='reactivating-the-bot', locale=locale))
+
         # if not await state.get_data():
         #     telegram_id = message.chat.id
         #     username = message.from_user.username

@@ -1,5 +1,6 @@
 from application.interfaces.web_interface import WebInterface
 from application.use_cases.get_user_data_use_case import GetUserDataUseCase
+from domain.entities.user import User
 
 
 class UsersService:
@@ -14,3 +15,11 @@ class UsersService:
 
     async def check_existence(self, user_id: int):
         return await self.web_interface.user_check_existence(user_id=user_id)
+
+    async def save_user(self, user: User):
+        await self.web_interface.create_user(user=user)
+
+
+
+
+
