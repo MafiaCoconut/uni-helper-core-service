@@ -166,7 +166,7 @@ class WebInterfaceImpl(WebInterface):
     async def create_user(self, user: User):
         async with aiohttp.ClientSession as session:
             async with session.post(
-                f"{os.getenv('USERS_ADDRESS')}/users",
+                f"{os.getenv('USERS_ADDRESS')}/users/createUser",
                 params={'user': user}
             ) as resp:
                 if resp.status == 200:
@@ -185,7 +185,7 @@ class WebInterfaceImpl(WebInterface):
                                ):
         async with aiohttp.ClientSession() as session:
             async with session.put(
-                f"{os.getenv('USERS_ADDRESS')}/users/{user_id}",
+                f"{os.getenv('USERS_ADDRESS')}/user{user_id}/updateData",
                 params={
                     'new_mailing_time': new_mailing_time,
                     'new_locale': new_locale,
@@ -203,7 +203,7 @@ class WebInterfaceImpl(WebInterface):
     async def deactivate_user(self, user_id):
         async with aiohttp.ClientSession() as session:
             async with session.put(
-                f"{os.getenv('USERS_ADDRESS')}/users/deactivate/{user_id}"
+                f"{os.getenv('USERS_ADDRESS')}/user{user_id}/deactivate"
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
@@ -216,7 +216,7 @@ class WebInterfaceImpl(WebInterface):
     async def reactivate_user(self, user_id):
         async with aiohttp.ClientSession() as session:
             async with session.put(
-                f"{os.getenv('USERS_ADDRESS')}/users/reactivate/{user_id}"
+                f"{os.getenv('USERS_ADDRESS')}/user{user_id}/reactivate"
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
@@ -229,7 +229,7 @@ class WebInterfaceImpl(WebInterface):
     async def get_users_all(self):
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                f"{os.getenv('USERS_ADDRESS')}/users/all"
+                f"{os.getenv('USERS_ADDRESS')}/users/getAll"
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
@@ -242,7 +242,7 @@ class WebInterfaceImpl(WebInterface):
     async def get_user(self, user_id: int):
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                f"{os.getenv('USERS_ADDRESS')}/users/{user_id}"
+                f"{os.getenv('USERS_ADDRESS')}/user{user_id}/getData"
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
@@ -264,7 +264,7 @@ class WebInterfaceImpl(WebInterface):
     async def get_users_mailing_time(self, user_id: int):
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                f"{os.getenv('USERS_ADDRESS')}/users/mailing_time/{user_id}"
+                f"{os.getenv('USERS_ADDRESS')}/user{user_id}/getMailingTime"
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
@@ -274,10 +274,10 @@ class WebInterfaceImpl(WebInterface):
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
     @log_decorator
-    async def get_users_language(self, user_id: int):
+    async def get_users_locale(self, user_id: int):
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                f"{os.getenv('USERS_ADDRESS')}/users/language/{user_id}"
+                f"{os.getenv('USERS_ADDRESS')}/user{user_id}/getLanguage"
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
@@ -290,7 +290,20 @@ class WebInterfaceImpl(WebInterface):
     async def get_users_canteen_id(self, user_id: int):
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                f"{os.getenv('USERS_ADDRESS')}/users/canteen_id/{user_id}"
+                f"{os.getenv('USERS_ADDRESS')}/user{user_id}/getCanteenId"
+            ) as resp:
+                if resp.status == 200:
+                    response_json = await resp.json()
+                    ic(response_json)
+                    return response_json
+                else:
+                    error_logger.error(f"Failed to get data. Response code: {resp.status}")
+
+    @log_decorator
+    async def user_check_existence(self, user_id: int) -> bool:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                f"{os.getenv('USERS_ADDRESS')}/user{user_id}/checkExistence"
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()

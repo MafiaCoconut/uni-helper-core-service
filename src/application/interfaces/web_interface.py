@@ -64,9 +64,13 @@ class WebInterface(ABC):
         pass
 
     @abstractmethod
-    async def get_users_language(self, user_id: int) -> str:
+    async def get_users_locale(self, user_id: int) -> str:
         pass
 
     @abstractmethod
     async def get_users_canteen_id(self, user_id: int) -> int:
+        pass
+
+    @abstractmethod
+    async def user_check_existence(self, user_id: int) -> bool:
         pass

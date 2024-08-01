@@ -24,8 +24,9 @@ class CheckLocaleMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: Dict[str, Any]
     ) -> Any:
-        # print("Before handler")
+
         try:
+            # print("Before handler")
             user_id = data["event_from_user"].id
             locale_key = f"{user_id}:locale"
             locale = self.redis_client.get(locale_key)
@@ -35,7 +36,7 @@ class CheckLocaleMiddleware(BaseMiddleware):
                 locale = await self.users_service.get_users_locale(user_id=user_id)
                 ic(f"From DB: {locale}")
                 if locale:
-                    await self.redis_client.setex(name=locale_key, time=3600, value=locale)
+                    self.redis_client.setex(name=locale_key, time=3600, value=locale)
                 else:
                     locale = "en"
 
