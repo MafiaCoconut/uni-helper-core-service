@@ -6,26 +6,31 @@ from aiogram.types import (
 
 from application.telegram.keyboards.navigator_keyboards import NavigatorKeyboardsBuilder
 from application.telegram.keyboards.settings_keyboards import SettingsKeyboardsBuilder
+from application.telegram.keyboards.translation_keyboards import TranslationKeyboardsBuilder
 
 
 class AuthorizationKeyboardsBuilder:
     def __init__(self,
                  translation_service: TranslationService,
                  settings_keyboards: SettingsKeyboardsBuilder,
-                 navigator_keyboards: NavigatorKeyboardsBuilder
+                 navigator_keyboards: NavigatorKeyboardsBuilder,
+                 translation_keyboards: TranslationKeyboardsBuilder,
                  ):
         self.translation_service = translation_service
         self.settings_keyboards = settings_keyboards
         self.navigator_keyboards = navigator_keyboards
+        self.translation_keyboards = translation_keyboards
 
     async def get_languages_list_from_start(self, locale: str):
-        languages = await self.settings_keyboards.get_languages_list('menu_authorization')
+        languages = await self.translation_keyboards.get_locales_list('authorization_locales_config')
 
-        languages.inline_keyboard.append([InlineKeyboardButton(
-            text=await self.translation_service.translate(message_id='to-change-canteen', locale=locale),
-            callback_data='change_canteen start')])
-        # menu_main = get_send_menu_main(l10n)
-        # languages.inline_keyboard.append(menu_main.inline_keyboard[0])
+        languages.inline_keyboard.append(
+            [
+                InlineKeyboardButton(
+                    text=await self.translation_service.translate(message_id='to-change-canteen', locale=locale),
+                    callback_data='change_canteen start')
+            ]
+        )
 
         return languages
 
@@ -48,7 +53,7 @@ class AuthorizationKeyboardsBuilder:
                             message_id='disable-mailing-canteen',
                             locale=locale
                         ),
-                        callback_data="settings_canteen_change -")
+                        callback_data="authorization_canteen_set -")
                 ]
 
             ]

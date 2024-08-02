@@ -32,9 +32,7 @@ class AuthorizationHandler:
         router.message(Command('start'))(self.start_authorization)
 
     def __register_callbacks(self, router: Router):
-        pass
-        # router.callback_query.register(self.menu_canteens_handler, F.data == "menu_canteens")
-        # router.callback_query.register(self.canteens_handler, F.data.startswith('canteen'))
+        router.callback_query.register(self.authorization_locale_config, F.data.startswith("authorization_locales_config"))
 
     async def start_authorization(self, message: Message, state: FSMContext, locale: str):
         user_id = message.chat.id
@@ -61,37 +59,24 @@ class AuthorizationHandler:
         else:
             await self.authorization_service.user_already_exist(user=User(user_id=user_id, locale=locale))
 
-        # if not await state.get_data():
-        #     telegram_id = message.chat.id
-        #     username = message.from_user.username
-        #
-        #     language = message.from_user.language_code
-        #     if language not in list_of_available_languages:
-        #         language = 'en'
-        #
-        #     l10n = auxiliary.get_l10n(language)
-        #
-        #     if not user_is_exists(telegram_id) or str(telegram_id) == os.getenv("ADMINS_ID"):
-        #         save_user(telegram_id=telegram_id, username=username, language=language)
-        #
-        #         user_logger = logging.getLogger('user_logging')
-        #         user_logger.info(f"Add User: {username}/{telegram_id} Language[{message.from_user.language_code}]")
-        #
-        #         await auxiliary.send_message_to_admin(f"Добавлен пользователь:\n\n"
-        #                                               f"id: {telegram_id}\n"
-        #                                               f"username: @{username}\n"
-        #                                               f"language: {message.from_user.language_code}",
-        #                                               _reply_markup=inline_admin.get_person_by_id(telegram_id))
-        #
-        #         menu_message = await message.answer(l10n.format_value('welcome-message'),
-        #                                             reply_markup=inline.get_settings_language_from_start(l10n,
-        #                                                                                                  'from_start'))
-        #         await state.set_state(GetStartMenu.start_menu_id)
-        #         await state.update_data(start_menu_id=menu_message.message_id)
-        #
-        #         # await message.answer("Выберите столовую, рассылку которой хотите получать",
-        #         #                      reply_markup=inline.get_change_canteen())
-        #
-        #     else:
-        #         await message.answer(l10n.format_value('reactivating-the-bot'), reply_markup=inline.get_main_menu(l10n))
+    async def authorization_locale_config(self, callback: CallbackQuery, state: FSMContext, locale: str):
+        new_locale = callback.data[callback.data.rfind(' ') + 1:]
+
+        user = User(
+            user_id=callback.message.chat.id,
+            locale=new_locale
+        )
+
+        await self.authorization_service.set_new_locale(user_id=callback.message.chat.id, new_locale=new_locale)
+        await callback.answer()
+
+        await self.authorization_service.refresh_menu_authorization(callback=callback, user=user)
+
+
+
+    async def authorization_canteen_config(self, callback: CallbackQuery, state: FSMContext, locale: str):
+
+        pass
+        # await self.authorization_service.start_canteen_config(user=user, menu_authorization_message_id=)
+
 

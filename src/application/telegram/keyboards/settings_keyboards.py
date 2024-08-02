@@ -38,21 +38,6 @@ class SettingsKeyboardsBuilder:
         )
         return keyboard
 
-    async def get_languages_list(self, where_was_called: str) -> InlineKeyboardMarkup:
-        keyboard = InlineKeyboardMarkup(
-            inline_keyboard=[
-                [
-                    InlineKeyboardButton(text="🇷🇺", callback_data=f'settings_language {where_was_called}_ru'),
-                    InlineKeyboardButton(text="🇺🇦", callback_data=f'settings_language {where_was_called}_uk'),
-                    InlineKeyboardButton(text="🇩🇪", callback_data=f'settings_language {where_was_called}_de'),
-                    InlineKeyboardButton(text="🇺🇸", callback_data=f'settings_language {where_was_called}_en'),
-                    InlineKeyboardButton(text="🇸🇦", callback_data=f'settings_language {where_was_called}_ar')
-                ],
-
-            ]
-        )
-        return keyboard
-
     def get_canteens_list_to_change(self, locale: str) -> InlineKeyboardMarkup:
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[

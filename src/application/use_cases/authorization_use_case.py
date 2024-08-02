@@ -29,22 +29,14 @@ class AuthorizationUseCase:
             keyboard=await self.authorization_keyboards.get_languages_list_from_start(locale=user.locale),
         )
 
-    async def state_set_canteen(self, user: User):
+    async def start_canteen_config(self, menu_authorization_message_id: int, user: User):
+        await self.telegram_interface.delete_keyboard(chat_id=user.user_id, message_id=menu_authorization_message_id)
+
         await self.telegram_interface.send_message(
             user_id=user.user_id,
             message=await self.translation_service.translate(message_id='set-canteen-message', locale=user.locale),
-            # keyboard=await self.authorization_keyboards.get_canteens_list(locale=user.locale)
+            keyboard=await self.authorization_keyboards.get_canteens_list_to_change(locale=user.locale),
         )
-
-        """
-        1. Проверка что пользователь зарегестрирован + 
-            1. Если пользователь не зарегестрирован, то добавлять в бд
-            2. Если пользователь зарегестрирован, то отправлять сообщение пользователю 
-               что тот уже зареган и предлагать открыть главное меню
-        2. Отправлять сообщение админу о добавлении пользователя + 
-        3. Предложить пользователю выбрать язык 
-        4. Предложить пользователю выбрать столовую 
-        """
 
     async def refresh_menu_authorization(self, callback, user: User):
         await self.telegram_interface.edit_message_with_callback(
@@ -63,3 +55,13 @@ class AuthorizationUseCase:
         # await message.answer(await self.translation_service.translate(message_id='reactivating-the-bot', locale=locale))
 
 
+
+"""
+1. Проверка что пользователь зарегестрирован + 
+    1. Если пользователь не зарегестрирован, то добавлять в бд + 
+    2. Если пользователь зарегестрирован, то отправлять сообщение пользователю + 
+       что тот уже зареган и предлагать открыть главное меню
+2. Отправлять сообщение админу о добавлении пользователя + 
+3. Предложить пользователю выбрать язык +
+4. Предложить пользователю выбрать столовую 
+"""

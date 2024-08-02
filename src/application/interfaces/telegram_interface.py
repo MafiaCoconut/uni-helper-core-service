@@ -17,3 +17,16 @@ class TelegramInterface(ABC):
     async def edit_message_with_callback(callback, message: str, keyboard: None):
         pass
 
+    @staticmethod
+    @abstractmethod
+    async def delete_message(chat_id: int, message_id: int):
+        pass
+
+    @staticmethod
+    @abstractmethod
+    async def delete_keyboard(chat_id: int, message_id: int):
+        pass
+
+
+
+

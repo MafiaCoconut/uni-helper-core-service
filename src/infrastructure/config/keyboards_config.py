@@ -6,6 +6,7 @@ from application.telegram.keyboards.menu_main_keyboards import MenuMainKeyboards
 from application.telegram.keyboards.navigator_keyboards import NavigatorKeyboardsBuilder
 from application.telegram.keyboards.settings_keyboards import SettingsKeyboardsBuilder
 from application.telegram.keyboards.stadburo_keyboards import StadburoKeyboardsBuilder
+from application.telegram.keyboards.translation_keyboards import TranslationKeyboardsBuilder
 from infrastructure.config.translation_config import translation_service
 
 canteens_keyboards = CanteensKeyboardsBuilder(translation_service=translation_service)
@@ -14,11 +15,13 @@ settings_keyboards = SettingsKeyboardsBuilder(translation_service=translation_se
 navigator_keyboards = NavigatorKeyboardsBuilder(translation_service=translation_service)
 links_keyboards = LinksKeyboardsBuilder(translation_service=translation_service)
 menu_main_keyboards = MenuMainKeyboardsBuilder(translation_service=translation_service)
+translation_keyboards = TranslationKeyboardsBuilder()
 
 authorization_keyboards = AuthorizationKeyboardsBuilder(
     translation_service=translation_service,
     settings_keyboards=settings_keyboards,
-    navigator_keyboards=navigator_keyboards
+    navigator_keyboards=navigator_keyboards,
+    translation_keyboards=translation_keyboards
 )
 
 admin_keyboards = AdminKeyboardsBuilder(translation_service=translation_service)

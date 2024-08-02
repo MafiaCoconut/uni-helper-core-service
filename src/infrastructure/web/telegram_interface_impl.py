@@ -22,3 +22,15 @@ class TelegramInterfaceImpl(TelegramInterface):
     @log_decorator
     async def edit_message_with_callback(callback: CallbackQuery, message: str, keyboard: None):
         await callback.message.edit_text(text=message, reply_markup=keyboard)
+
+    @staticmethod
+    @log_decorator
+    async def delete_message(chat_id: int, message_id: int):
+        await bot.delete_message(chat_id=chat_id, message_id=message_id)
+
+    @staticmethod
+    @log_decorator
+    async def delete_keyboard(chat_id: int, message_id: int):
+        await bot.edit_message_reply_markup(chat_id=chat_id, message_id=message_id, reply_markup=None)
+
+

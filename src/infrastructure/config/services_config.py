@@ -31,21 +31,19 @@ admins_service = AdminsService(
     telegram_interface=telegram_interface
 )
 
+settings_service = SettingsService(
+    users_service=users_service,
+    redis_service=redis_service,
+    settings_keyboards=settings_keyboards,
+)
+
 authorization_service = AuthorizationService(
     web_interface=web_interface,
     telegram_interface=telegram_interface,
     admins_service=admins_service,
+    settings_service=settings_service,
     authorization_keyboards=authorization_keyboards,
     translation_service=translation_service,
-)
-
-
-settings_service = SettingsService(
-    users_service=users_service,
-    redis_service=redis_service,
-    authorization_service=authorization_service,
-    settings_keyboards=settings_keyboards,
-
 )
 
 
