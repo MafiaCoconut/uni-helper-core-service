@@ -6,6 +6,7 @@ from application.services.translation_service import TranslationService
 from application.telegram.keyboards.authorization_keyboards import AuthorizationKeyboardsBuilder
 from application.use_cases.authorization_use_case import AuthorizationUseCase
 from domain.entities.user import User
+from infrastructure.config.logs_config import log_decorator
 
 
 class AuthorizationService:
@@ -30,5 +31,10 @@ class AuthorizationService:
     # def authorization_keyboards(self):
     #     return self.keyboards_provider.get_authorization_keyboards()
 
+    @log_decorator
     async def start_authorization(self, user: User):
         await self.authorization_use_case.start_authorization(user=user)
+
+    @log_decorator
+    async def refresh_menu_authorization(self, callback, user: User):
+        await self.authorization_use_case.refresh_menu_authorization(callback=callback, user=user)

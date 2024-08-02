@@ -39,7 +39,8 @@ class AuthorizationHandler:
     async def start_authorization(self, message: Message, state: FSMContext, locale: str):
         user_id = message.chat.id
 
-        if not await self.users_service.check_existence(user_id=user_id):
+        # if not await self.users_service.check_existence(user_id=user_id):
+        if await self.users_service.check_existence(user_id=user_id):
             users_language = message.from_user.language_code
             users_username = message.from_user.username
             users_name = message.from_user.first_name + " " + (
@@ -53,6 +54,8 @@ class AuthorizationHandler:
                 mailing_time="11:45",
                 locale=users_language if users_language in await self.translation_service.get_list_of_languages() else 'en',
             )
+            await state.update_data(user=user)
+
             await self.authorization_service.start_authorization(user=user)
 
         else:

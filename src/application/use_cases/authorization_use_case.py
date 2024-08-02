@@ -21,7 +21,7 @@ class AuthorizationUseCase:
         self.translation_service = translation_service
 
     async def start_authorization(self, user: User):
-        await self.web_interface.create_user(user=user)
+        # await self.web_interface.create_user(user=user)
         await self.admins_service.send_message_to_admin_about_new_user(user=user)
         await self.telegram_interface.send_message(
             user_id=user.user_id,
@@ -45,3 +45,10 @@ class AuthorizationUseCase:
         3. Предложить пользователю выбрать язык 
         4. Предложить пользователю выбрать столовую 
         """
+
+    async def refresh_menu_authorization(self, callback, user: User):
+        await self.telegram_interface.edit_message_with_callback(
+            callback=callback,
+            message=await self.translation_service.translate(message_id='welcome-message', locale=user.locale),
+            keyboard=await self.authorization_keyboards.get_languages_list_from_start(locale=user.locale)
+        )

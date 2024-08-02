@@ -20,7 +20,11 @@ class UpdateUserDataUseCase:
         await self.users_service.update_user(user_id=user_id, new_locale=new_locale)
         await self.redis_service.setex(key=f"{user_id}:locale", value=new_locale, time=3600)
 
-        """
-        1. Отправить в User Service новые данные
-        2. Обновить locale в redis
-        """
+    async def update_mailing_time(self, user_id: int, new_mailing_time: str):
+        await self.users_service.update_user(user_id=user_id, new_mailing_time=new_mailing_time)
+
+    async def update_canteen_id(self, user_id: int, new_canteen_id: int):
+        await self.users_service.update_user(user_id=user_id, new_canteen_id=new_canteen_id)
+
+
+

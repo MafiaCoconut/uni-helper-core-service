@@ -12,3 +12,8 @@ class TelegramInterface(ABC):
     async def send_message_to_admin(message: str, keyboard: None):
         pass
 
+    @staticmethod
+    @abstractmethod
+    async def edit_message_with_callback(callback, message: str, keyboard: None):
+        pass
+

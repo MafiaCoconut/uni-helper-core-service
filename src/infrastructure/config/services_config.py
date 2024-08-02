@@ -43,6 +43,7 @@ authorization_service = AuthorizationService(
 settings_service = SettingsService(
     users_service=users_service,
     redis_service=redis_service,
+    authorization_service=authorization_service,
     settings_keyboards=settings_keyboards,
 
 )
