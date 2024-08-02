@@ -38,8 +38,12 @@ class WebInterface(ABC):
 
     @abstractmethod
     async def update_user_data(
-            self, user_id: int, status: str = None,
-            new_mailing_time: str = None, new_language: str = None, new_canteen_id: int = None,
+            self,
+            user_id: int,
+            new_status: str = None,
+            new_mailing_time: str = None,
+            new_locale: str = None,
+            new_canteen_id: int = None,
     ):
         pass
 

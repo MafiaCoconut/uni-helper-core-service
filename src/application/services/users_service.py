@@ -19,6 +19,21 @@ class UsersService:
     async def save_user(self, user: User):
         await self.web_interface.create_user(user=user)
 
+    async def update_user(self,
+                          user_id: int,
+                          new_status: str = None,
+                          new_locale: str = None,
+                          new_mailing_time: str = None,
+                          new_canteen_id: str = None
+                          ):
+        await self.web_interface.update_user_data(
+            user_id=user_id,
+            new_status=new_status,
+            new_mailing_time=new_mailing_time,
+            new_locale=new_locale,
+            new_canteen_id=new_canteen_id
+        )
+
 
 
 

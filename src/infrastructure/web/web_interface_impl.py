@@ -177,11 +177,12 @@ class WebInterfaceImpl(WebInterface):
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
     @log_decorator
-    async def update_user_data(self, user_id: int,
+    async def update_user_data(self,
+                               user_id: int,
                                new_mailing_time: str = None,
                                new_locale: str = None,
                                new_canteen_id: int = None,
-                               status: str = None,
+                               new_status: str = None,
                                ):
         async with aiohttp.ClientSession() as session:
             async with session.put(

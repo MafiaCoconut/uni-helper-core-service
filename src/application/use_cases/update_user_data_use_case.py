@@ -1,3 +1,4 @@
+from application.services.redis_service import RedisService
 from application.services.users_service import UsersService
 
 
@@ -9,13 +10,15 @@ class UpdateUserDataUseCase:
         self.users_service = users_service
         self.redis_service = redis_service
 
-    def update_locale(self, user_id: int, new_locale: str):
+    async def update_locale(self, user_id: int, new_locale: str):
         """
-
-        :param user_id:
-        :param new_locale:
-        :return:
+        Функция обновляет локаль пользователя в базе данных и Redis
+        :param user_id: ID юзера в телеграм
+        :param new_locale: Языковая локаль
+        :return: None
         """
+        await self.users_service.update_user(user_id=user_id, new_locale=new_locale)
+        await self.redis_service.setex(key=f"{user_id}:locale", value=new_locale, time=3600)
 
         """
         1. Отправить в User Service новые данные
