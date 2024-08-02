@@ -10,4 +10,4 @@ class Canteen:
     description: str = field(default=None)
     opened_time: int = field(default=None)
     closed_time: int = field(default=None)
-    created_at: Optional[datetime] = field(default=None)
+    created_at: Optional[datetime] | str = field(default=None)

@@ -59,6 +59,14 @@ class AuthorizationService:
     async def set_new_locale(self, user_id: int, new_locale: str):
         await self.settings_service.set_new_locale(user_id=user_id, new_locale=new_locale)
 
+    @log_decorator
+    async def check_canteen(self, callback, user: User, canteen_id: int):
+        await self.authorization_use_case.check_canteen(callback=callback, user=user, canteen_id=canteen_id)
+
+    @log_decorator
+    async def set_canteen(self, user: User, canteen_id: int):
+        await self.authorization_use_case.set_canteen(user=user, canteen_id=canteen_id)
+
 
 
 

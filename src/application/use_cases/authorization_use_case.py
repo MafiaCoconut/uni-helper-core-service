@@ -22,19 +22,20 @@ class AuthorizationUseCase:
 
     async def start_authorization(self, user: User):
         # await self.web_interface.create_user(user=user)
-        await self.admins_service.send_message_to_admin_about_new_user(user=user)
         await self.telegram_interface.send_message(
             user_id=user.user_id,
             message=await self.translation_service.translate(message_id='welcome-message', locale=user.locale),
             keyboard=await self.authorization_keyboards.get_languages_list_from_start(locale=user.locale),
         )
+        await self.admins_service.send_message_to_admin_about_new_user(user=user)
+
 
     async def start_canteen_config(self, menu_authorization_message_id: int, user: User):
         await self.telegram_interface.delete_keyboard(chat_id=user.user_id, message_id=menu_authorization_message_id)
 
         await self.telegram_interface.send_message(
             user_id=user.user_id,
-            message=await self.translation_service.translate(message_id='set-canteen-message', locale=user.locale),
+            message=await self.translation_service.translate(message_id='choose-canteen-for-mailing', locale=user.locale),
             keyboard=await self.authorization_keyboards.get_canteens_list_to_change(locale=user.locale),
         )
 
@@ -54,6 +55,30 @@ class AuthorizationUseCase:
 
         # await message.answer(await self.translation_service.translate(message_id='reactivating-the-bot', locale=locale))
 
+    async def check_canteen(self, callback, user: User, canteen_id: int):
+        if canteen_id == 0:
+            pass
+        else:
+            canteen = await self.web_interface.get_canteens_info(canteen_id=canteen_id)
+
+            await self.telegram_interface.edit_message_with_callback(
+                callback=callback,
+                message=await self.translation_service.translate(
+                    message_id='is-sure-to-save-canteen', locale=user.locale, canteen=canteen.name
+                ),
+                keyboard=await self.authorization_keyboards.get_check_status_change_canteen(
+                    canteen_id=canteen.canteen_id, locale=user.locale
+                )
+
+            )
+
+    async def set_canteen(self, user: User, canteen_id: int):
+        await self.web_interface.update_user_data(user_id=user.user_id, new_canteen_id=int(canteen_id))
+
+        await self.telegram_interface.send_message(
+            user_id=user.user_id,
+            message=await self.translation_service.translate(message_id='menu_main', locale=user.locale),
+        )
 
 
 """

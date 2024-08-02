@@ -80,9 +80,23 @@ class WebInterfaceImpl(WebInterface):
     async def get_canteens_info(self, canteen_id: int):
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    f"{os.getenv('CANTEEN_ADDRESS')}/canteens/{canteen_id}",
+                    f"{os.getenv('CANTEEN_ADDRESS')}/canteen{canteen_id}/getObject",
             ) as resp:
-                print(resp)
+                if resp.status == 200:
+                    response_json = await resp.json()
+                    ic(response_json)
+                    canteen = Canteen(
+                        canteen_id=response_json.get('canteen').get('canteen_id'),
+                        name=response_json.get('canteen').get('name'),
+                        description=response_json.get('canteen').get('description'),
+                        opened_time=response_json.get('canteen').get('opened_time'),
+                        closed_time=response_json.get('canteen').get('closed_time'),
+                        created_at=datetime.fromisoformat(response_json.get('canteen').get('created_at')),
+                    )
+                    ic(canteen)
+                    return canteen
+                else:
+                    error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
     @log_decorator
     async def parse_canteen(self,  canteen_id: int):
@@ -116,8 +130,8 @@ class WebInterfaceImpl(WebInterface):
                     response_json = await resp.json()
                     # ic(response_json)
                     result = {'error': response_json.get('error')}
-                    ic(response_json.get('termins')[0].get('created_at'))
-                    ic(type(response_json.get('termins')[0].get('created_at')))
+                    # ic(response_json.get('termins')[0].get('created_at'))
+                    # ic(type(response_json.get('termins')[0].get('created_at')))
                     result['termins'] = [Termin(
                         termin_id=termin.get('termin_id'),
                         category_id=termin.get('category_id'),
@@ -185,8 +199,6 @@ class WebInterfaceImpl(WebInterface):
                                new_status: str | None = None,
                                ):
         async with aiohttp.ClientSession() as session:
-            ic(new_locale, new_canteen_id, new_mailing_time)
-
             async with session.put(
                 f"{os.getenv('USERS_ADDRESS')}/user{user_id}/updateData",
                 json={

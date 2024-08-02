@@ -28,7 +28,7 @@ class AuthorizationKeyboardsBuilder:
             [
                 InlineKeyboardButton(
                     text=await self.translation_service.translate(message_id='to-change-canteen', locale=locale),
-                    callback_data='change_canteen start')
+                    callback_data='authorization_canteens_config')
             ]
         )
 
@@ -39,13 +39,13 @@ class AuthorizationKeyboardsBuilder:
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="Mensa Erlenring",
-                                         callback_data="authorization_canteen_set mensa_erlenring"),
+                                         callback_data="authorization_canteen_set_check 1"),
                     InlineKeyboardButton(text="Mensa Lahnberge",
-                                         callback_data="authorization_canteen_set mensa_lahnberge")
+                                         callback_data="authorization_canteen_set_check 2")
                 ],
                 [
-                    InlineKeyboardButton(text="Bistro", callback_data="authorization_canteen_set bistro"),
-                    InlineKeyboardButton(text="THM", callback_data="authorization_canteen_set thm")
+                    InlineKeyboardButton(text="Bistro", callback_data="authorization_canteen_set_check 3"),
+                    InlineKeyboardButton(text="THM", callback_data="authorization_canteen_set_check 6")
                 ],
                 [
                     InlineKeyboardButton(
@@ -53,7 +53,7 @@ class AuthorizationKeyboardsBuilder:
                             message_id='disable-mailing-canteen',
                             locale=locale
                         ),
-                        callback_data="authorization_canteen_set -")
+                        callback_data="authorization_canteen_set_check 0")
                 ]
 
             ]
@@ -62,3 +62,20 @@ class AuthorizationKeyboardsBuilder:
 
     async def send_main_menu(self, locale: str):
         return await self.navigator_keyboards.get_send_menu_main(locale=locale)
+
+    async def get_check_status_change_canteen(self, canteen_id: str, locale: str):
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [
+                    InlineKeyboardButton(
+                        text=await self.translation_service.translate(message_id='save', locale=locale),
+                        callback_data=f'authorization_canteen_set {canteen_id}')
+                ],
+                [
+                    InlineKeyboardButton(
+                        text=await self.translation_service.translate(message_id='change', locale=locale),
+                        callback_data='authorization_canteens_config')
+                ]
+            ]
+        )
+        return keyboard
