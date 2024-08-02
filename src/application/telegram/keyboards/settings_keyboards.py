@@ -9,43 +9,45 @@ class SettingsKeyboardsBuilder:
     def __init__(self, translation_service: TranslationService):
         self.translation_service = translation_service
 
-    def get_menu(self, locale: str) -> InlineKeyboardMarkup:
-        languages = self.get_languages_list('from_settings')
+    async def get_menu(self, locale: str) -> InlineKeyboardMarkup:
+        languages = await self.get_languages_list('from_settings')
 
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 [languages.inline_keyboard[0][i] for i in range(len(languages.inline_keyboard[0]))],
 
                 [InlineKeyboardButton(
-                    text=self.translation_service.translate(message_id='change-mailing-time', locale=locale),
+                    text=await self.translation_service.translate(message_id='change-mailing-time', locale=locale),
                     callback_data="change_mailing_time")],
 
                 [InlineKeyboardButton(
-                    text=self.translation_service.translate(message_id='change-status-mailing', locale=locale),
+                    text=await self.translation_service.translate(message_id='change-status-mailing', locale=locale),
                     callback_data="change_status_mailing")],
 
                 # [InlineKeyboardButton(text=l10n.format_value('change-status-numbers-in-menu'),
                 #                       callback_data="change_status_numbers_in_menu")],
 
                 [InlineKeyboardButton(
-                    text=self.translation_service.translate(message_id='change-canteen', locale=locale),
+                    text=await self.translation_service.translate(message_id='change-canteen', locale=locale),
                     callback_data='change_canteen_from_settings')],
 
                 [InlineKeyboardButton(
-                    text=self.translation_service.translate(message_id='to-menu-main', locale=locale),
+                    text=await self.translation_service.translate(message_id='to-menu-main', locale=locale),
                     callback_data="menu_main")],
             ]
         )
         return keyboard
 
-    def get_languages_list(self, where_was_called: str) -> InlineKeyboardMarkup:
+    async def get_languages_list(self, where_was_called: str) -> InlineKeyboardMarkup:
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
-                [InlineKeyboardButton(text="🇷🇺", callback_data=f'settings_language {where_was_called}_ru'),
-                 InlineKeyboardButton(text="🇺🇦", callback_data=f'settings_language_{where_was_called}_uk'),
-                 InlineKeyboardButton(text="🇩🇪", callback_data=f'settings_language {where_was_called}_de'),
-                 InlineKeyboardButton(text="🇺🇸", callback_data=f'settings_language {where_was_called}_en'),
-                 InlineKeyboardButton(text="🇸🇦", callback_data=f'settings_language {where_was_called}_ar')],
+                [
+                    InlineKeyboardButton(text="🇷🇺", callback_data=f'settings_language {where_was_called}_ru'),
+                    InlineKeyboardButton(text="🇺🇦", callback_data=f'settings_language {where_was_called}_uk'),
+                    InlineKeyboardButton(text="🇩🇪", callback_data=f'settings_language {where_was_called}_de'),
+                    InlineKeyboardButton(text="🇺🇸", callback_data=f'settings_language {where_was_called}_en'),
+                    InlineKeyboardButton(text="🇸🇦", callback_data=f'settings_language {where_was_called}_ar')
+                ],
 
             ]
         )
@@ -83,4 +85,3 @@ class SettingsKeyboardsBuilder:
             ]
         )
         return keyboard
-

@@ -29,7 +29,7 @@ class AuthorizationHandler:
         return router
 
     def __register_handlers(self, router: Router):
-        router.message(CommandStart)(self.start_authorization)
+        router.message(Command('start'))(self.start_authorization)
 
     def __register_callbacks(self, router: Router):
         pass
@@ -56,6 +56,7 @@ class AuthorizationHandler:
             await self.authorization_service.start_authorization(user=user)
 
         else:
+            #TODO перенести эту часть в сервис
             await message.answer(await self.translation_service.translate(message_id='reactivating-the-bot', locale=locale))
 
         # if not await state.get_data():
