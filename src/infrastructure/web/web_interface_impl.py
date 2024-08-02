@@ -179,19 +179,22 @@ class WebInterfaceImpl(WebInterface):
     @log_decorator
     async def update_user_data(self,
                                user_id: int,
-                               new_mailing_time: str = None,
-                               new_locale: str = None,
-                               new_canteen_id: int = None,
-                               new_status: str = None,
+                               new_mailing_time: str | None = None,
+                               new_locale: str | None = None,
+                               new_canteen_id: int | None = None,
+                               new_status: str | None = None,
                                ):
         async with aiohttp.ClientSession() as session:
+            ic(new_locale, new_canteen_id, new_mailing_time)
+
             async with session.put(
                 f"{os.getenv('USERS_ADDRESS')}/user{user_id}/updateData",
-                params={
+                json={
                     'new_mailing_time': new_mailing_time,
                     'new_locale': new_locale,
                     'new_canteen_id': new_canteen_id,
-                }
+                },
+                headers={'Content-Type': 'application/json'}
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()

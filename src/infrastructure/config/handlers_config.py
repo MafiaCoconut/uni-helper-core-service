@@ -13,7 +13,7 @@ from infrastructure.config.keyboards_config import menu_main_keyboards, canteens
     stadburo_keyboards, links_keyboards, authorization_keyboards, settings_keyboards
 
 from infrastructure.config.services_config import translation_service, canteens_service, stadburo_service, \
-    users_service, authorization_service
+    users_service, authorization_service, settings_service
 
 miss_message_handler = MissMessageHandler(translation_service=translation_service)
 
@@ -57,7 +57,8 @@ links_handler = LinksHandler(
 )
 
 settings_handler = SettingsHandler(
-    settings_keyboards=settings_keyboards
+    settings_keyboards=settings_keyboards,
+    settings_service=settings_service
 )
 
 logs_handler = LogsHandler()

@@ -7,19 +7,20 @@ from domain.entities.user import User
 
 class AdminsService:
     def __init__(self,
-                 keyboards_provider: KeyboardsProvider,
+                 # keyboards_provider: KeyboardsProvider,
+                 admin_keyboards: AdminKeyboardsBuilder,
                  telegram_interface: TelegramInterface,
                  ):
-        self.keyboards_provider = keyboards_provider
+        # self.keyboards_provider = keyboards_provider
 
         self.send_message_to_admin_use_case = SendMessageToAdminUseCase(
-            admin_keyboards=self.admin_keyboards,
+            admin_keyboards=admin_keyboards,
             telegram_interface=telegram_interface,
         )
 
-    @property
-    def admin_keyboards(self):
-        return self.keyboards_provider.get_admin_keyboards()
+    # @property
+    # def admin_keyboards(self):
+    #     return self.keyboards_provider.get_admin_keyboards()
 
     async def send_message_to_admin_about_new_user(self, user: User):
         await self.send_message_to_admin_use_case.new_users_info(user=user)

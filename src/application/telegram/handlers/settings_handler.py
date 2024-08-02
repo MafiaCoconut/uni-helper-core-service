@@ -23,7 +23,7 @@ class SettingsHandler:
         pass
 
     def __register_callbacks(self, router: Router):
-        router.callback_query.register(self.set_new_locale, F.data.starswith('settings_language'))
+        router.callback_query.register(self.set_new_locale, F.data.startswith('settings_language'))
         # router.callback_query.register(self.menu_canteens_handler, F.data == "menu_canteens")
         # router.callback_query.register(self.canteens_handler, F.data.startswith('canteen'))
 
@@ -31,4 +31,5 @@ class SettingsHandler:
         new_locale = callback.data[callback.data.rfind('_')+1:]
         print(new_locale)
         await self.settings_service.set_new_locale(user_id=callback.message.chat.id, new_locale=new_locale)
+        await callback.answer()
 

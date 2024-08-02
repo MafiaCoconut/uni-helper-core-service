@@ -21,7 +21,7 @@ class AuthorizationUseCase:
         self.translation_service = translation_service
 
     async def start_authorization(self, user: User):
-        # await self.web_interface.create_user(user=user)
+        await self.web_interface.create_user(user=user)
         await self.admins_service.send_message_to_admin_about_new_user(user=user)
         await self.telegram_interface.send_message(
             user_id=user.user_id,

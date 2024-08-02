@@ -13,22 +13,22 @@ class AuthorizationService:
                  web_interface: WebInterface,
                  telegram_interface: TelegramInterface,
                  admins_service: AdminsService,
-                 keyboards_provider: KeyboardsProvider,
+                 authorization_keyboards: AuthorizationKeyboardsBuilder,
                  translation_service: TranslationService,
                  ):
-        self.keyboards_provider = keyboards_provider
+        # self.keyboards_provider = keyboards_provider
 
         self.authorization_use_case = AuthorizationUseCase(
             web_interface=web_interface,
             telegram_interface=telegram_interface,
             admins_service=admins_service,
-            authorization_keyboards=self.authorization_keyboards,
+            authorization_keyboards=authorization_keyboards,
             translation_service=translation_service
         )
 
-    @property
-    def authorization_keyboards(self):
-        return self.keyboards_provider.get_authorization_keyboards()
+    # @property
+    # def authorization_keyboards(self):
+    #     return self.keyboards_provider.get_authorization_keyboards()
 
     async def start_authorization(self, user: User):
         await self.authorization_use_case.start_authorization(user=user)

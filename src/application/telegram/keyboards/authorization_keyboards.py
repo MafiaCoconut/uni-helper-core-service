@@ -16,7 +16,7 @@ class AuthorizationKeyboardsBuilder:
         self.settings_keyboards = settings_keyboards
 
     async def get_languages_list_from_start(self, locale: str):
-        languages = self.settings_keyboards.get_languages_list('from_start')
+        languages = await self.settings_keyboards.get_languages_list('from_start')
 
         languages.inline_keyboard.append([InlineKeyboardButton(
             text=await self.translation_service.translate(message_id='to-change-canteen', locale=locale),
