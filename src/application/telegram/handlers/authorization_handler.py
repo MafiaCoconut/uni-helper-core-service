@@ -59,8 +59,7 @@ class AuthorizationHandler:
             await self.authorization_service.start_authorization(user=user)
 
         else:
-            #TODO перенести эту часть в сервис
-            await message.answer(await self.translation_service.translate(message_id='reactivating-the-bot', locale=locale))
+            await self.authorization_service.user_already_exist(user=User(user_id=user_id, locale=locale))
 
         # if not await state.get_data():
         #     telegram_id = message.chat.id

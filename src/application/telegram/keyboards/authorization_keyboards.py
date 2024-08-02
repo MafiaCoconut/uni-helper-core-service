@@ -4,6 +4,7 @@ from aiogram.types import (
     InlineKeyboardMarkup,
 )
 
+from application.telegram.keyboards.navigator_keyboards import NavigatorKeyboardsBuilder
 from application.telegram.keyboards.settings_keyboards import SettingsKeyboardsBuilder
 
 
@@ -11,9 +12,11 @@ class AuthorizationKeyboardsBuilder:
     def __init__(self,
                  translation_service: TranslationService,
                  settings_keyboards: SettingsKeyboardsBuilder,
+                 navigator_keyboards: NavigatorKeyboardsBuilder
                  ):
         self.translation_service = translation_service
         self.settings_keyboards = settings_keyboards
+        self.navigator_keyboards = navigator_keyboards
 
     async def get_languages_list_from_start(self, locale: str):
         languages = await self.settings_keyboards.get_languages_list('menu_authorization')
@@ -51,3 +54,6 @@ class AuthorizationKeyboardsBuilder:
             ]
         )
         return change_canteen
+
+    async def send_main_menu(self, locale: str):
+        return await self.navigator_keyboards.get_send_menu_main(locale=locale)

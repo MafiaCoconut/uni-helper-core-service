@@ -38,3 +38,11 @@ class AuthorizationService:
     @log_decorator
     async def refresh_menu_authorization(self, callback, user: User):
         await self.authorization_use_case.refresh_menu_authorization(callback=callback, user=user)
+
+    @log_decorator
+    async def user_already_exist(self, user: User):
+        """
+        Функция отправляет сообщение зарегистрированному пользователю о том что он уже зарегистрирован
+        :param user: User(user_id, locale)
+        """
+        await self.authorization_use_case.user_already_exist(user=user)

@@ -52,3 +52,14 @@ class AuthorizationUseCase:
             message=await self.translation_service.translate(message_id='welcome-message', locale=user.locale),
             keyboard=await self.authorization_keyboards.get_languages_list_from_start(locale=user.locale)
         )
+
+    async def user_already_exist(self, user: User):
+        await self.telegram_interface.send_message(
+            user_id=user.user_id,
+            message=await self.translation_service.translate(message_id='reactivating-the-bot', locale=user.locale),
+            keyboard=await self.authorization_keyboards.send_main_menu(locale=user.locale)
+        )
+
+        # await message.answer(await self.translation_service.translate(message_id='reactivating-the-bot', locale=locale))
+
+

@@ -18,6 +18,7 @@ menu_main_keyboards = MenuMainKeyboardsBuilder(translation_service=translation_s
 authorization_keyboards = AuthorizationKeyboardsBuilder(
     translation_service=translation_service,
     settings_keyboards=settings_keyboards,
+    navigator_keyboards=navigator_keyboards
 )
 
 admin_keyboards = AdminKeyboardsBuilder(translation_service=translation_service)

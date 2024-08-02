@@ -4,6 +4,7 @@ from aiogram.types import CallbackQuery
 
 from application.services.settings_service import SettingsService
 from application.telegram.keyboards.settings_keyboards import SettingsKeyboardsBuilder
+from domain.entities.user import User
 
 
 class SettingsHandler:
@@ -27,16 +28,22 @@ class SettingsHandler:
         router.callback_query.register(self.set_new_locale, F.data.startswith('settings_language'))
 
     async def set_new_locale(self, callback: CallbackQuery, state: FSMContext, locale: str):
+        new_locale = callback.data[callback.data.rfind('_') + 1:]
+        where_was_called = callback.data[callback.data.find(' ') + 1:callback.data.rfind('_')]
+        print(where_was_called)
+
         data = await state.get_data()
         user = data.get('user')
 
-        new_locale = callback.data[callback.data.rfind('_')+1:]
-        print(new_locale)
-        user.locale = new_locale
+        # TODO если при настройке кантины state будет не нужен, то можно убрать
+        if user is not None:
+            user.locale = new_locale
+        else:
+            user = User(
+                user_id=callback.message.chat.id,
+                locale=new_locale
+            )
         await state.update_data(user=user)
-
-        where_was_called = callback.data[callback.data.find(' ')+1:callback.data.rfind('_')]
-        print(where_was_called)
 
         await self.settings_service.set_new_locale(user_id=callback.message.chat.id, new_locale=new_locale)
         await callback.answer()
