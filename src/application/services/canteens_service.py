@@ -6,6 +6,7 @@ from application.services.translation_service import TranslationService
 from application.use_cases.generate_canteens_menu_use_case import GenerateCanteenMenuUseCase
 from application.use_cases.notification_send_canteens_menu_use_case import NotificationSendCanteensMenuUseCase
 from application.use_cases.refactor_canteens_menu_to_text_use_case import RefactorCanteensMenuToTextUseCase
+from domain.entities.canteen import Canteen
 
 
 class CanteensService:
@@ -31,7 +32,7 @@ class CanteensService:
     async def get_canteens_menu(self, canteen_id: int, locale: str) -> str:
         return await self.generate_canteens_menu.execute(canteen_id=canteen_id, locale=locale)
 
-    async def get_canteens_info(self, canteen_id: int) -> str:
+    async def get_canteens_info(self, canteen_id: int) -> Canteen:
         return await self.web_interface.get_canteens_info(canteen_id)
 
     async def parse_canteen(self, canteen_id: int) -> str:

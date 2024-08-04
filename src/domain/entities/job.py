@@ -1,15 +1,14 @@
-from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List
-from typing import Optional, Callable
+from typing import Callable
+
+from pydantic import BaseModel, Field
 
 
-@dataclass
-class Job:
-    func: Callable = field(default=None)
-    trigger: str = field(default=None)
-    run_date: datetime = field(default=None)
-    args: list = field(default=None)
-    job_id: Optional[str] = field(default=None)
-    job_type: Optional[str] = field(default=None)
+class Job(BaseModel):
+    func: Callable = Field(default=None)
+    trigger: str = Field(default=None)
+    run_date: datetime = Field(default=None)
+    args: list = Field(default=None)
+    job_id: str | None = Field(default=None)
+    job_type: str | None = Field(default=None)
 

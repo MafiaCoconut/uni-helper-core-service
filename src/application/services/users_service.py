@@ -34,6 +34,8 @@ class UsersService:
             new_canteen_id=new_canteen_id
         )
 
+    async def get_user(self, user_id: int):
+        return await self.web_interface.get_user(user_id=user_id)
 
 
 

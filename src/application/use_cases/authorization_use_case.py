@@ -1,20 +1,26 @@
 from application.interfaces.telegram_interface import TelegramInterface
 from application.interfaces.web_interface import WebInterface
 from application.services.admin_service import AdminsService
+from application.services.canteens_service import CanteensService
 from application.services.translation_service import TranslationService
+from application.services.users_service import UsersService
 from application.telegram.keyboards.authorization_keyboards import AuthorizationKeyboardsBuilder
 from domain.entities.user import User
 
 
 class AuthorizationUseCase:
     def __init__(self,
-                 web_interface: WebInterface,
+                 # web_interface: WebInterface,
+                 users_service: UsersService,
+                 canteens_service: CanteensService,
                  telegram_interface: TelegramInterface,
                  admins_service: AdminsService,
                  authorization_keyboards: AuthorizationKeyboardsBuilder,
                  translation_service: TranslationService,
                  ):
-        self.web_interface = web_interface
+        # self.web_interface = web_interface
+        self.users_service = users_service
+        self.canteens_service = canteens_service
         self.telegram_interface = telegram_interface
         self.admins_service = admins_service
         self.authorization_keyboards = authorization_keyboards
@@ -59,7 +65,8 @@ class AuthorizationUseCase:
         if canteen_id == 0:
             pass
         else:
-            canteen = await self.web_interface.get_canteens_info(canteen_id=canteen_id)
+            canteen = await self.canteens_service.get_canteens_info(canteen_id=canteen_id)
+            # canteen = await self.web_interface.get_canteens_info(canteen_id=canteen_id)
 
             await self.telegram_interface.edit_message_with_callback(
                 callback=callback,

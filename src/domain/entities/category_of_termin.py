@@ -1,9 +1,9 @@
-from dataclasses import dataclass, field
 from datetime import datetime
+from pydantic import BaseModel, Field
 
-@dataclass
-class CategoryOfTermins:
-    category_id: int = field(default=None)
-    name: str = field(default=None)
-    created_at: datetime = field(default=None)
+
+class CategoryOfTermins(BaseModel):
+    category_id: int = Field(default=None)
+    name: str = Field(default=None)
+    created_at: datetime | None = Field(default=None)
 

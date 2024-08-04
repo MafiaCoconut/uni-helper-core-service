@@ -2,8 +2,10 @@ from application.interfaces.telegram_interface import TelegramInterface
 from application.interfaces.web_interface import WebInterface
 from application.providers.keyboards_provider import KeyboardsProvider
 from application.services.admin_service import AdminsService
+from application.services.canteens_service import CanteensService
 from application.services.settings_service import SettingsService
 from application.services.translation_service import TranslationService
+from application.services.users_service import UsersService
 from application.telegram.keyboards.authorization_keyboards import AuthorizationKeyboardsBuilder
 from application.use_cases.authorization_use_case import AuthorizationUseCase
 from domain.entities.user import User
@@ -12,13 +14,16 @@ from infrastructure.config.logs_config import log_decorator
 
 class AuthorizationService:
     def __init__(self,
-                 web_interface: WebInterface,
+                 users_service: UsersService,
+                 canteens_service: CanteensService,
                  telegram_interface: TelegramInterface,
                  admins_service: AdminsService,
                  settings_service: SettingsService,
                  authorization_keyboards: AuthorizationKeyboardsBuilder,
                  translation_service: TranslationService,
                  ):
+        self.users_service = users_service
+        self.canteens_service = canteens_service
         # self.keyboards_provider = keyboards_provider
         self.settings_service = settings_service
         self.authorization_use_case = AuthorizationUseCase(
