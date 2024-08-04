@@ -54,9 +54,9 @@ class AuthorizationHandler:
                 mailing_time="11:45",
                 locale=users_language if users_language in await self.translation_service.get_list_of_languages() else 'en',
             )
-            await state.update_data(menu_authorization_message_id=message.message_id+1)
+            message_id = await self.authorization_service.start_authorization(user=user)
+            await state.update_data(menu_authorization_message_id=message_id)
 
-            await self.authorization_service.start_authorization(user=user)
 
         else:
             await self.authorization_service.user_already_exist(user=User(user_id=user_id, locale=locale))
@@ -77,9 +77,13 @@ class AuthorizationHandler:
     async def authorization_canteen_config_handler(self, callback: CallbackQuery, state: FSMContext, locale: str):
         data = await state.get_data()
 
-        await self.authorization_service.start_canteen_config(
+        message_id = await self.authorization_service.start_canteen_config(
             user=User(user_id=callback.message.chat.id, locale=locale),
-            menu_authorization_message_id=data.get('menu_authorization_message_id'))
+            menu_authorization_message_id=data.get('menu_authorization_message_id'),
+
+        )
+
+        await state.update_data(menu_canteens_config_message_id=message_id)
 
         await callback.answer()
 

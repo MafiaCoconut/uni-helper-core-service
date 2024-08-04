@@ -1,3 +1,5 @@
+from icecream import ic
+
 from application.interfaces.telegram_interface import TelegramInterface
 from application.interfaces.web_interface import WebInterface
 from application.services.admin_service import AdminsService
@@ -18,7 +20,6 @@ class AuthorizationUseCase:
                  authorization_keyboards: AuthorizationKeyboardsBuilder,
                  translation_service: TranslationService,
                  ):
-        # self.web_interface = web_interface
         self.users_service = users_service
         self.canteens_service = canteens_service
         self.telegram_interface = telegram_interface
@@ -26,24 +27,29 @@ class AuthorizationUseCase:
         self.authorization_keyboards = authorization_keyboards
         self.translation_service = translation_service
 
-    async def start_authorization(self, user: User):
-        # await self.web_interface.create_user(user=user)
-        await self.telegram_interface.send_message(
+    async def start_authorization(self, user: User) -> int:
+        await self.users_service.create_user(user=user)
+        message_id = await self.telegram_interface.send_message(
             user_id=user.user_id,
             message=await self.translation_service.translate(message_id='welcome-message', locale=user.locale),
             keyboard=await self.authorization_keyboards.get_languages_list_from_start(locale=user.locale),
         )
-        await self.admins_service.send_message_to_admin_about_new_user(user=user)
+        # await self.admins_service.send_message_to_admin_about_new_user(user=user)
 
+        return message_id
 
-    async def start_canteen_config(self, menu_authorization_message_id: int, user: User):
-        await self.telegram_interface.delete_keyboard(chat_id=user.user_id, message_id=menu_authorization_message_id)
+    async def start_canteen_config(self, menu_authorization_message_id: int, user: User) -> int:
+        try:
+            await self.telegram_interface.delete_keyboard(chat_id=user.user_id, message_id=menu_authorization_message_id)
+        except:
+            pass
 
-        await self.telegram_interface.send_message(
+        message_id = await self.telegram_interface.send_message(
             user_id=user.user_id,
             message=await self.translation_service.translate(message_id='choose-canteen-for-mailing', locale=user.locale),
             keyboard=await self.authorization_keyboards.get_canteens_list_to_change(locale=user.locale),
         )
+        return message_id
 
     async def refresh_menu_authorization(self, callback, user: User):
         await self.telegram_interface.edit_message_with_callback(
@@ -52,12 +58,13 @@ class AuthorizationUseCase:
             keyboard=await self.authorization_keyboards.get_languages_list_from_start(locale=user.locale)
         )
 
-    async def user_already_exist(self, user: User):
-        await self.telegram_interface.send_message(
+    async def user_already_exist(self, user: User) -> int:
+        message_id = await self.telegram_interface.send_message(
             user_id=user.user_id,
             message=await self.translation_service.translate(message_id='reactivating-the-bot', locale=user.locale),
             keyboard=await self.authorization_keyboards.send_main_menu(locale=user.locale)
         )
+        return message_id
 
         # await message.answer(await self.translation_service.translate(message_id='reactivating-the-bot', locale=locale))
 
@@ -66,7 +73,6 @@ class AuthorizationUseCase:
             pass
         else:
             canteen = await self.canteens_service.get_canteens_info(canteen_id=canteen_id)
-            # canteen = await self.web_interface.get_canteens_info(canteen_id=canteen_id)
 
             await self.telegram_interface.edit_message_with_callback(
                 callback=callback,
@@ -79,13 +85,14 @@ class AuthorizationUseCase:
 
             )
 
-    async def set_canteen(self, user: User, canteen_id: int):
-        await self.web_interface.update_user_data(user_id=user.user_id, new_canteen_id=int(canteen_id))
+    async def set_canteen(self, user: User, canteen_id: int) -> int:
+        await self.users_service.update_user(user_id=user.user_id, new_canteen_id=int(canteen_id))
 
-        await self.telegram_interface.send_message(
+        message_id = await self.telegram_interface.send_message(
             user_id=user.user_id,
             message=await self.translation_service.translate(message_id='menu_main', locale=user.locale),
         )
+        return message_id
 
 
 """

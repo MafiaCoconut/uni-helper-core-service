@@ -38,7 +38,8 @@ settings_service = SettingsService(
 )
 
 authorization_service = AuthorizationService(
-    web_interface=web_interface,
+    users_service=users_service,
+    canteens_service=canteens_service,
     telegram_interface=telegram_interface,
     admins_service=admins_service,
     settings_service=settings_service,

@@ -63,7 +63,7 @@ class AuthorizationKeyboardsBuilder:
     async def send_main_menu(self, locale: str):
         return await self.navigator_keyboards.get_send_menu_main(locale=locale)
 
-    async def get_check_status_change_canteen(self, canteen_id: str, locale: str):
+    async def get_check_status_change_canteen(self, canteen_id: int | str, locale: str):
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 [

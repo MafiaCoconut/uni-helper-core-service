@@ -84,7 +84,7 @@ class WebInterfaceImpl(WebInterface):
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
-                    ic(response_json)
+                    # ic(response_json)
                     canteen = Canteen(
                         canteen_id=response_json.get('canteen').get('canteen_id'),
                         name=response_json.get('canteen').get('name'),
@@ -156,7 +156,7 @@ class WebInterfaceImpl(WebInterface):
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
-                    ic(response_json)
+                    # ic(response_json)
                     return response_json
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
