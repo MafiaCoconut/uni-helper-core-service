@@ -83,7 +83,7 @@ class AuthorizationHandler:
 
         )
 
-        await state.update_data(menu_canteens_config_message_id=message_id)
+        await state.update_data(canteens_config_message_id=message_id)
 
         await callback.answer()
 
@@ -98,10 +98,13 @@ class AuthorizationHandler:
         await callback.answer()
 
     async def set_canteen_handler(self, callback: CallbackQuery, state: FSMContext, locale: str):
+        data = await state.get_data()
+        canteens_config_message_id = data.get('canteens_config_message_id')
         canteen_id = callback.data[callback.data.find(' ') + 1:]
 
         await self.authorization_service.set_canteen(
             user=User(user_id=callback.message.chat.id, locale=locale),
-            canteen_id=int(canteen_id)
+            canteen_id=int(canteen_id),
+            canteens_config_message_id=canteens_config_message_id
         )
         await callback.answer()

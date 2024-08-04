@@ -7,6 +7,7 @@ from application.services.canteens_service import CanteensService
 from application.services.translation_service import TranslationService
 from application.services.users_service import UsersService
 from application.telegram.keyboards.authorization_keyboards import AuthorizationKeyboardsBuilder
+from application.telegram.keyboards.menu_main_keyboards import MenuMainKeyboardsBuilder
 from domain.entities.user import User
 
 
@@ -17,15 +18,20 @@ class AuthorizationUseCase:
                  canteens_service: CanteensService,
                  telegram_interface: TelegramInterface,
                  admins_service: AdminsService,
-                 authorization_keyboards: AuthorizationKeyboardsBuilder,
                  translation_service: TranslationService,
+                 authorization_keyboards: AuthorizationKeyboardsBuilder,
+                 menu_main_keyboards: MenuMainKeyboardsBuilder,
                  ):
+        self.telegram_interface = telegram_interface
+
         self.users_service = users_service
         self.canteens_service = canteens_service
-        self.telegram_interface = telegram_interface
         self.admins_service = admins_service
-        self.authorization_keyboards = authorization_keyboards
         self.translation_service = translation_service
+
+        self.authorization_keyboards = authorization_keyboards
+        self.menu_main_keyboards = menu_main_keyboards
+
 
     async def start_authorization(self, user: User) -> int:
         await self.users_service.create_user(user=user)
@@ -85,22 +91,13 @@ class AuthorizationUseCase:
 
             )
 
-    async def set_canteen(self, user: User, canteen_id: int) -> int:
+    async def set_canteen(self, user: User, canteen_id: int, canteens_config_message_id: int) -> int:
+        await self.telegram_interface.delete_message(chat_id=user.user_id, message_id=canteens_config_message_id)
         await self.users_service.update_user(user_id=user.user_id, new_canteen_id=int(canteen_id))
 
         message_id = await self.telegram_interface.send_message(
             user_id=user.user_id,
             message=await self.translation_service.translate(message_id='menu_main', locale=user.locale),
+            keyboard=await self.menu_main_keyboards.get_menu_main(locale=user.locale)
         )
         return message_id
-
-
-"""
-1. Проверка что пользователь зарегестрирован + 
-    1. Если пользователь не зарегестрирован, то добавлять в бд + 
-    2. Если пользователь зарегестрирован, то отправлять сообщение пользователю + 
-       что тот уже зареган и предлагать открыть главное меню
-2. Отправлять сообщение админу о добавлении пользователя + 
-3. Предложить пользователю выбрать язык +
-4. Предложить пользователю выбрать столовую 
-"""

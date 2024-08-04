@@ -9,6 +9,7 @@ from application.services.users_service import UsersService
 from application.telegram.keyboards.authorization_keyboards import AuthorizationKeyboardsBuilder
 from application.use_cases.authorization_use_case import AuthorizationUseCase
 from domain.entities.user import User
+from infrastructure.config.keyboards_config import menu_main_keyboards
 from infrastructure.config.logs_config import log_decorator
 
 
@@ -27,12 +28,13 @@ class AuthorizationService:
         # self.keyboards_provider = keyboards_provider
         self.settings_service = settings_service
         self.authorization_use_case = AuthorizationUseCase(
+            telegram_interface=telegram_interface,
             users_service=users_service,
             canteens_service=canteens_service,
-            telegram_interface=telegram_interface,
             admins_service=admins_service,
+            translation_service=translation_service,
             authorization_keyboards=authorization_keyboards,
-            translation_service=translation_service
+            menu_main_keyboards=menu_main_keyboards,
         )
 
     # @property
@@ -74,8 +76,10 @@ class AuthorizationService:
         await self.authorization_use_case.check_canteen(callback=callback, user=user, canteen_id=canteen_id)
 
     @log_decorator
-    async def set_canteen(self, user: User, canteen_id: int) -> int:
-        message_id = await self.authorization_use_case.set_canteen(user=user, canteen_id=canteen_id)
+    async def set_canteen(self, user: User, canteen_id: int, canteens_config_message_id: int) -> int:
+        message_id = await self.authorization_use_case.set_canteen(
+            user=user, canteen_id=canteen_id, canteens_config_message_id=canteens_config_message_id,
+        )
         return message_id
 
 
