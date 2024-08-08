@@ -1,5 +1,6 @@
+from application.gateways.canteens_gateway import CanteensGateway
+from application.gateways.users_gateway import UsersGateway
 from application.interfaces.telegram_interface import TelegramInterface
-from application.interfaces.web_interface import WebInterface
 from application.services.translation_service import TranslationService
 from application.use_cases.generate_canteens_menu_use_case import GenerateCanteenMenuUseCase
 from application.use_cases.send_canteens_menu_use_case import SendCanteensMenuUseCase
@@ -7,13 +8,14 @@ from application.use_cases.send_canteens_menu_use_case import SendCanteensMenuUs
 
 class NotificationSendCanteensMenuUseCase:
     def __init__(self,
-                 web_interface: WebInterface,
+                 users_gateway: UsersGateway,
+                 canteens_gateway: CanteensGateway,
                  telegram_interface: TelegramInterface,
                  translation_service: TranslationService,
                  ):
-        self.web_interface = web_interface
+        self.users_gateway = users_gateway
         self.generate_canteens_menu_use_case = GenerateCanteenMenuUseCase(
-            web_interface=web_interface,
+            canteens_gateway=canteens_gateway,
             telegram_interface=telegram_interface,
             translation_service=translation_service
         )
@@ -27,7 +29,7 @@ class NotificationSendCanteensMenuUseCase:
         преобразует текущие данные столовой в текст и возвращает их в виде текста
         :param user_id: ID юзера в базе данных
         """
-        user = await self.web_interface.get_user(user_id=user_id)
+        user = await self.users_gateway.get_user(user_id=user_id)
         message = await self.generate_canteens_menu_use_case.execute(canteen_id=user.canteen_id, locale=user.locale)
         await self.send_canteens_menu_use_case.execute(user_id=user_id, message=message, keyboard=None)
 

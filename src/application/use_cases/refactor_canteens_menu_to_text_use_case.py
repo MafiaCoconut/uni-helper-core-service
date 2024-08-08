@@ -18,7 +18,7 @@ class RefactorCanteensMenuToTextUseCase:
 
     async def execute(
             self,
-            canteen: Canteen, main_dishes: list, side_dishes: list,
+            canteen: Canteen, main_dishes: list[MainDish], side_dishes: list[SideDish],
             locale: str,
             test_time=None, test_day=None
     ) -> dict[str, str]:

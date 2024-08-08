@@ -3,35 +3,7 @@ from abc import ABC, abstractmethod
 from domain.entities.user import User
 
 
-class WebInterface(ABC):
-    @abstractmethod
-    async def get_canteens_data(self, canteen_id: int):
-        pass
-
-    @abstractmethod
-    async def get_canteens_info(self, canteen_id: int):
-        pass
-
-    @abstractmethod
-    async def parse_canteen(self, canteen_id: int):
-        pass
-
-    @abstractmethod
-    async def parse_canteen_all(self):
-        pass
-
-    @abstractmethod
-    async def get_category_of_termins_data(self, category_of_termins_id: int):
-        pass
-
-    @abstractmethod
-    async def parse_stadburo(self, category_of_termins_id: int):
-        pass
-
-    @abstractmethod
-    async def parse_stadburo_all(self):
-        pass
-
+class UsersGateway(ABC):
     @abstractmethod
     async def create_user(self, user: User):
         pass

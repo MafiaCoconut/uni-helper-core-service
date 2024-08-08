@@ -1,6 +1,4 @@
 from application.interfaces.telegram_interface import TelegramInterface
-from application.interfaces.web_interface import WebInterface
-from application.providers.keyboards_provider import KeyboardsProvider
 from application.services.admin_service import AdminsService
 from application.services.canteens_service import CanteensService
 from application.services.settings_service import SettingsService
@@ -25,7 +23,6 @@ class AuthorizationService:
                  ):
         self.users_service = users_service
         self.canteens_service = canteens_service
-        # self.keyboards_provider = keyboards_provider
         self.settings_service = settings_service
         self.authorization_use_case = AuthorizationUseCase(
             telegram_interface=telegram_interface,
@@ -36,10 +33,6 @@ class AuthorizationService:
             authorization_keyboards=authorization_keyboards,
             menu_main_keyboards=menu_main_keyboards,
         )
-
-    # @property
-    # def authorization_keyboards(self):
-    #     return self.keyboards_provider.get_authorization_keyboards()
 
     @log_decorator
     async def start_authorization(self, user: User) -> int:

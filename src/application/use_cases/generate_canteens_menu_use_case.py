@@ -1,7 +1,7 @@
 from icecream import ic
 
+from application.gateways.canteens_gateway import CanteensGateway
 from application.interfaces.telegram_interface import TelegramInterface
-from application.interfaces.web_interface import WebInterface
 from application.services.translation_service import TranslationService
 from application.use_cases.refactor_canteens_menu_to_text_use_case import RefactorCanteensMenuToTextUseCase
 from application.use_cases.send_canteens_menu_use_case import SendCanteensMenuUseCase
@@ -15,11 +15,11 @@ class GenerateCanteenMenuUseCase:
     Функции execute получает на вход ID столовой и локаль на которой нужно вернуть текст
     """
     def __init__(self,
-                 web_interface: WebInterface,
+                 canteens_gateway: CanteensGateway,
                  telegram_interface: TelegramInterface,
                  translation_service: TranslationService,
                  ):
-        self.web_interface = web_interface
+        self.canteens_gateway = canteens_gateway
         self.telegram_interface = telegram_interface
 
         self.translation_service = translation_service
@@ -40,7 +40,7 @@ class GenerateCanteenMenuUseCase:
         :param test_time: Ручное указание времени, когда запрашивается столовая
         :return: Текст столовой
         """
-        canteen_data = await self.web_interface.get_canteens_data(canteen_id=canteen_id)
+        canteen_data = await self.canteens_gateway.get_canteens_data(canteen_id=canteen_id)
         result = await self.refactor_canteens_menu_to_text_use_case.execute(
             main_dishes=canteen_data.get('main_dishes'),
             side_dishes=canteen_data.get('side_dishes'),

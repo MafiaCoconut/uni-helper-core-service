@@ -1,7 +1,6 @@
 from icecream import ic
 
 from application.interfaces.telegram_interface import TelegramInterface
-from application.interfaces.web_interface import WebInterface
 from application.services.admin_service import AdminsService
 from application.services.canteens_service import CanteensService
 from application.services.translation_service import TranslationService
@@ -76,6 +75,7 @@ class AuthorizationUseCase:
 
     async def check_canteen(self, callback, user: User, canteen_id: int):
         if canteen_id == 0:
+            # TODO доделать
             pass
         else:
             canteen = await self.canteens_service.get_canteens_info(canteen_id=canteen_id)

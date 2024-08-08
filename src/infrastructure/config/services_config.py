@@ -5,25 +5,27 @@ from application.services.settings_service import SettingsService
 from application.services.stadburo_service import StadburoService
 from application.services.users_service import UsersService
 from application.services.translation_service import TranslationService
+from infrastructure.config.gateways_config import canteens_gateway, users_gateway, stadburo_gateway
 
-from infrastructure.config.interfaces_config import web_interface, telegram_interface
+from infrastructure.config.interfaces_config import telegram_interface
 from infrastructure.config.keyboards_config import settings_keyboards, authorization_keyboards, admin_keyboards
 from infrastructure.config.providers_config import keyboards_provider
 from infrastructure.config.redis_config import redis_service
 from infrastructure.config.translation_config import translation_service
 
 canteens_service = CanteensService(
-    web_interface=web_interface,
+    users_gateway=users_gateway,
+    canteens_gateway=canteens_gateway,
     telegram_interface=telegram_interface,
     translation_service=translation_service
 )
 stadburo_service = StadburoService(
-    web_interface=web_interface,
+    stadburo_gateway=stadburo_gateway,
     translation_service=translation_service
 )
 
 users_service = UsersService(
-    web_interface=web_interface
+    users_gateway=users_gateway
 )
 
 admins_service = AdminsService(

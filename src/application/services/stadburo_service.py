@@ -1,6 +1,6 @@
 from icecream import ic
 
-from application.interfaces.web_interface import WebInterface
+from application.gateways.stadburo_gateway import StadburoGateway
 from application.services.translation_service import TranslationService
 from application.use_cases.generate_termins_list_use_case import GenerateTerminsListUseCase
 from application.use_cases.refactor_stadburo_termins_to_text_use_case import RefactorStadburoTerminsToTextUseCase
@@ -9,13 +9,13 @@ from infrastructure.config.logs_config import log_decorator
 
 class StadburoService:
     def __init__(self,
-                 web_interface: WebInterface,
+                 stadburo_gateway: StadburoGateway,
                  translation_service: TranslationService,
                  ):
-        self.web_interface = web_interface
+        self.stadburo_gateway = stadburo_gateway
         self.translation_service = translation_service
         self.generate_termins_list_use_case = GenerateTerminsListUseCase(
-            web_interface=web_interface,
+            stadburo_gateway=stadburo_gateway,
             translation_service=translation_service
         )
 
