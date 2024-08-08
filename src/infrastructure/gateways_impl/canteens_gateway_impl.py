@@ -30,6 +30,7 @@ class CanteensGatewayImpl(CanteensGateway):
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
+                    ic(response_json)
                     canteen = Canteen(
                         canteen_id=response_json.get('canteen').get('canteen_id'),
                         name=response_json.get('canteen').get('name'),
@@ -54,7 +55,7 @@ class CanteensGatewayImpl(CanteensGateway):
 
                     if response_json.get('side_dishes') is not None:
                         side_dishes = [SideDish(
-                            side_dish_id=side_dish.get('updated_at'),
+                            side_dish_id=side_dish.get('side_dish_id'),
                             canteen_id=side_dish.get('canteen_id'),
                             name=side_dish.get('name'),
                             type=side_dish.get('type'),

@@ -2,6 +2,7 @@ from application.services.translation_service import TranslationService
 from domain.entities.category_of_termin import CategoryOfTermins
 from domain.entities.termin import Termin
 from errors import TerminsErrorCodes
+from infrastructure.config.logs_config import log_decorator
 
 
 class RefactorStadburoTerminsToTextUseCase:
@@ -10,6 +11,7 @@ class RefactorStadburoTerminsToTextUseCase:
                  ):
         self.translation_service = translation_service
 
+    @log_decorator
     async def execute(self, termins: list[Termin], category_of_termins: CategoryOfTermins, locale: str) -> dict:
         """
 
