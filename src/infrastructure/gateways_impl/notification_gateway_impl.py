@@ -25,7 +25,7 @@ class NotificationGatewayImpl(NotificationGateway):
                     logging.error(f"Failed to update mailing time. Response code: {resp.status}")
 
     @log_decorator
-    async def delete_mailing_time(self, user_id: int):
+    async def delete_canteens_menu_mailing_time(self, user_id: int):
         async with aiohttp.ClientSession() as session:
             async with session.get(
                     url=self.notification_address + f"/user{user_id}/deleteMailingTime",
@@ -37,7 +37,7 @@ class NotificationGatewayImpl(NotificationGateway):
                     logging.error(f"Failed to update mailing time. Response code: {resp.status}")
 
     @log_decorator
-    async def set_mailing_time(self, user_id: int, mailing_time: str):
+    async def set_canteens_menu_mailing_time(self, user_id: int, mailing_time: str):
         async with aiohttp.ClientSession() as session:
             async with session.get(
                     url=self.notification_address + f"/user{user_id}/addUsersMailingTime",

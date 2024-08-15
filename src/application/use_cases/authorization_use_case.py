@@ -3,6 +3,7 @@ from icecream import ic
 from application.interfaces.telegram_interface import TelegramInterface
 from application.services.admin_service import AdminsService
 from application.services.canteens_service import CanteensService
+from application.services.notification_service import NotificationService
 from application.services.translation_service import TranslationService
 from application.services.users_service import UsersService
 from application.telegram.keyboards.authorization_keyboards import AuthorizationKeyboardsBuilder
@@ -16,6 +17,7 @@ class AuthorizationUseCase:
                  users_service: UsersService,
                  canteens_service: CanteensService,
                  telegram_interface: TelegramInterface,
+                 notification_service: NotificationService,
                  admins_service: AdminsService,
                  translation_service: TranslationService,
                  authorization_keyboards: AuthorizationKeyboardsBuilder,
@@ -25,6 +27,7 @@ class AuthorizationUseCase:
 
         self.users_service = users_service
         self.canteens_service = canteens_service
+        self.notification_service = notification_service
         self.admins_service = admins_service
         self.translation_service = translation_service
 

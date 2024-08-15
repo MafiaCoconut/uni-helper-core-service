@@ -7,9 +7,9 @@ class NotificationGateway(ABC):
         pass
 
     @abstractmethod
-    async def delete_mailing_time(self, user_id: int):
+    async def delete_canteens_menu_mailing_time(self, user_id: int):
         pass
 
     @abstractmethod
-    async def set_mailing_time(self, user_id: int, mailing_time: str):
+    async def set_canteens_menu_mailing_time(self, user_id: int, mailing_time: str):
         pass

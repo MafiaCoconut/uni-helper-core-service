@@ -31,7 +31,7 @@ class SettingsUserDataUseCase:
 
     async def disable_mailing(self, user_id: int):
         await self.users_service.update_user(user_id=user_id, new_mailing_time='-')
-        await self.notification_service.delete_job(user_id=user_id)
+        await self.notification_service.delete_canteens_menu_mailing(user_id=user_id)
 
 
 
