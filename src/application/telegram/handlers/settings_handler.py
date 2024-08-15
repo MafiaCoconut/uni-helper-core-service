@@ -28,7 +28,8 @@ class SettingsHandler:
     def __register_callbacks(self, router: Router):
         router.callback_query.register(self.menu_settings_handler, F.data == "menu_settings")
         router.callback_query.register(self.change_locale_handler, F.data.startswith("settings_locales_config"))
-        router.callback_query.register(self.change_mailing_time_handler, F.data == "settings_change_mailing_time")
+        router.callback_query.register(self.menu_change_mailing_time_handler, F.data == "menu_settings_change_mailing_time")
+        router.callback_query.register(self.change_mailing_time_handler, F.data.startswith("settings_change_mailing_time"))
 
         # router.callback_query.register(self.set_new_locale, F.data.startswith('settings_language'))
         # Настройки
@@ -53,10 +54,15 @@ class SettingsHandler:
         await self.settings_service.change_locale(callback=call, user_id=call.message.chat.id, new_locale=new_locale)
         await call.answer()
 
+    async def menu_change_mailing_time_handler(self, call: CallbackQuery, locale: str):
+        await self.settings_service.menu_change_mailing_time(callback=call, locale=locale)
+        await call.answer()
+
     async def change_mailing_time_handler(self, call: CallbackQuery, locale: str):
-        new_mailing_time = call.data[call.data.find(' ')]
-        await self.settings_service.change_mailing_time(callback=call, user_id=call.message.chat.id, locale=locale,
-                                                        new_mailing_time=new_mailing_time)
+        new_mailing_time = call.data[call.data.find(' ') + 1:]
+        ic(new_mailing_time)
+        await self.settings_service.change_mailing_time(callback=call, user_id=call.message.chat.id,
+                                                        locale=locale, new_mailing_time=new_mailing_time)
         await call.answer()
 
     # async def set_new_locale(self, callback: CallbackQuery, state: FSMContext, locale: str):

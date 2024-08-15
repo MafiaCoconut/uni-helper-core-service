@@ -32,7 +32,7 @@ class SettingsKeyboardsBuilder:
 
                 [InlineKeyboardButton(
                     text=await self.translation_service.translate(message_id='change-mailing-time', locale=locale),
-                    callback_data="settings_change_mailing_time")],
+                    callback_data="menu_settings_change_mailing_time")],
 
                 [InlineKeyboardButton(
                     text=await self.translation_service.translate(message_id='change-status-mailing', locale=locale),
@@ -89,12 +89,12 @@ class SettingsKeyboardsBuilder:
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="11:30", callback_data="settings_change_mailing_time 10:00"),
-                    InlineKeyboardButton(text="12:00", callback_data="settings_change_mailing_time 11:00")
+                    InlineKeyboardButton(text="11:30", callback_data="settings_change_mailing_time 11:30"),
+                    InlineKeyboardButton(text="11:45", callback_data="settings_change_mailing_time 11:45")
                 ],
                 [
-                    InlineKeyboardButton(text="12:30", callback_data="settings_change_mailing_time 12:00"),
-                    InlineKeyboardButton(text="13:00", callback_data="settings_change_mailing_time 13:00")
+                    InlineKeyboardButton(text="12:00", callback_data="settings_change_mailing_time 12:00"),
+                    InlineKeyboardButton(text="12:15", callback_data="settings_change_mailing_time 12:15")
                 ]
             ]
         )
