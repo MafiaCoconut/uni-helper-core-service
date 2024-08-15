@@ -11,11 +11,15 @@ from infrastructure.config.translation_config import translation_service
 
 canteens_keyboards = CanteensKeyboardsBuilder(translation_service=translation_service)
 stadburo_keyboards = StadburoKeyboardsBuilder(translation_service=translation_service)
-settings_keyboards = SettingsKeyboardsBuilder(translation_service=translation_service)
 navigator_keyboards = NavigatorKeyboardsBuilder(translation_service=translation_service)
 links_keyboards = LinksKeyboardsBuilder(translation_service=translation_service)
 menu_main_keyboards = MenuMainKeyboardsBuilder(translation_service=translation_service)
 translation_keyboards = TranslationKeyboardsBuilder()
+
+settings_keyboards = SettingsKeyboardsBuilder(
+    translation_service=translation_service,
+    translation_keyboards=translation_keyboards,
+)
 
 authorization_keyboards = AuthorizationKeyboardsBuilder(
     translation_service=translation_service,
@@ -23,6 +27,7 @@ authorization_keyboards = AuthorizationKeyboardsBuilder(
     navigator_keyboards=navigator_keyboards,
     translation_keyboards=translation_keyboards
 )
+
 
 admin_keyboards = AdminKeyboardsBuilder(translation_service=translation_service)
 

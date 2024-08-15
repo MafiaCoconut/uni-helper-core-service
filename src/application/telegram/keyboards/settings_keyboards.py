@@ -4,10 +4,29 @@ from aiogram.types import (
     InlineKeyboardMarkup,
 )
 
+from application.telegram.keyboards.translation_keyboards import TranslationKeyboardsBuilder
+
 
 class SettingsKeyboardsBuilder:
-    def __init__(self, translation_service: TranslationService):
+    def __init__(self,
+                 translation_service: TranslationService,
+                 translation_keyboards: TranslationKeyboardsBuilder,
+                 ):
         self.translation_service = translation_service
+        self.translation_keyboards = translation_keyboards
+
+    async def get_languages_list(self, locale: str):
+        languages = await self.translation_keyboards.get_locales_list('settings_locales_config')
+
+        languages.inline_keyboard.append(
+            [
+                InlineKeyboardButton(
+                    text=await self.translation_service.translate(message_id='to-change-canteen', locale=locale),
+                    callback_data='settings_canteens_config')
+            ]
+        )
+
+        return languages
 
     async def get_menu(self, locale: str) -> InlineKeyboardMarkup:
         languages = await self.get_languages_list('from_settings')

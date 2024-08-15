@@ -25,10 +25,31 @@ class SettingsHandler:
         pass
 
     def __register_callbacks(self, router: Router):
-        router.callback_query.register(self.set_new_locale, F.data.startswith('settings_language'))
+        router.callback_query.register(self.menu_settings_handler, F.data == "menu_settings")
 
-    async def set_new_locale(self, callback: CallbackQuery, state: FSMContext, locale: str):
-        pass
+        # router.callback_query.register(self.set_new_locale, F.data.startswith('settings_language'))
+        # Настройки
+        # router.callback_query.register(self.change_mailing_time_handler, F.data == "change_mailing_time")
+        # router.callback_query.register(self.change_status_mailing_handler, F.data == 'change_status_mailing')
+        # dp.callback_query.register(settings_callback.change_status_numbers_in_menu_handler,
+        #                            F.data == 'change_status_numbers_in_menu')
+        # router.callback_query.register(self.change_language_handler, F.data.startswith('settings_language'))
+        # router.callback_query.register(self.set_canteen_to_person_status_question,
+        #                            F.data.startswith('change_canteen'))
+        # router.callback_query.register(self.set_canteen_to_person_status_check_handler,
+        #                            F.data.startswith('settings_canteen_change'))
+        # router.callback_query.register(self.set_canteen_to_person_status_save,
+        #                            F.data.startswith('settings_canteen_yes'))
+
+    async def menu_settings_handler(self, call: CallbackQuery, locale: str):
+        await self.settings_service.menu_settings(callback=call, user_id=call.message.chat.id, locale=locale)
+        # await call.message.edit_text(
+        #     auxiliary.get_text_for_settings(call.message, l10n),
+        #                              reply_markup=inline.get_settings(l10n))
+        await call.answer()
+
+    # async def set_new_locale(self, callback: CallbackQuery, state: FSMContext, locale: str):
+    #     pass
         # new_locale = callback.data[callback.data.rfind('_') + 1:]
         # where_was_called = callback.data[callback.data.find(' ') + 1:callback.data.rfind('_')]
         # print(where_was_called)

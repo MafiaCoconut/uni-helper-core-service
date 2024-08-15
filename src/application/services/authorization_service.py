@@ -1,6 +1,7 @@
 from application.interfaces.telegram_interface import TelegramInterface
 from application.services.admin_service import AdminsService
 from application.services.canteens_service import CanteensService
+from application.services.notification_service import NotificationService
 from application.services.settings_service import SettingsService
 from application.services.translation_service import TranslationService
 from application.services.users_service import UsersService
@@ -18,6 +19,7 @@ class AuthorizationService:
                  telegram_interface: TelegramInterface,
                  admins_service: AdminsService,
                  settings_service: SettingsService,
+                 notification_service: NotificationService,
                  authorization_keyboards: AuthorizationKeyboardsBuilder,
                  translation_service: TranslationService,
                  ):
@@ -29,6 +31,7 @@ class AuthorizationService:
             users_service=users_service,
             canteens_service=canteens_service,
             admins_service=admins_service,
+            notification_service=notification_service,
             translation_service=translation_service,
             authorization_keyboards=authorization_keyboards,
             menu_main_keyboards=menu_main_keyboards,
