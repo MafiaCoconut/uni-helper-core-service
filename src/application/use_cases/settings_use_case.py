@@ -28,7 +28,6 @@ class SettingsUseCase:
 
     async def get_settings_text(self, user_id: int, locale: str):
         user = await self.users_service.get_user(user_id=user_id)
-        ic(user)
         text = await self.translation_service.translate(message_id='menu-settings-heading', locale=locale) + '\n'
         if user.canteen_id != 0:
             text += await self.translation_service.translate(message_id='menu-settings-mailing-on', locale=locale) + '\n'
@@ -57,6 +56,7 @@ class SettingsUseCase:
     @log_decorator
     async def change_locale(self, callback, user_id: int, new_locale: str):
         await self.update_user_data_use_case.update_locale(user_id=user_id, new_locale=new_locale)
+
         try:
             await self.telegram_interface.edit_message_with_callback(
                 callback=callback,
@@ -66,4 +66,15 @@ class SettingsUseCase:
         except Exception as e:
             ic(e)
 
+    @log_decorator
+    async def change_mailing_time(self, callback, user_id: int, new_mailing_time: str, locale: str):
+        await self.update_user_data_use_case.update_mailing_time(user_id=user_id, new_mailing_time=new_mailing_time)
+        await self.telegram_interface.edit_message_with_callback(
+            callback=callback,
+            message=await self.translation_service.translate(
+                message_id='enter-appropriate-time-for-your-daily-mailing',
+                locale=locale,
+            ),
+            keyboard=await self.settings_keyboards.get_change_mailing_time(locale=locale)
+        )
 

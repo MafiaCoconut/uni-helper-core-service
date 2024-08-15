@@ -25,6 +25,7 @@ class SettingsUserDataUseCase:
 
     async def update_mailing_time(self, user_id: int, new_mailing_time: str):
         await self.users_service.update_user(user_id=user_id, new_mailing_time=new_mailing_time)
+        await self.notification_service.update_canteens_menu_mailing(user_id=user_id, new_mailing_time=new_mailing_time)
 
     async def update_canteen_id(self, user_id: int, new_canteen_id: int):
         await self.users_service.update_user(user_id=user_id, new_canteen_id=new_canteen_id)

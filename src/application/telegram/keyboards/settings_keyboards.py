@@ -4,6 +4,7 @@ from aiogram.types import (
     InlineKeyboardMarkup,
 )
 
+from application.telegram.keyboards.navigator_keyboards import NavigatorKeyboardsBuilder
 from application.telegram.keyboards.translation_keyboards import TranslationKeyboardsBuilder
 
 
@@ -11,25 +12,19 @@ class SettingsKeyboardsBuilder:
     def __init__(self,
                  translation_service: TranslationService,
                  translation_keyboards: TranslationKeyboardsBuilder,
+                 navigator_keyboards: NavigatorKeyboardsBuilder,
+
                  ):
         self.translation_service = translation_service
         self.translation_keyboards = translation_keyboards
+        self.navigator_keyboards = navigator_keyboards
 
-    async def get_languages_list(self, locale: str):
+    async def get_languages_list(self):
         languages = await self.translation_keyboards.get_locales_list(where_was_called='settings_locales_config')
-
-        # languages.inline_keyboard.append(
-        #     [
-        #         InlineKeyboardButton(
-        #             text=await self.translation_service.translate(message_id='to-change-canteen', locale=locale),
-        #             callback_data='settings_canteens_config')
-        #     ]
-        # )
-
         return languages
 
     async def get_menu(self, locale: str) -> InlineKeyboardMarkup:
-        languages = await self.get_languages_list(locale=locale)
+        languages = await self.get_languages_list()
 
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
@@ -37,7 +32,7 @@ class SettingsKeyboardsBuilder:
 
                 [InlineKeyboardButton(
                     text=await self.translation_service.translate(message_id='change-mailing-time', locale=locale),
-                    callback_data="change_mailing_time")],
+                    callback_data="settings_change_mailing_time")],
 
                 [InlineKeyboardButton(
                     text=await self.translation_service.translate(message_id='change-status-mailing', locale=locale),
@@ -57,7 +52,7 @@ class SettingsKeyboardsBuilder:
         )
         return keyboard
 
-    def get_canteens_list_to_change(self, locale: str) -> InlineKeyboardMarkup:
+    async def get_canteens_list_to_change(self, locale: str) -> InlineKeyboardMarkup:
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 [
@@ -72,20 +67,38 @@ class SettingsKeyboardsBuilder:
                 ],
                 [
                     InlineKeyboardButton(
-                        text=self.translation_service.translate(message_id='disable-mailing-canteen', locale=locale),
+                        text=await self.translation_service.translate(message_id='disable-mailing-canteen', locale=locale),
                         callback_data="settings_canteen_change -")]
 
             ]
         )
         return keyboard
 
-    def get_check_status_change_canteen(self, locale: str, canteen_name: str):
+    async def get_check_status_change_canteen(self, locale: str, canteen_name: str):
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
-                [InlineKeyboardButton(text=self.translation_service.translate(message_id='save', locale=locale),
+                [InlineKeyboardButton(text=await self.translation_service.translate(message_id='save', locale=locale),
                                       callback_data=f'settings_canteen_yes {canteen_name}')],
-                [InlineKeyboardButton(text=self.translation_service.translate(message_id='change', locale=locale),
+                [InlineKeyboardButton(text=await self.translation_service.translate(message_id='change', locale=locale),
                                       callback_data='change_canteen from_settings')]
             ]
         )
+        return keyboard
+
+    async def get_change_mailing_time(self, locale: str):
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [
+                    InlineKeyboardButton(text="11:30", callback_data="settings_change_mailing_time 10:00"),
+                    InlineKeyboardButton(text="12:00", callback_data="settings_change_mailing_time 11:00")
+                ],
+                [
+                    InlineKeyboardButton(text="12:30", callback_data="settings_change_mailing_time 12:00"),
+                    InlineKeyboardButton(text="13:00", callback_data="settings_change_mailing_time 13:00")
+                ]
+            ]
+        )
+        keyboard_go_to_menu_settings = await self.navigator_keyboards.get_go_to(locale=locale, where="settings")
+        keyboard.inline_keyboard.append(keyboard_go_to_menu_settings.inline_keyboard[0])
+
         return keyboard

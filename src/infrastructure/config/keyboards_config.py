@@ -19,6 +19,7 @@ translation_keyboards = TranslationKeyboardsBuilder()
 settings_keyboards = SettingsKeyboardsBuilder(
     translation_service=translation_service,
     translation_keyboards=translation_keyboards,
+    navigator_keyboards=navigator_keyboards,
 )
 
 authorization_keyboards = AuthorizationKeyboardsBuilder(
