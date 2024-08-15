@@ -31,7 +31,6 @@ class AuthorizationUseCase:
         self.authorization_keyboards = authorization_keyboards
         self.menu_main_keyboards = menu_main_keyboards
 
-
     async def start_authorization(self, user: User) -> int:
         await self.users_service.create_user(user=user)
         message_id = await self.telegram_interface.send_message(

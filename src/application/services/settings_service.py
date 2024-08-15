@@ -1,7 +1,7 @@
 from application.services.redis_service import RedisService
 from application.services.users_service import UsersService
 from application.telegram.keyboards.settings_keyboards import SettingsKeyboardsBuilder
-from application.use_cases.update_user_data_use_case import UpdateUserDataUseCase
+from application.use_cases.update_user_data_use_case import SettingsUserDataUseCase
 from domain.entities.user import User
 from infrastructure.config.logs_config import log_decorator
 
@@ -13,7 +13,7 @@ class SettingsService:
                  settings_keyboards: SettingsKeyboardsBuilder,
                  ):
         self.settings_keyboards = settings_keyboards
-        self.update_user_data_use_case = UpdateUserDataUseCase(
+        self.update_user_data_use_case = SettingsUserDataUseCase(
             redis_service=redis_service,
             users_service=users_service,
         )
