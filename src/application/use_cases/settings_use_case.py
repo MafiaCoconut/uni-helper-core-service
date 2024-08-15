@@ -34,10 +34,11 @@ class SettingsUseCase:
             text += await self.translation_service.translate(message_id='menu-settings-mailing-on', locale=locale) + '\n'
             text += await self.translation_service.translate(message_id='menu-settings-mailing-time', locale=locale,
                                                              mailing_time=user.mailing_time) + '\n'
-
+            canteen = await self.canteens_service.get_canteens_info(canteen_id=user.canteen_id)
             text += await self.translation_service.translate(
                 message_id='menu-settings-canteen', locale=locale,
-                canteen=await self.canteens_service.get_canteens_info(canteen_id=user.canteen_id)).name + '\n'
+                canteen=canteen.name + '\n'
+            )
         else:
             text += await self.translation_service.translate(message_id='menu-settings-mailing-off', locale=locale) + '\n'
 
