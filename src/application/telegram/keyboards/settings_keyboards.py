@@ -16,20 +16,20 @@ class SettingsKeyboardsBuilder:
         self.translation_keyboards = translation_keyboards
 
     async def get_languages_list(self, locale: str):
-        languages = await self.translation_keyboards.get_locales_list('settings_locales_config')
+        languages = await self.translation_keyboards.get_locales_list(where_was_called='settings_locales_config')
 
-        languages.inline_keyboard.append(
-            [
-                InlineKeyboardButton(
-                    text=await self.translation_service.translate(message_id='to-change-canteen', locale=locale),
-                    callback_data='settings_canteens_config')
-            ]
-        )
+        # languages.inline_keyboard.append(
+        #     [
+        #         InlineKeyboardButton(
+        #             text=await self.translation_service.translate(message_id='to-change-canteen', locale=locale),
+        #             callback_data='settings_canteens_config')
+        #     ]
+        # )
 
         return languages
 
     async def get_menu(self, locale: str) -> InlineKeyboardMarkup:
-        languages = await self.get_languages_list('from_settings')
+        languages = await self.get_languages_list(locale=locale)
 
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[

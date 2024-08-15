@@ -42,6 +42,7 @@ notification_service = NotificationService(
 settings_service = SettingsService(
     users_service=users_service,
     redis_service=redis_service,
+    canteens_service=canteens_service,
     settings_keyboards=settings_keyboards,
     notification_service=notification_service,
     telegram_interface=telegram_interface,

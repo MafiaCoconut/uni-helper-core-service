@@ -1,6 +1,7 @@
 from aiogram import Router, F
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
+from icecream import ic
 
 from application.services.settings_service import SettingsService
 from application.telegram.keyboards.settings_keyboards import SettingsKeyboardsBuilder
@@ -26,6 +27,7 @@ class SettingsHandler:
 
     def __register_callbacks(self, router: Router):
         router.callback_query.register(self.menu_settings_handler, F.data == "menu_settings")
+        router.callback_query.register(self.change_locale_handler, F.data.startswith("settings_locales_config"))
 
         # router.callback_query.register(self.set_new_locale, F.data.startswith('settings_language'))
         # Настройки
@@ -43,9 +45,12 @@ class SettingsHandler:
 
     async def menu_settings_handler(self, call: CallbackQuery, locale: str):
         await self.settings_service.menu_settings(callback=call, user_id=call.message.chat.id, locale=locale)
-        # await call.message.edit_text(
-        #     auxiliary.get_text_for_settings(call.message, l10n),
-        #                              reply_markup=inline.get_settings(l10n))
+        await call.answer()
+
+    async def change_locale_handler(self, call: CallbackQuery, locale: str):
+        new_locale = call.data[call.data.find(' ')+1:]
+        ic(new_locale)
+        await self.settings_service.change_locale(callback=call, user_id=call.message.chat.id, new_locale=new_locale)
         await call.answer()
 
     # async def set_new_locale(self, callback: CallbackQuery, state: FSMContext, locale: str):
