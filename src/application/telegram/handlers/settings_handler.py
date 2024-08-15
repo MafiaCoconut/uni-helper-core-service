@@ -30,6 +30,7 @@ class SettingsHandler:
         router.callback_query.register(self.change_locale_handler, F.data.startswith("settings_locales_config"))
         router.callback_query.register(self.menu_change_mailing_time_handler, F.data == "menu_settings_change_mailing_time")
         router.callback_query.register(self.change_mailing_time_handler, F.data.startswith("settings_change_mailing_time"))
+        router.callback_query.register(self.change_mailing_status, F.data == "change_status_mailing")
 
         # router.callback_query.register(self.set_new_locale, F.data.startswith('settings_language'))
         # Настройки
@@ -64,6 +65,9 @@ class SettingsHandler:
         await self.settings_service.change_mailing_time(callback=call, user_id=call.message.chat.id,
                                                         locale=locale, new_mailing_time=new_mailing_time)
         await call.answer()
+
+    async def change_mailing_status(self, call: CallbackQuery, locale: str):
+        await self.settings_service.change_mailing_status(callback=call, user_id=call.message.chat.id, locale=locale)
 
     # async def set_new_locale(self, callback: CallbackQuery, state: FSMContext, locale: str):
     #     pass

@@ -90,3 +90,21 @@ class SettingsUseCase:
         except Exception as e:
             ic(e)
 
+    @log_decorator
+    async def change_mailing_status(self, callback, user_id: int, locale: str):
+        user = await self.users_service.get_user(user_id=user_id)
+        ic(user)
+        if user.mailing_time == '-':
+            await self.update_user_data_use_case.enable_mailing(user_id=user_id, new_mailing_time='11:45')
+        else:
+            await self.update_user_data_use_case.disable_mailing(user_id=user_id)
+
+        try:
+            await self.telegram_interface.edit_message_with_callback(
+                callback=callback,
+                message=await self.get_settings_text(user_id=user_id, locale=locale),
+                keyboard=await self.settings_keyboards.get_menu(locale=locale),
+            )
+        except Exception as e:
+            ic(e)
+

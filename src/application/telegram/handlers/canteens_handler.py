@@ -52,7 +52,7 @@ class CanteensHandler:
         :param locale: Языковая локаль
         """
         canteen_id = call.data[call.data.find(' ')+1:]
-        ic(canteen_id)
+        # ic(canteen_id)
 
         canteen_menu = await self.canteens_service.get_canteens_menu(canteen_id=canteen_id, locale=locale)
 

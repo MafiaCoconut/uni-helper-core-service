@@ -54,6 +54,10 @@ class SettingsService:
                                                          new_mailing_time=new_mailing_time, locale=locale)
 
     @log_decorator
+    async def change_mailing_status(self, callback, user_id, locale: str):
+        await self.settings_use_case.change_mailing_status(callback=callback, user_id=user_id, locale=locale)
+
+    @log_decorator
     async def set_new_locale(self, user_id: int, new_locale: str):
         await self.settings_user_data_use_case.update_locale(user_id=user_id, new_locale=new_locale)
 

@@ -87,7 +87,7 @@ class CanteensGatewayImpl(CanteensGateway):
                         closed_time=response_json.get('canteen').get('closed_time'),
                         created_at=datetime.fromisoformat(response_json.get('canteen').get('created_at')),
                     )
-                    ic(canteen)
+                    # ic(canteen)
                     return canteen
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
