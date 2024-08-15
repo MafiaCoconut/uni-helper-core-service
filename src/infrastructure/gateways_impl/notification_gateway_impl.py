@@ -14,9 +14,9 @@ class NotificationGatewayImpl(NotificationGateway):
     @log_decorator
     async def update_mailing_time(self, user_id: int, new_mailing_time: str):
         async with aiohttp.ClientSession() as session:
-            async with session.get(
+            async with session.put(
                     url=self.notification_address + f"/user{user_id}/updateMailingTime",
-                    json={'new_mailing_time': new_mailing_time}
+                    params={'new_mailing_time': new_mailing_time}
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
@@ -27,7 +27,7 @@ class NotificationGatewayImpl(NotificationGateway):
     @log_decorator
     async def delete_canteens_menu_mailing_time(self, user_id: int):
         async with aiohttp.ClientSession() as session:
-            async with session.get(
+            async with session.delete(
                     url=self.notification_address + f"/user{user_id}/deleteMailingTime",
             ) as resp:
                 if resp.status == 200:
@@ -39,9 +39,9 @@ class NotificationGatewayImpl(NotificationGateway):
     @log_decorator
     async def set_canteens_menu_mailing_time(self, user_id: int, mailing_time: str):
         async with aiohttp.ClientSession() as session:
-            async with session.get(
+            async with session.post(
                     url=self.notification_address + f"/user{user_id}/addUsersMailingTime",
-                    json={'mailing_time': mailing_time}
+                    params={'mailing_time': mailing_time}
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()

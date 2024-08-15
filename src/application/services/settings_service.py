@@ -54,8 +54,17 @@ class SettingsService:
                                                          new_mailing_time=new_mailing_time, locale=locale)
 
     @log_decorator
-    async def change_mailing_status(self, callback, user_id, locale: str):
+    async def change_mailing_status(self, callback, user_id: int, locale: str):
         await self.settings_use_case.change_mailing_status(callback=callback, user_id=user_id, locale=locale)
+
+    @log_decorator
+    async def menu_change_canteen(self, callback, user_id: int, locale: str):
+        await self.settings_use_case.menu_change_canteen(callback=callback, user_id=user_id, locale=locale)
+
+    @log_decorator
+    async def change_canteen(self, callback, user_id: int, locale: str, new_canteen_id: int):
+        await self.settings_use_case.change_canteen(callback=callback, user_id=user_id,
+                                                    locale=locale, new_canteen_id=new_canteen_id)
 
     @log_decorator
     async def set_new_locale(self, user_id: int, new_locale: str):

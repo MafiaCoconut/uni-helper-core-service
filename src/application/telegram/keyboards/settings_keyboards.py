@@ -57,21 +57,25 @@ class SettingsKeyboardsBuilder:
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="Mensa Erlenring",
-                                         callback_data="settings_canteen_change mensa_erlenring"),
+                                         callback_data="settings_canteen_change 1"),
                     InlineKeyboardButton(text="Mensa Lahnberge",
-                                         callback_data="settings_canteen_change mensa_lahnberge")
+                                         callback_data="settings_canteen_change 2")
                 ],
                 [
-                    InlineKeyboardButton(text="Bistro", callback_data="settings_canteen_change bistro"),
-                    InlineKeyboardButton(text="THM", callback_data="settings_canteen_change thm")
+                    InlineKeyboardButton(text="Bistro", callback_data="settings_canteen_change 3"),
+                    InlineKeyboardButton(text="THM", callback_data="settings_canteen_change 6")
                 ],
                 [
                     InlineKeyboardButton(
                         text=await self.translation_service.translate(message_id='disable-mailing-canteen', locale=locale),
-                        callback_data="settings_canteen_change -")]
-
+                        callback_data="settings_canteen_change 0"
+                    )
+                ]
             ]
         )
+        keyboard_go_to_menu_settings = await self.navigator_keyboards.get_go_to(locale=locale, where="settings")
+        keyboard.inline_keyboard.append(keyboard_go_to_menu_settings.inline_keyboard[0])
+
         return keyboard
 
     async def get_check_status_change_canteen(self, locale: str, canteen_name: str):

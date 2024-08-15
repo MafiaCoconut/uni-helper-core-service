@@ -30,7 +30,10 @@ class SettingsHandler:
         router.callback_query.register(self.change_locale_handler, F.data.startswith("settings_locales_config"))
         router.callback_query.register(self.menu_change_mailing_time_handler, F.data == "menu_settings_change_mailing_time")
         router.callback_query.register(self.change_mailing_time_handler, F.data.startswith("settings_change_mailing_time"))
-        router.callback_query.register(self.change_mailing_status, F.data == "change_status_mailing")
+        router.callback_query.register(self.change_mailing_status_handler, F.data == "change_status_mailing")
+
+        router.callback_query.register(self.menu_change_canteen_handler, F.data == "change_canteen_from_settings")
+        router.callback_query.register(self.change_canteen_handler, F.data.startswith("settings_canteen_change"))
 
         # router.callback_query.register(self.set_new_locale, F.data.startswith('settings_language'))
         # Настройки
@@ -66,8 +69,19 @@ class SettingsHandler:
                                                         locale=locale, new_mailing_time=new_mailing_time)
         await call.answer()
 
-    async def change_mailing_status(self, call: CallbackQuery, locale: str):
+    async def change_mailing_status_handler(self, call: CallbackQuery, locale: str):
         await self.settings_service.change_mailing_status(callback=call, user_id=call.message.chat.id, locale=locale)
+        await call.answer()
+
+    async def menu_change_canteen_handler(self, call: CallbackQuery, locale: str):
+        await self.settings_service.menu_change_canteen(callback=call, user_id=call.message.chat.id, locale=locale)
+        await call.answer()
+
+    async def change_canteen_handler(self, call: CallbackQuery, locale: str):
+        new_canteen_id = call.data[call.data.find(' ') + 1:]
+        await self.settings_service.change_canteen(callback=call, user_id=call.message.chat.id,
+                                                   locale=locale, new_canteen_id=new_canteen_id)
+        await call.answer()
 
     # async def set_new_locale(self, callback: CallbackQuery, state: FSMContext, locale: str):
     #     pass
