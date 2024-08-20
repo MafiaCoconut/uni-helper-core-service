@@ -38,8 +38,15 @@ class AuthorizationService:
         )
 
     @log_decorator
-    async def start_authorization(self, user: User) -> int:
-        message_id = await self.authorization_use_case.start_authorization(user=user)
+    async def start_authorization(self, user_id: int, name: str = "5",
+                                  username: str = "-", locale: str = "en"
+                                  ) -> int:
+        message_id = await self.authorization_use_case.start_authorization(
+            user_id=user_id,
+            name=name,
+            username=username,
+            locale=locale,
+        )
         return message_id
 
     @log_decorator
@@ -77,12 +84,3 @@ class AuthorizationService:
             user=user, canteen_id=canteen_id, canteens_config_message_id=canteens_config_message_id,
         )
         return message_id
-
-
-
-
-
-
-
-
-

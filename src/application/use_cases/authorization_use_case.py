@@ -34,27 +34,42 @@ class AuthorizationUseCase:
         self.authorization_keyboards = authorization_keyboards
         self.menu_main_keyboards = menu_main_keyboards
 
-    async def start_authorization(self, user: User) -> int:
-        await self.users_service.create_user(user=user)
-        message_id = await self.telegram_interface.send_message(
-            user_id=user.user_id,
-            message=await self.translation_service.translate(message_id='welcome-message', locale=user.locale),
-            keyboard=await self.authorization_keyboards.get_languages_list_from_start(locale=user.locale),
+    async def start_authorization(self,
+                                  user_id: int, name: str = "-",
+                                  username: str = "-", locale: str = "en"
+                                  ) -> int:
+        await self.users_service.create_user(
+            User(
+                user_id=user_id,
+                name=name,
+                username=username,
+                locale=locale,
+                mailing_time="-",
+                canteen_id="0",
+                status="active",
+            )
         )
-        await self.notification_service.set_canteens_menu_mailing(user_id=user.user_id, mailing_time="11:45")
+        message_id = await self.telegram_interface.send_message(
+            user_id=user_id,
+            message=await self.translation_service.translate(message_id='welcome-message', locale=locale),
+            keyboard=await self.authorization_keyboards.get_languages_list_from_start(locale=locale),
+        )
+        # await self.notification_service.set_canteens_menu_mailing(user_id=user_id, mailing_time="11:45")
         # await self.admins_service.send_message_to_admin_about_new_user(user=user)
 
         return message_id
 
     async def start_canteen_config(self, menu_authorization_message_id: int, user: User) -> int:
         try:
-            await self.telegram_interface.delete_keyboard(chat_id=user.user_id, message_id=menu_authorization_message_id)
+            await self.telegram_interface.delete_keyboard(chat_id=user.user_id,
+                                                          message_id=menu_authorization_message_id)
         except:
             pass
 
         message_id = await self.telegram_interface.send_message(
             user_id=user.user_id,
-            message=await self.translation_service.translate(message_id='choose-canteen-for-mailing', locale=user.locale),
+            message=await self.translation_service.translate(message_id='choose-canteen-for-mailing',
+                                                             locale=user.locale),
             keyboard=await self.authorization_keyboards.get_canteens_list_to_change(locale=user.locale),
         )
         return message_id
@@ -78,11 +93,15 @@ class AuthorizationUseCase:
 
     async def check_canteen(self, callback, user: User, canteen_id: int):
         if canteen_id == 0:
-            # TODO доделать
-            pass
+            await self.telegram_interface.edit_message_with_callback(
+                callback=callback,
+                message=await self.translation_service.translate(
+                    message_id="null-canteen-has-been-selected", locale=user.locale
+                ),
+                keyboard=await self.menu_main_keyboards.get_menu_main(locale=user.locale)
+            )
         else:
             canteen = await self.canteens_service.get_canteens_info(canteen_id=canteen_id)
-
             await self.telegram_interface.edit_message_with_callback(
                 callback=callback,
                 message=await self.translation_service.translate(
@@ -96,7 +115,11 @@ class AuthorizationUseCase:
 
     async def set_canteen(self, user: User, canteen_id: int, canteens_config_message_id: int) -> int:
         await self.telegram_interface.delete_message(chat_id=user.user_id, message_id=canteens_config_message_id)
-        await self.users_service.update_user(user_id=user.user_id, new_canteen_id=int(canteen_id))
+        await self.users_service.update_user(
+            user_id=user.user_id,
+            new_canteen_id=int(canteen_id),
+            new_mailing_time="11:45",
+        )
 
         message_id = await self.telegram_interface.send_message(
             user_id=user.user_id,

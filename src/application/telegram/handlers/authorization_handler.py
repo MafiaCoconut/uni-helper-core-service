@@ -47,17 +47,20 @@ class AuthorizationHandler:
                 message.from_user.last_name if message.from_user.last_name is not None else ""
             )
 
-            user = User(
+            # user = User(
+            #     user_id=user_id,
+            #     username=users_username if users_username is not None else "-",
+            #     name=users_name if users_name is not None else "-",
+            #     mailing_time="11:45",
+            #     locale=users_language if users_language in await self.translation_service.get_list_of_languages() else 'en',
+            # )
+            message_id = await self.authorization_service.start_authorization(
                 user_id=user_id,
-                username=users_username if users_username is not None else "-",
                 name=users_name if users_name is not None else "-",
-                mailing_time="11:45",
-                locale=users_language if users_language in await self.translation_service.get_list_of_languages() else 'en',
+                username=users_username if users_username is not None else "-",
+                locale=users_language if users_language in await self.translation_service.get_list_of_languages() else 'en'
             )
-            message_id = await self.authorization_service.start_authorization(user=user)
             await state.update_data(menu_authorization_message_id=message_id)
-
-
         else:
             await self.authorization_service.user_already_exist(user=User(user_id=user_id, locale=locale))
 
@@ -93,7 +96,7 @@ class AuthorizationHandler:
         await self.authorization_service.check_canteen(
             callback=callback,
             user=User(user_id=callback.message.chat.id, locale=locale),
-            canteen_id=canteen_id
+            canteen_id=int(canteen_id)
         )
         await callback.answer()
 

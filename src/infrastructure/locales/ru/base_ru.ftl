@@ -201,3 +201,4 @@ save = Сохранить
 choose-canteen-for-mailing = Выберите столовую, рассылку которой хотите получать
 is-sure-to-save-canteen = Вы уверены, что хотите выбрать столовую {$canteen}?
 is-sure-to-disable-mailing-canteen = Вы уверены, что хотите отключить рассылку меню столовых?
+null-canteen-has-been-selected = Рассылка отключена
