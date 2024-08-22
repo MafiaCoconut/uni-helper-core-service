@@ -91,6 +91,3 @@ class AdminMenuUsersUseCase:
             message=text,
             keyboard=await self.admin_keyboards.get_link_to_person(user_id=user_id)
         )
-
-    async def delete_user(self, callback, user_id: int):
-        pass

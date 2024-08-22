@@ -25,12 +25,12 @@ class AdminMenuKeyboardsBuilder:
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 [InlineKeyboardButton(text="Список пользователей", callback_data="admin_get_all_users")],
-                # [InlineKeyboardButton(text="username, time, created", callback_data="admin_get_username_time_created")],
-                # [InlineKeyboardButton(text="id, username, time", callback_data="admin_get_id_username_time")],
-                [InlineKeyboardButton(text="Изменить параметры", callback_data="admin_change_persons_parameters")],
                 [InlineKeyboardButton(text="Количество пользователей", callback_data="admin_get_count_users")],
                 [InlineKeyboardButton(text="Получить ссылку на пользователя", callback_data="admin_get_person_by_id")],
-                [InlineKeyboardButton(text="Удалить пользователя", callback_data="admin_delete_person")],
+                # [InlineKeyboardButton(text="Удалить пользователя", callback_data="admin_delete_person")],
+                # [InlineKeyboardButton(text="username, time, created", callback_data="admin_get_username_time_created")],
+                # [InlineKeyboardButton(text="id, username, time", callback_data="admin_get_id_username_time")],
+                # [InlineKeyboardButton(text="Изменить параметры", callback_data="admin_change_persons_parameters")],
 
                 [InlineKeyboardButton(text="В главное меню", callback_data="admin_menu help")],
             ]
