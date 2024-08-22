@@ -34,6 +34,14 @@ class TelegramInterfaceImpl(TelegramInterface):
 
     @staticmethod
     @log_decorator
+    async def edit_message(chat_id: int, message_id: int, message: str, keyboard=None) -> int:
+        message = await bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=message, reply_markup=keyboard)
+        return message.message_id
+
+
+
+    @staticmethod
+    @log_decorator
     async def delete_message(chat_id: int, message_id: int):
         await bot.delete_message(chat_id=chat_id, message_id=message_id)
 

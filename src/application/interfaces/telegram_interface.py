@@ -24,6 +24,11 @@ class TelegramInterface(ABC):
 
     @staticmethod
     @abstractmethod
+    async def edit_message(chat_id: int, message_id: int, message: str, keyboard=None) -> int:
+        pass
+
+    @staticmethod
+    @abstractmethod
     async def delete_message(chat_id: int, message_id: int):
         pass
 

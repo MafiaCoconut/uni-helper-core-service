@@ -41,6 +41,7 @@ class AdminsService:
             users_gateway=users_gateway,
             telegram_interface=telegram_interface,
             excel_interface=excel_interface,
+            admin_keyboards=admin_keyboards,
             admin_menu_keyboards=admin_menu_keyboards,
         )
         self.admin_menu_canteens_use_case = AdminMenuCanteensUseCase(
@@ -61,14 +62,32 @@ class AdminsService:
     async def send_message_to_admin_about_new_user(self, user: User):
         await self.send_message_to_admin_use_case.new_users_info(user=user)
 
-    async def send_menu_admin_main(self, user_id: int):
-        await self.admin_menu_use_case.menu_main(user_id=user_id)
+    async def send_menu_main(self, user_id: int):
+        await self.admin_menu_use_case.send_menu_main(user_id=user_id)
+
+    async def menu_main(self, callback):
+        await self.admin_menu_use_case.menu_main(callback=callback)
 
     async def menu_users(self, callback):
         await self.admin_menu_users_use_case.menu(callback=callback)
 
     async def get_all_users_data(self, callback):
         await self.admin_menu_users_use_case.get_all_users_data_in_xslx(callback=callback)
+
+    async def get_count_users(self, callback):
+        await self.admin_menu_users_use_case.get_count_users(callback=callback)
+
+    async def request_to_user_data(self, callback, state):
+        await self.admin_menu_users_use_case.request_to_user_data(callback=callback, state=state)
+
+    async def get_user_data(self, message, state, user_id: int):
+        await self.admin_menu_users_use_case.get_user_data(message=message, state=state, user_id=user_id)
+
+    async def change_user(self, callback):
+        await self.admin_menu_users_use_case.change_user(callback=callback)
+
+    async def delete_user(self, callback):
+        await self.admin_menu_users_use_case.delete_user(callback=callback)
 
     async def menu_canteens(self, callback):
         await self.admin_menu_canteens_use_case.menu(callback=callback)

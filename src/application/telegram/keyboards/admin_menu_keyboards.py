@@ -12,11 +12,11 @@ class AdminMenuKeyboardsBuilder:
     async def menu_main(self):
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
-                [InlineKeyboardButton(text="Пользователи", callback_data="admin_menu_users")],
-                [InlineKeyboardButton(text="Столовые", callback_data="admin_menu_canteens")],
-                [InlineKeyboardButton(text="Stadburo", callback_data="admin_menu_stadburo")],
-                [InlineKeyboardButton(text="Логи", callback_data="admin_menu_logs")],
-                [InlineKeyboardButton(text="Рассылка", callback_data="admin_menu_mailing")],
+                [InlineKeyboardButton(text="Пользователи", callback_data="admin_menu users")],
+                [InlineKeyboardButton(text="Столовые", callback_data="admin_menu canteens")],
+                [InlineKeyboardButton(text="Stadburo", callback_data="admin_menu stadburo")],
+                [InlineKeyboardButton(text="Логи", callback_data="admin_menu logs")],
+                [InlineKeyboardButton(text="Рассылка", callback_data="admin_menu mailing")],
             ]
         )
         return keyboard
@@ -25,14 +25,14 @@ class AdminMenuKeyboardsBuilder:
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 [InlineKeyboardButton(text="Список пользователей", callback_data="admin_get_all_users")],
-                [InlineKeyboardButton(text="username, time, created", callback_data="admin_get_username_time_created")],
-                [InlineKeyboardButton(text="id, username, time", callback_data="admin_get_id_username_time")],
+                # [InlineKeyboardButton(text="username, time, created", callback_data="admin_get_username_time_created")],
+                # [InlineKeyboardButton(text="id, username, time", callback_data="admin_get_id_username_time")],
                 [InlineKeyboardButton(text="Изменить параметры", callback_data="admin_change_persons_parameters")],
                 [InlineKeyboardButton(text="Количество пользователей", callback_data="admin_get_count_users")],
                 [InlineKeyboardButton(text="Получить ссылку на пользователя", callback_data="admin_get_person_by_id")],
                 [InlineKeyboardButton(text="Удалить пользователя", callback_data="admin_delete_person")],
 
-                [InlineKeyboardButton(text="В главное меню", callback_data="admin_menu_help")],
+                [InlineKeyboardButton(text="В главное меню", callback_data="admin_menu help")],
             ]
         )
         return keyboard
@@ -65,7 +65,7 @@ class AdminMenuKeyboardsBuilder:
                 #                       callback_data="admin_start_canteen_parser_marburg mo_diner"),
                 #  InlineKeyboardButton(text="меню", callback_data="admin_get_canteen_marburg mo_diner")],
 
-                [InlineKeyboardButton(text="В главное меню", callback_data="admin_menu_help")],
+                [InlineKeyboardButton(text="В главное меню", callback_data="admin_menu help")],
 
             ]
         )
@@ -76,7 +76,7 @@ class AdminMenuKeyboardsBuilder:
             inline_keyboard=[
                 [InlineKeyboardButton(text="Запустить парсер", callback_data="admin_start_termins_parser")],
 
-                [InlineKeyboardButton(text="В главное меню", callback_data="admin_menu_help")],
+                [InlineKeyboardButton(text="В главное меню", callback_data="admin_menu help")],
 
             ]
         )
@@ -88,7 +88,7 @@ class AdminMenuKeyboardsBuilder:
                 [InlineKeyboardButton(text="Прислать логи", callback_data="admin_send_logs")],
                 [InlineKeyboardButton(text="Очистить логи", callback_data="admin_clear_logs")],
 
-                [InlineKeyboardButton(text="В главное меню", callback_data="admin_menu_help")],
+                [InlineKeyboardButton(text="В главное меню", callback_data="admin_menu help")],
 
             ]
         )
