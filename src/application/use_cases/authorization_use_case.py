@@ -54,7 +54,6 @@ class AuthorizationUseCase:
             message=await self.translation_service.translate(message_id='welcome-message', locale=locale),
             keyboard=await self.authorization_keyboards.get_languages_list_from_start(locale=locale),
         )
-        # await self.notification_service.set_canteens_menu_mailing(user_id=user_id, mailing_time="11:45")
         # await self.admins_service.send_message_to_admin_about_new_user(user=user)
 
         return message_id
@@ -120,6 +119,7 @@ class AuthorizationUseCase:
             new_canteen_id=int(canteen_id),
             new_mailing_time="11:45",
         )
+        await self.notification_service.set_canteens_menu_mailing(user_id=user.user_id, mailing_time="11:45")
 
         message_id = await self.telegram_interface.send_message(
             user_id=user.user_id,

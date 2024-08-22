@@ -40,7 +40,7 @@ class AuthorizationHandler:
     async def start_authorization_handler(self, message: Message, state: FSMContext, locale: str):
         user_id = message.chat.id
 
-        if await self.users_service.check_existence(user_id=user_id):
+        if not await self.users_service.check_existence(user_id=user_id):
             users_language = message.from_user.language_code
             users_username = message.from_user.username
             users_name = message.from_user.first_name + " " + (

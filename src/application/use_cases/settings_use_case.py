@@ -88,6 +88,8 @@ class SettingsUseCase:
         ic(user)
         if user.mailing_time == '-':
             await self.update_user_data_use_case.enable_mailing(user_id=user_id, new_mailing_time='11:45')
+            if user.canteen_id == 0:
+                await self.update_user_data_use_case.update_canteen_id(user_id=user_id, new_canteen_id=1)
         else:
             await self.update_user_data_use_case.disable_mailing(user_id=user_id)
 

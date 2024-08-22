@@ -59,17 +59,18 @@ class SettingsKeyboardsBuilder:
                     InlineKeyboardButton(text="Mensa Erlenring",
                                          callback_data="settings_canteen_change 1"),
                     InlineKeyboardButton(text="Mensa Lahnberge",
-                                         callback_data="settings_canteen_change 2")
+                                         callback_data="settings_canteen_change 2"),
+                    InlineKeyboardButton(text="Bistro",
+                                         callback_data="settings_canteen_change 3")
                 ],
                 [
-                    InlineKeyboardButton(text="Bistro", callback_data="settings_canteen_change 3"),
                     InlineKeyboardButton(text="THM", callback_data="settings_canteen_change 6")
                 ],
                 [
-                    InlineKeyboardButton(
-                        text=await self.translation_service.translate(message_id='disable-mailing-canteen', locale=locale),
-                        callback_data="settings_canteen_change 0"
-                    )
+                    # InlineKeyboardButton(
+                    #     text=await self.translation_service.translate(message_id='disable-mailing-canteen', locale=locale),
+                    #     callback_data="settings_canteen_change 0"
+                    # )
                 ]
             ]
         )
