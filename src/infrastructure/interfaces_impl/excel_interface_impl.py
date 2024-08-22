@@ -1,10 +1,12 @@
 from openpyxl import Workbook
 
 from application.interfaces.excel_interface import ExcelInterface
+from infrastructure.config.logs_config import log_decorator
 
 
 class ExcelInterfaceImpl(ExcelInterface):
     @staticmethod
+    @log_decorator
     async def save_to_excel(headers: list, rows: list, path: str):
         wb = Workbook()
         ws = wb.active
@@ -22,6 +24,7 @@ class ExcelInterfaceImpl(ExcelInterface):
         wb.save(path)
 
     @staticmethod
+    @log_decorator
     async def clear(path: str):
         wb = Workbook()
         ws = wb.active

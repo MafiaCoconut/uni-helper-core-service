@@ -9,9 +9,9 @@ class User(BaseModel):
     mailing_time: str = Field(default="-")
     locale: str = Field(default="-")
     canteen_id: int = Field(default=0)
+    status: str = Field(default="active")
     created_at: datetime | None = Field(default=None)
     updated_at: datetime | None = Field(default=None)
-    status: str = Field(default="active")
 
     # username: str = Field(default="-")
     # mailing_time: str = Field(default="-")

@@ -1,6 +1,6 @@
 import os
 import requests
-from aiogram.types import CallbackQuery
+from aiogram.types import Message, CallbackQuery, FSInputFile
 
 from application.interfaces.telegram_interface import TelegramInterface
 from infrastructure.config.logs_config import log_decorator
@@ -10,8 +10,14 @@ from infrastructure.config.bot_config import bot
 class TelegramInterfaceImpl(TelegramInterface):
     @staticmethod
     @log_decorator
-    async def send_message(user_id: int, message: str, keyboard=None, parse_mode: str = "HTML")-> int:
+    async def send_message(user_id: int, message: str, keyboard=None, parse_mode: str = "HTML") -> int:
         message = await bot.send_message(chat_id=user_id, text=message, parse_mode=parse_mode, reply_markup=keyboard)
+        return message.message_id
+
+    @staticmethod
+    @log_decorator
+    async def send_file(chat_id: int, file_path: str) -> int:
+        message = await bot.send_document(chat_id=chat_id, document=FSInputFile(path=file_path))
         return message.message_id
 
     @staticmethod

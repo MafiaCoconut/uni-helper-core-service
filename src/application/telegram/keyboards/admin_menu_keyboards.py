@@ -24,7 +24,7 @@ class AdminMenuKeyboardsBuilder:
     async def menu_users(self):
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
-                [InlineKeyboardButton(text="Список пользователей", callback_data="admin_get_all_persons")],
+                [InlineKeyboardButton(text="Список пользователей", callback_data="admin_get_all_users")],
                 [InlineKeyboardButton(text="username, time, created", callback_data="admin_get_username_time_created")],
                 [InlineKeyboardButton(text="id, username, time", callback_data="admin_get_id_username_time")],
                 [InlineKeyboardButton(text="Изменить параметры", callback_data="admin_change_persons_parameters")],

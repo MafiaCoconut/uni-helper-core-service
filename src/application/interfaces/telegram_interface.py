@@ -9,6 +9,11 @@ class TelegramInterface(ABC):
 
     @staticmethod
     @abstractmethod
+    async def send_file(chat_id: int, file_path: str):
+        pass
+
+    @staticmethod
+    @abstractmethod
     async def send_message_to_admin(message: str, keyboard=None):
         pass
 

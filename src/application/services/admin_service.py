@@ -1,6 +1,7 @@
 from application.gateways.canteens_gateway import CanteensGateway
 from application.gateways.stadburo_gateway import StadburoGateway
 from application.gateways.users_gateway import UsersGateway
+from application.interfaces.excel_interface import ExcelInterface
 from application.interfaces.telegram_interface import TelegramInterface
 from application.providers.keyboards_provider import KeyboardsProvider
 from application.telegram.keyboards.admin_keyboards import AdminKeyboardsBuilder
@@ -20,6 +21,7 @@ class AdminsService:
                  admin_keyboards: AdminKeyboardsBuilder,
                  admin_menu_keyboards: AdminMenuKeyboardsBuilder,
                  telegram_interface: TelegramInterface,
+                 excel_interface: ExcelInterface,
                  users_gateway: UsersGateway,
                  canteens_gateway: CanteensGateway,
                  stadburo_gateway: StadburoGateway,
@@ -38,6 +40,7 @@ class AdminsService:
         self.admin_menu_users_use_case = AdminMenuUsersUseCase(
             users_gateway=users_gateway,
             telegram_interface=telegram_interface,
+            excel_interface=excel_interface,
             admin_menu_keyboards=admin_menu_keyboards,
         )
         self.admin_menu_canteens_use_case = AdminMenuCanteensUseCase(
@@ -60,6 +63,22 @@ class AdminsService:
 
     async def send_menu_admin_main(self, user_id: int):
         await self.admin_menu_use_case.menu_main(user_id=user_id)
+
+    async def menu_users(self, callback):
+        await self.admin_menu_users_use_case.menu(callback=callback)
+
+    async def get_all_users_data(self, callback):
+        await self.admin_menu_users_use_case.get_all_users_data_in_xslx(callback=callback)
+
+    async def menu_canteens(self, callback):
+        await self.admin_menu_canteens_use_case.menu(callback=callback)
+
+    async def menu_stadburo(self, callback):
+        await self.admin_menu_stadburo_use_case.menu(callback=callback)
+
+    async def menu_logs(self, callback):
+        await self.admin_menu_logs_use_case.menu(callback=callback)
+
 
 
 

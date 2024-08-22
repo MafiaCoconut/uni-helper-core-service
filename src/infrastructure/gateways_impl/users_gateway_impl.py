@@ -84,8 +84,21 @@ class UsersGatewayImpl(UsersGateway):
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
-                    ic(response_json)
-                    return response_json
+                    # ic(response_json)
+                    if response_json is not None:
+                        users = [User(
+                            user_id=user.get('user_id'),
+                            username=user.get('username'),
+                            name=user.get('name'),
+                            mailing_time=user.get('mailing_time'),
+                            locale=user.get('locale'),
+                            canteen_id=user.get('canteen_id'),
+                            status=user.get('status'),
+                            created_at=datetime.fromisoformat(user.get('created_at')),
+                            updated_at=datetime.fromisoformat(user.get('updated_at')),
+                        ) for user in response_json]
+                        # ic(users)
+                        return users
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
@@ -105,9 +118,9 @@ class UsersGatewayImpl(UsersGateway):
                             mailing_time=response_json.get('mailing_time'),
                             locale=response_json.get('locale'),
                             canteen_id=response_json.get('canteen_id'),
+                            status=response_json.get('status'),
                             created_at=datetime.fromisoformat(response_json.get('created_at')),
                             updated_at=datetime.fromisoformat(response_json.get('updated_at')),
-                            status=response_json.get('status'),
                         )
                         return user
                     else:
