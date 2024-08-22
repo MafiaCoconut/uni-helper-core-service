@@ -19,3 +19,6 @@ class AdminMenuUsersUseCase:
             message="<b>Меню работы с пользователями</b>",
             keyboard=await self.admin_menu_keyboards.menu_users(),
         )
+
+    async def get_all_users_data_in_xslx(self):
+        pass
