@@ -10,7 +10,8 @@ from infrastructure.config.gateways_config import canteens_gateway, users_gatewa
     notification_gateway
 
 from infrastructure.config.interfaces_config import telegram_interface
-from infrastructure.config.keyboards_config import settings_keyboards, authorization_keyboards, admin_keyboards
+from infrastructure.config.keyboards_config import settings_keyboards, authorization_keyboards, admin_keyboards, \
+    admin_menu_keyboards
 from infrastructure.config.providers_config import keyboards_provider
 from infrastructure.config.redis_config import redis_service
 from infrastructure.config.translation_config import translation_service
@@ -32,7 +33,11 @@ users_service = UsersService(
 
 admins_service = AdminsService(
     admin_keyboards=admin_keyboards,
-    telegram_interface=telegram_interface
+    admin_menu_keyboards=admin_menu_keyboards,
+    telegram_interface=telegram_interface,
+    users_gateway=users_gateway,
+    canteens_gateway=canteens_gateway,
+    stadburo_gateway=stadburo_gateway,
 )
 
 notification_service = NotificationService(

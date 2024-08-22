@@ -1,14 +1,15 @@
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 
-
+from application.services.admin_service import AdminsService
 from application.telegram.filters.is_admin import IsAdmin
 
 
 class AdminMenuHandler:
     def __init__(self,
+                 admins_service: AdminsService,
                  ):
-        pass
+        self.admins_service = admins_service
 
     def get_router(self) -> Router:
         router = Router()
@@ -23,4 +24,4 @@ class AdminMenuHandler:
         pass
 
     async def menu_admin_main_handler(self, message: Message):
-        await message.answer("", reply_markup=)
+        await self.admins_service.send_menu_admin_main(user_id=message.chat.id)

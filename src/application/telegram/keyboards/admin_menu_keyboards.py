@@ -4,9 +4,10 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 class AdminMenuKeyboardsBuilder:
     def __init__(self,
-                 translation_service: TranslationService
+                 # translation_service: TranslationService
                  ):
-        self.translation_service = translation_service
+        # self.translation_service = translation_service
+        pass
 
     async def menu_main(self):
         keyboard = InlineKeyboardMarkup(

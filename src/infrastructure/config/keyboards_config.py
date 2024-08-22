@@ -1,4 +1,5 @@
 from application.telegram.keyboards.admin_keyboards import AdminKeyboardsBuilder
+from application.telegram.keyboards.admin_menu_keyboards import AdminMenuKeyboardsBuilder
 from application.telegram.keyboards.authorization_keyboards import AuthorizationKeyboardsBuilder
 from application.telegram.keyboards.canteens_keyboards import CanteensKeyboardsBuilder
 from application.telegram.keyboards.links_keyboards import LinksKeyboardsBuilder
@@ -31,6 +32,7 @@ authorization_keyboards = AuthorizationKeyboardsBuilder(
 
 
 admin_keyboards = AdminKeyboardsBuilder(translation_service=translation_service)
+admin_menu_keyboards = AdminMenuKeyboardsBuilder()
 
 
 
