@@ -41,29 +41,21 @@ class AdminMenuKeyboardsBuilder:
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 [InlineKeyboardButton(text="Запуск парсера всех",
-                                      callback_data="admin_start_canteen_parser_marburg all")],
+                                      callback_data="admin_start_canteen_parser_all")],
 
                 [InlineKeyboardButton(text="Erlenring парсер",
-                                      callback_data="admin_start_canteen_parser_marburg mensa_erlenring"),
-                 InlineKeyboardButton(text="меню", callback_data="admin_get_canteen_marburg mensa_erlenring")],
+                                      callback_data="admin_start_canteen_parser 1"),
+                 InlineKeyboardButton(text="меню", callback_data="admin_get_canteen 1")],
 
                 [InlineKeyboardButton(text="Lahnberge парсер",
-                                      callback_data="admin_start_canteen_parser_marburg mensa_lahnberge"),
-                 InlineKeyboardButton(text="меню", callback_data="admin_get_canteen_marburg mensa_lahnberge")],
+                                      callback_data="admin_start_canteen_parser 2"),
+                 InlineKeyboardButton(text="меню", callback_data="admin_get_canteen 2")],
 
-                [InlineKeyboardButton(text="Bistro парсер", callback_data="admin_start_canteen_parser_marburg bistro"),
-                 InlineKeyboardButton(text="меню", callback_data="admin_get_canteen_marburg bistro")],
+                [InlineKeyboardButton(text="Bistro парсер", callback_data="admin_start_canteen_parser 3"),
+                 InlineKeyboardButton(text="меню", callback_data="admin_get_canteen 3")],
 
-                [InlineKeyboardButton(text="THM", callback_data="admin_start_canteen_parser_giessen thm"),
-                 InlineKeyboardButton(text="меню", callback_data="admin_get_canteen_giessen thm")],
-
-                # [InlineKeyboardButton(text="Cafeteria парсер",
-                #                       callback_data="admin_start_canteen_parser_marburg cafeteria_lahnberge"),
-                #  InlineKeyboardButton(text="меню", callback_data="admin_get_canteen_marburg cafeteria_lahnberge")],
-
-                # [InlineKeyboardButton(text="Mo diner парсер",
-                #                       callback_data="admin_start_canteen_parser_marburg mo_diner"),
-                #  InlineKeyboardButton(text="меню", callback_data="admin_get_canteen_marburg mo_diner")],
+                [InlineKeyboardButton(text="THM", callback_data="admin_start_canteen_parser 6"),
+                 InlineKeyboardButton(text="меню", callback_data="admin_get_canteen 6")],
 
                 [InlineKeyboardButton(text="В главное меню", callback_data="admin_menu help")],
 

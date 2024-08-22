@@ -11,8 +11,10 @@ from application.use_cases.admin_menu_logs_use_case import AdminMenuLogsUseCase
 from application.use_cases.admin_menu_stadburo_use_case import AdminMenuStadburoUseCase
 from application.use_cases.admin_menu_use_case import AdminMenuUseCase
 from application.use_cases.admin_menu_users_use_case import AdminMenuUsersUseCase
+from application.use_cases.refactor_canteens_menu_to_text_use_case import RefactorCanteensMenuToTextUseCase
 from application.use_cases.send_message_to_admin_use_case import SendMessageToAdminUseCase
 from domain.entities.user import User
+from infrastructure.config.translation_config import translation_service
 
 
 class AdminsService:
@@ -28,7 +30,9 @@ class AdminsService:
 
                  ):
         # self.keyboards_provider = keyboards_provider
-
+        self.refactor_canteen_to_text = RefactorCanteensMenuToTextUseCase(
+            translation_service=translation_service
+        )
         self.send_message_to_admin_use_case = SendMessageToAdminUseCase(
             admin_keyboards=admin_keyboards,
             telegram_interface=telegram_interface,
@@ -48,7 +52,9 @@ class AdminsService:
             canteens_gateway=canteens_gateway,
             telegram_interface=telegram_interface,
             admin_menu_keyboards=admin_menu_keyboards,
+            refactor_canteen_to_text=self.refactor_canteen_to_text
         )
+
         self.admin_menu_stadburo_use_case = AdminMenuStadburoUseCase(
             stadburo_gateway=stadburo_gateway,
             telegram_interface=telegram_interface,
@@ -83,14 +89,19 @@ class AdminsService:
     async def get_user_data(self, message, state, user_id: int):
         await self.admin_menu_users_use_case.get_user_data(message=message, state=state, user_id=user_id)
 
-    async def change_user(self, callback):
-        await self.admin_menu_users_use_case.change_user(callback=callback)
-
-    async def delete_user(self, callback):
-        await self.admin_menu_users_use_case.delete_user(callback=callback)
-
     async def menu_canteens(self, callback):
         await self.admin_menu_canteens_use_case.menu(callback=callback)
+
+    async def parse_canteen(self, callback, canteen_id: int):
+        await self.admin_menu_canteens_use_case.parse(callback=callback, canteen_id=canteen_id)
+
+    async def parse_canteen_all(self, callback):
+        await self.admin_menu_canteens_use_case.parse_all(callback=callback)
+
+    async def get_canteen(self, callback, canteen_id: int):
+        await self.admin_menu_canteens_use_case.get_menu(callback=callback, canteen_id=canteen_id)
+
+
 
     async def menu_stadburo(self, callback):
         await self.admin_menu_stadburo_use_case.menu(callback=callback)

@@ -95,7 +95,7 @@ class CanteensGatewayImpl(CanteensGateway):
     @log_decorator
     async def parse_canteen(self, canteen_id: int):
         async with aiohttp.ClientSession() as session:
-            async with session.get(
+            async with session.post(
                     url=self.canteens_address + f"/canteen{canteen_id}/startParser"
             ) as resp:
                 print(resp)
@@ -103,7 +103,7 @@ class CanteensGatewayImpl(CanteensGateway):
     @log_decorator
     async def parse_canteen_all(self):
         async with aiohttp.ClientSession() as session:
-            async with session.get(
-                    url=self.canteens_address + "/canteen/startParsersAll"
+            async with session.post(
+                    url=self.canteens_address + "/canteen/startAllParsers"
             ) as resp:
                 print(resp)

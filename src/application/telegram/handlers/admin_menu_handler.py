@@ -35,6 +35,10 @@ class AdminMenuHandler:
         router.callback_query.register(self.get_all_users_data, F.data.startswith("admin_get_all_users"))
         router.callback_query.register(self.get_count_users, F.data.startswith("admin_get_count_users"))
         router.callback_query.register(self.request_to_user_data, F.data.startswith("admin_get_person_by_id"))
+
+        router.callback_query.register(self.parse_canteens_all, F.data == "admin_start_canteen_parser_all")
+        router.callback_query.register(self.parse_canteen, F.data.startswith("admin_start_canteen_parser"))
+        router.callback_query.register(self.get_canteen, F.data.startswith("admin_get_canteen"))
         # router.callback_query.register(self., F.data.startswith("admin_change_persons_parameters"))
         # router.callback_query.register(self., F.data.startswith("admin_delete_person"))
 
@@ -60,16 +64,19 @@ class AdminMenuHandler:
         user_id = int(message.text)
         await self.admins_service.get_user_data(message=message, state=state, user_id=user_id)
 
-    async def change_user(self, callback: CallbackQuery):
-        await self.admins_service.change_user(callback=callback)
-
-    async def delete_user(self, callback: CallbackQuery):
-        await self.admins_service.delete_user(callback=callback)
-
-
-
     async def menu_canteens(self, callback: CallbackQuery):
         await self.admins_service.menu_canteens(callback=callback)
+
+    async def parse_canteen(self, callback: CallbackQuery):
+        canteen_id = int(callback.data[callback.data.find(' ') + 1:])
+        await self.admins_service.parse_canteen(callback=callback, canteen_id=canteen_id)
+
+    async def parse_canteens_all(self, callback: CallbackQuery):
+        await self.admins_service.parse_canteen_all(callback=callback)
+
+    async def get_canteen(self, callback: CallbackQuery):
+        canteen_id = int(callback.data[callback.data.find(' ') + 1:])
+        await self.admins_service.get_canteen(callback=callback, canteen_id=canteen_id)
 
     async def menu_stadburo(self, callback: CallbackQuery):
         await self.admins_service.menu_stadburo(callback=callback)
