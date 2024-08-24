@@ -98,3 +98,5 @@ class AdminMenuHandler:
 
     async def clear_logs(self, callback: CallbackQuery):
         await self.admins_service.clear_logs(callback=callback)
+
+

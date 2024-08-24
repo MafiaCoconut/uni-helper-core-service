@@ -110,6 +110,13 @@ class AdminsService:
     async def menu_logs(self, callback):
         await self.admin_menu_logs_use_case.menu(callback=callback)
 
+    async def send_logs(self, callback):
+        await self.admin_menu_logs_use_case.send_logs(callback=callback)
+
+    async def clear_logs(self, callback):
+        await self.admin_menu_logs_use_case.clear_logs(callback=callback)
+
+
 
 
 
