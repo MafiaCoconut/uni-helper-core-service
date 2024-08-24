@@ -39,6 +39,12 @@ class AdminMenuHandler:
         router.callback_query.register(self.parse_canteens_all, F.data == "admin_start_canteen_parser_all")
         router.callback_query.register(self.parse_canteen, F.data.startswith("admin_start_canteen_parser"))
         router.callback_query.register(self.get_canteen, F.data.startswith("admin_get_canteen"))
+
+        router.callback_query.register(self.parse_stadburo_all, F.data.startswith("admin_start_termins_parser"))
+
+        router.callback_query.register(self.send_logs, F.data.startswith("admin_send_logs"))
+        router.callback_query.register(self.clear_logs, F.data.startswith("admin_clear_logs"))
+
         # router.callback_query.register(self., F.data.startswith("admin_change_persons_parameters"))
         # router.callback_query.register(self., F.data.startswith("admin_delete_person"))
 
@@ -81,6 +87,14 @@ class AdminMenuHandler:
     async def menu_stadburo(self, callback: CallbackQuery):
         await self.admins_service.menu_stadburo(callback=callback)
 
+    async def parse_stadburo_all(self, callback: CallbackQuery):
+        await self.admins_service.parse_stadburo_all(callback=callback)
+
     async def menu_logs(self, callback: CallbackQuery):
         await self.admins_service.menu_logs(callback=callback)
 
+    async def send_logs(self, callback: CallbackQuery):
+        await self.admins_service.send_logs(callback=callback)
+
+    async def clear_logs(self, callback: CallbackQuery):
+        await self.admins_service.clear_logs(callback=callback)

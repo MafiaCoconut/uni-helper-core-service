@@ -101,10 +101,11 @@ class AdminsService:
     async def get_canteen(self, callback, canteen_id: int):
         await self.admin_menu_canteens_use_case.get_menu(callback=callback, canteen_id=canteen_id)
 
-
-
     async def menu_stadburo(self, callback):
         await self.admin_menu_stadburo_use_case.menu(callback=callback)
+
+    async def parse_stadburo_all(self, callback):
+        await self.admin_menu_stadburo_use_case.parse_all(callback=callback)
 
     async def menu_logs(self, callback):
         await self.admin_menu_logs_use_case.menu(callback=callback)

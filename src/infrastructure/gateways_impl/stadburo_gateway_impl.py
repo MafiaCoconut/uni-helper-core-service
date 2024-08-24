@@ -32,7 +32,7 @@ class StadburoGatewayImpl(StadburoGateway):
     @log_decorator
     async def parse_stadburo_all(self):
         async with aiohttp.ClientSession() as session:
-            async with session.get(
+            async with session.post(
                     url=self.stadburo_address + f"/category_of_termins/startParsersAll"
             ) as resp:
                 if resp.status == 200:
