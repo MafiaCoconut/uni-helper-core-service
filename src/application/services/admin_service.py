@@ -101,6 +101,9 @@ class AdminsService:
     async def get_canteen(self, callback, canteen_id: int):
         await self.admin_menu_canteens_use_case.get_menu(callback=callback, canteen_id=canteen_id)
 
+    async def change_canteen_status(self, callback, canteen_id: int):
+        await self.admin_menu_canteens_use_case.change_canteen_status(callback=callback, canteen_id=canteen_id)
+
     async def menu_stadburo(self, callback):
         await self.admin_menu_stadburo_use_case.menu(callback=callback)
 

@@ -39,6 +39,7 @@ class AdminMenuHandler:
         router.callback_query.register(self.parse_canteens_all, F.data == "admin_start_canteen_parser_all")
         router.callback_query.register(self.parse_canteen, F.data.startswith("admin_start_canteen_parser"))
         router.callback_query.register(self.get_canteen, F.data.startswith("admin_get_canteen"))
+        router.callback_query.register(self.change_canteen_status, F.data.startswith("admin_change_canteen_status"))
 
         router.callback_query.register(self.parse_stadburo_all, F.data.startswith("admin_start_termins_parser"))
 
@@ -83,6 +84,10 @@ class AdminMenuHandler:
     async def get_canteen(self, callback: CallbackQuery):
         canteen_id = int(callback.data[callback.data.find(' ') + 1:])
         await self.admins_service.get_canteen(callback=callback, canteen_id=canteen_id)
+
+    async def change_canteen_status(self, callback: CallbackQuery):
+        canteen_id = int(callback.data[callback.data.find(' ') + 1:])
+        await self.admins_service.change_canteen_status(callback=callback, canteen_id=canteen_id)
 
     async def menu_stadburo(self, callback: CallbackQuery):
         await self.admins_service.menu_stadburo(callback=callback)

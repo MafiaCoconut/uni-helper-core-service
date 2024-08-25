@@ -38,24 +38,36 @@ class AdminMenuKeyboardsBuilder:
         return keyboard
 
     async def menu_canteens(self):
+        menu = "Info"
+        on_off = "On/Off"
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 [InlineKeyboardButton(text="Запуск парсера всех",
                                       callback_data="admin_start_canteen_parser_all")],
 
-                [InlineKeyboardButton(text="Erlenring парсер",
-                                      callback_data="admin_start_canteen_parser 1"),
-                 InlineKeyboardButton(text="меню", callback_data="admin_get_canteen 1")],
+                [
+                    InlineKeyboardButton(text="Erlenring парсер", callback_data="admin_start_canteen_parser 1"),
+                    InlineKeyboardButton(text=menu, callback_data="admin_get_canteen 1"),
+                    InlineKeyboardButton(text=on_off, callback_data="admin_change_canteen_status 1")
+                ],
 
-                [InlineKeyboardButton(text="Lahnberge парсер",
-                                      callback_data="admin_start_canteen_parser 2"),
-                 InlineKeyboardButton(text="меню", callback_data="admin_get_canteen 2")],
+                [
+                    InlineKeyboardButton(text="Lahnberge парсер", callback_data="admin_start_canteen_parser 2"),
+                    InlineKeyboardButton(text=menu, callback_data="admin_get_canteen 2"),
+                    InlineKeyboardButton(text=on_off, callback_data="admin_change_canteen_status 2")
+                ],
 
-                [InlineKeyboardButton(text="Bistro парсер", callback_data="admin_start_canteen_parser 3"),
-                 InlineKeyboardButton(text="меню", callback_data="admin_get_canteen 3")],
+                [
+                    InlineKeyboardButton(text="Bistro парсер", callback_data="admin_start_canteen_parser 3"),
+                    InlineKeyboardButton(text=menu, callback_data="admin_get_canteen 3"),
+                    InlineKeyboardButton(text=on_off, callback_data="admin_change_canteen_status 3")
+                ],
 
-                [InlineKeyboardButton(text="THM", callback_data="admin_start_canteen_parser 6"),
-                 InlineKeyboardButton(text="меню", callback_data="admin_get_canteen 6")],
+                [
+                    InlineKeyboardButton(text="THM", callback_data="admin_start_canteen_parser 6"),
+                    InlineKeyboardButton(text=menu, callback_data="admin_get_canteen 6"),
+                    InlineKeyboardButton(text=on_off, callback_data="admin_change_canteen_status 6")
+                ],
 
                 [InlineKeyboardButton(text="В главное меню", callback_data="admin_menu help")],
 
@@ -88,7 +100,3 @@ class AdminMenuKeyboardsBuilder:
 
     async def menu_mailing(self):
         pass
-
-
-
-

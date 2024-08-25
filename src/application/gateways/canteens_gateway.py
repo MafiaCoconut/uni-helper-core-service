@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from domain.entities.canteen import Canteen
 from domain.entities.user import User
 
 
@@ -15,7 +16,7 @@ class CanteensGateway(ABC):
         pass
 
     @abstractmethod
-    async def get_canteens_info(self, canteen_id: int):
+    async def get_canteens_info(self, canteen_id: int) -> Canteen:
         pass
 
     @abstractmethod
@@ -25,6 +26,15 @@ class CanteensGateway(ABC):
     @abstractmethod
     async def parse_canteen_all(self):
         pass
+
+    @abstractmethod
+    async def reactivate(self, canteen_id: int):
+        pass
+
+    @abstractmethod
+    async def deactivate(self, canteen_id: int):
+        pass
+
 
 
 

@@ -35,10 +35,13 @@ class CanteensGatewayImpl(CanteensGateway):
                         canteen_id=response_json.get('canteen').get('canteen_id'),
                         name=response_json.get('canteen').get('name'),
                         description=response_json.get('canteen').get('description'),
+                        status=response_json.get('canteen').get('status'),
+                        times=response_json.get('canteen').get('times'),
                         opened_time=response_json.get('canteen').get('opened_time'),
                         closed_time=response_json.get('canteen').get('closed_time'),
                         created_at=datetime.fromisoformat(response_json.get('canteen').get('created_at')),
                     )
+                    ic(canteen)
                     main_dishes = []
                     side_dishes = []
                     if response_json.get('main_dishes') is not None:
@@ -71,7 +74,7 @@ class CanteensGatewayImpl(CanteensGateway):
                     raise ValueError(f"Failed to get data. Response code: {resp.status}")
 
     @log_decorator
-    async def get_canteens_info(self, canteen_id: int):
+    async def get_canteens_info(self, canteen_id: int) -> Canteen:
         async with aiohttp.ClientSession() as session:
             async with session.get(
                     url=self.canteens_address + f"/canteen{canteen_id}/getObject",
@@ -83,11 +86,13 @@ class CanteensGatewayImpl(CanteensGateway):
                         canteen_id=response_json.get('canteen').get('canteen_id'),
                         name=response_json.get('canteen').get('name'),
                         description=response_json.get('canteen').get('description'),
+                        status=response_json.get('canteen').get('status'),
+                        times=response_json.get('canteen').get('times'),
                         opened_time=response_json.get('canteen').get('opened_time'),
                         closed_time=response_json.get('canteen').get('closed_time'),
                         created_at=datetime.fromisoformat(response_json.get('canteen').get('created_at')),
                     )
-                    # ic(canteen)
+                    ic(canteen)
                     return canteen
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
@@ -107,3 +112,20 @@ class CanteensGatewayImpl(CanteensGateway):
                     url=self.canteens_address + "/canteen/startAllParsers"
             ) as resp:
                 print(resp)
+
+    @log_decorator
+    async def reactivate(self, canteen_id: int):
+        async with aiohttp.ClientSession() as session:
+            async with session.put(
+                    url=self.canteens_address + f"/canteen{canteen_id}/reactivate"
+            ) as resp:
+                print(resp)
+
+    @log_decorator
+    async def deactivate(self, canteen_id: int):
+        async with aiohttp.ClientSession() as session:
+            async with session.put(
+                    url=self.canteens_address + f"/canteen{canteen_id}/deactivate"
+            ) as resp:
+                print(resp)
+
