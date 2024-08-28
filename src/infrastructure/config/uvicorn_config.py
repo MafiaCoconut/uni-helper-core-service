@@ -12,6 +12,9 @@ from infrastructure.config import webhook_config, dispatcher_config, logs_config
 from infrastructure.config.bot_config import bot
 import time
 
+from infrastructure.config.services_config import get_scheduler_service
+
+
 from infrastructure.config.dispatcher_config import dp
 from infrastructure.web.api import router
 
@@ -22,6 +25,8 @@ system_logger = logging.getLogger("system_logger")
 async def lifespan(app):
     logs_config.config()
 
+    scheduler_service = get_scheduler_service()
+    await scheduler_service.set_start_jobs()
     system_logger.info("Start uvicorn configuration")
 
     # await bot.set_my_commands(get_bot_commands())

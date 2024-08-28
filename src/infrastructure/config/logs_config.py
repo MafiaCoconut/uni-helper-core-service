@@ -3,12 +3,15 @@ from functools import wraps
 
 from dotenv import load_dotenv
 import os
+from aiogram.types.update import Update
 
 
 load_dotenv()
 system_logger = logging.getLogger("system_logger")
 user_logger = logging.getLogger("user_logger")
 error_logger = logging.getLogger("error_logger")
+apscheduler_logger = logging.getLogger('apscheduler')
+aiogram_logger = logging.getLogger("aiogram.events")
 
 
 def config():
@@ -31,11 +34,13 @@ def config():
     user_handler = logging.FileHandler("logs/user_data.log")
     user_handler.setFormatter(formatter)
 
-    global system_logger
-    global user_logger
-    global error_logger
+    error_handler = logging.FileHandler("logs/error_data.log")
+    error_handler.setFormatter(formatter)
 
-    if os.getenv("DEVICE") == "Laptop" or os.getenv("DEVICE") == "Ubuntu":
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(formatter)
+
+    if os.getenv("MODE") == "DEVELOPMENT":
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(formatter)
 
@@ -46,6 +51,7 @@ def config():
         system_logger.addHandler(console_handler)
         user_logger.addHandler(console_handler)
         error_logger.addHandler(console_handler)
+        apscheduler_logger.addHandler(console_handler)
 
     else:
         system_logger.setLevel(logging.INFO)
@@ -54,42 +60,27 @@ def config():
 
     system_logger.addHandler(system_handler)
 
-    apscheduler_logger = logging.getLogger("apscheduler")
+    user_logger.addHandler(user_handler)
+
+    error_logger.addHandler(error_handler)
+    error_logs_config(formatter=formatter)
+
     apscheduler_logger.setLevel(logging.DEBUG)
     apscheduler_logger.addHandler(system_handler)
 
-    aiogram_logger = logging.getLogger("aiogram.events")
     aiogram_logger.setLevel(logging.DEBUG)
     aiogram_logger.addHandler(system_handler)
 
-    user_logger.setLevel(logging.DEBUG)
-    user_logger.addHandler(user_handler)
 
-    error_logs_config(formatter=formatter)
-
-    # raise RuntimeError("Test unhandled")
-
-
-
-from aiogram.types.update import Update
 async def error_aio_handler(update: Update):
     """
     Функция для обработки и логирования всех необработанных исключений.
     """
     error_logger.error(update.exception)
     system_logger.error(update.exception)
-    # icecream.ic(update.exception)
-    # icecream.ic(update)
 
 
 def error_logs_config(formatter):
-    global error_logger
-    error_handler = logging.FileHandler("logs/error_data.log")
-    error_handler.setFormatter(formatter)
-
-    error_logger.setLevel(logging.ERROR)
-    error_logger.addHandler(error_handler)
-
     from infrastructure.config.dispatcher_config import dp
     dp.errors.register(error_aio_handler)
 

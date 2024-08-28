@@ -2,6 +2,8 @@ from application.services.admin_service import AdminsService
 from application.services.authorization_service import AuthorizationService
 from application.services.canteens_service import CanteensService
 from application.services.notification_service import NotificationService
+from application.services.s3_service import S3Service
+from application.services.scheduler_service import SchedulerService
 from application.services.settings_service import SettingsService
 from application.services.stadburo_service import StadburoService
 from application.services.users_service import UsersService
@@ -14,6 +16,8 @@ from infrastructure.config.keyboards_config import settings_keyboards, authoriza
     admin_menu_keyboards
 from infrastructure.config.providers_config import keyboards_provider
 from infrastructure.config.redis_config import redis_service
+from infrastructure.config.s3_config import s3client
+from infrastructure.config.scheduler_interfaces_config import get_scheduler_interface
 from infrastructure.config.translation_config import translation_service
 
 canteens_service = CanteensService(
@@ -64,6 +68,17 @@ authorization_service = AuthorizationService(
     authorization_keyboards=authorization_keyboards,
     translation_service=translation_service,
 )
+
+s3_service = S3Service(
+    s3client=s3client
+)
+
+
+def get_scheduler_service() -> SchedulerService:
+    return SchedulerService(
+        scheduler_interface=get_scheduler_interface(),
+        s3_service=s3_service
+    )
 
 
 
