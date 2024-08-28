@@ -1,0 +1,65 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:latest
+    restart: always
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yml"
+    volumes:
+      - ./ngrok.yml:/etc/ngrok.yml
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    ports:
+      - "4040:4040"
+
+  core_service:
+    image: python:3.12
+    container_name: core_service
+    working_dir: /src
+    env_file:
+      - .env_core_service
+    depends_on:
+      - redis
+    ports:
+      - "8080:8080"
+
+  users_service:
+    image: python:3.12
+    container_name: users_service
+    working_dir: /src
+    env_file:
+      - .env_users_service
+    depends_on:
+      - redis
+    ports:
+      - "8003:8003"
+
+
+networks:
+  uni_helper_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+
+
+
+
+
+
+
+
+
