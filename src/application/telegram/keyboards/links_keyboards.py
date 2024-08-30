@@ -22,6 +22,13 @@ class LinksKeyboardsBuilder:
                                          url="https://home.students.uni-marburg.de/login.php"),
                 ],
                 [
+                    InlineKeyboardButton(text="Mensa Marburg",
+                                         url="https://studierendenwerk-marburg.de/essen-trinken/speisekarte/"),
+                    InlineKeyboardButton(text="Mensa THM",
+                                         url="https://www.stwgi.de/mensa-thm-giessen")
+
+                ],
+                [
                     InlineKeyboardButton(text="Marburg Bibliothek",
                                          url="https://arbeitsplatz.ub.uni-marburg.de/index.php?location=gruppen"),
                     InlineKeyboardButton(text="Rückzahlung",
@@ -30,13 +37,6 @@ class LinksKeyboardsBuilder:
                 [
                     InlineKeyboardButton(text="Giessen Bibliothek",
                                          url="https://www.thm.de/bibliothek/lernortplus/raeume-ausstattung/arbeitsplatz-buchungssystem"),
-                ],
-                [
-                    InlineKeyboardButton(text="Mensa Marburg",
-                                         url="https://studierendenwerk-marburg.de/essen-trinken/speisekarte/"),
-                    InlineKeyboardButton(text="Mensa THM",
-                                         url="https://www.stwgi.de/mensa-thm-giessen")
-
                 ],
                 [
                     InlineKeyboardButton(text="Stadburo",
@@ -60,15 +60,15 @@ class LinksKeyboardsBuilder:
         keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="VPN",
-                                         url="https://www.uni-marburg.de/de/hrz/dienste/vpn"),
                     InlineKeyboardButton(text="WiFi",
                                          url="https://www.uni-marburg.de/de/hrz/dienste/wlan"),
                     InlineKeyboardButton(text="Printer",
                                          url="https://www.uni-marburg.de/de/hrz/dienste/kopieren-drucken-scannen"),
+                    InlineKeyboardButton(text="VPN",
+                                         url="https://www.uni-marburg.de/de/hrz/dienste/vpn"),
                 ],
                 [
-                    InlineKeyboardButton(text="Deutsche Ticket",
+                    InlineKeyboardButton(text="Deutschland-Ticket",
                                          url="https://weblogin.uni-marburg.de/idp/profile/SAML2/POST/SSO?execution=e1s2"),
                     InlineKeyboardButton(text="Deutsche Radio",
                                          url="https://www.rundfunkbeitrag.de/meldedaten/"),

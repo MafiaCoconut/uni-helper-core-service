@@ -33,18 +33,12 @@ class SettingsKeyboardsBuilder:
                 [InlineKeyboardButton(
                     text=await self.translation_service.translate(message_id='change-mailing-time', locale=locale),
                     callback_data="menu_settings_change_mailing_time")],
-
-                [InlineKeyboardButton(
-                    text=await self.translation_service.translate(message_id='change-status-mailing', locale=locale),
-                    callback_data="change_status_mailing")],
-
-                # [InlineKeyboardButton(text=l10n.format_value('change-status-numbers-in-menu'),
-                #                       callback_data="change_status_numbers_in_menu")],
-
                 [InlineKeyboardButton(
                     text=await self.translation_service.translate(message_id='change-canteen', locale=locale),
                     callback_data='change_canteen_from_settings')],
-
+                [InlineKeyboardButton(
+                    text=await self.translation_service.translate(message_id='change-status-mailing', locale=locale),
+                    callback_data="change_status_mailing")],
                 [InlineKeyboardButton(
                     text=await self.translation_service.translate(message_id='to-menu-main', locale=locale),
                     callback_data="menu_main")],

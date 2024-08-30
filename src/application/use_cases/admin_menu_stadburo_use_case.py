@@ -22,6 +22,7 @@ class AdminMenuStadburoUseCase:
 
     async def parse_all(self, callback):
         await self.stadburo_gateway.parse_stadburo_all()
+        await callback.answer()
         try:
             await self.telegram_interface.edit_message_with_callback(
                 callback=callback,

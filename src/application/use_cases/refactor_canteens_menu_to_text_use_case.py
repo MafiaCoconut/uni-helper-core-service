@@ -114,7 +114,7 @@ class RefactorCanteensMenuToTextUseCase:
 
     @log_decorator
     async def set_text(self, canteen: Canteen, main_dishes: list, side_dishes: list, locale: str):
-        header = await self.get_header(created_at=canteen.created_at, locale=locale, canteen=canteen)
+        header = await self.get_header(created_at=canteen.last_parsing_time, locale=locale, canteen=canteen)
         main_dishes_text = await self.get_main_dishes_text(main_dishes=main_dishes, locale=locale)
         side_dishes_text = await self.get_side_dishes_text(side_dishes=side_dishes, locale=locale)
 
