@@ -4,6 +4,7 @@ from application.interfaces.telegram_interface import TelegramInterface
 from application.services.translation_service import TranslationService
 from application.use_cases.generate_canteens_menu_use_case import GenerateCanteenMenuUseCase
 from application.use_cases.send_canteens_menu_use_case import SendCanteensMenuUseCase
+from infrastructure.config.logs_config import log_decorator
 
 
 class NotificationSendCanteensMenuUseCase:
@@ -23,6 +24,7 @@ class NotificationSendCanteensMenuUseCase:
             telegram_interface=telegram_interface
         )
 
+    @log_decorator(print_args=False)
     async def execute(self, user_id: int):
         """
         Функция получает данные о выбранной User столовой и локали,

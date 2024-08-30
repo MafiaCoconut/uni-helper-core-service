@@ -1,6 +1,7 @@
 from application.gateways.stadburo_gateway import StadburoGateway
 from application.services.translation_service import TranslationService
 from application.use_cases.refactor_stadburo_termins_to_text_use_case import RefactorStadburoTerminsToTextUseCase
+from infrastructure.config.logs_config import log_decorator
 
 
 class GenerateTerminsListUseCase:
@@ -13,6 +14,7 @@ class GenerateTerminsListUseCase:
             translation_service=translation_service
         )
 
+    @log_decorator(print_args=False)
     async def execute(self, category_of_termins_id: int, locale: str) -> str:
         data = await self.stadburo_gateway.get_category_of_termins_data(category_of_termins_id=category_of_termins_id)
 

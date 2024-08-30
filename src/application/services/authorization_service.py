@@ -37,7 +37,6 @@ class AuthorizationService:
             menu_main_keyboards=menu_main_keyboards,
         )
 
-    @log_decorator
     async def start_authorization(self, user_id: int, name: str = "5",
                                   username: str = "-", locale: str = "en"
                                   ) -> int:
@@ -49,11 +48,9 @@ class AuthorizationService:
         )
         return message_id
 
-    @log_decorator
     async def refresh_menu_authorization(self, callback, user: User):
         await self.authorization_use_case.refresh_menu_authorization(callback=callback, user=user)
 
-    @log_decorator
     async def user_already_exist(self, user: User) -> int:
         """
         Функция отправляет сообщение зарегистрированному пользователю о том что он уже зарегистрирован
@@ -63,22 +60,18 @@ class AuthorizationService:
         message_id = await self.authorization_use_case.user_already_exist(user=user)
         return message_id
 
-    @log_decorator
     async def start_canteen_config(self, user: User, menu_authorization_message_id: int) -> int:
         message_id = await self.authorization_use_case.start_canteen_config(
             menu_authorization_message_id=menu_authorization_message_id, user=user
         )
         return message_id
 
-    @log_decorator
     async def set_new_locale(self, user_id: int, new_locale: str):
         await self.settings_service.set_new_locale(user_id=user_id, new_locale=new_locale)
 
-    @log_decorator
     async def check_canteen(self, callback, user: User, canteen_id: int):
         await self.authorization_use_case.check_canteen(callback=callback, user=user, canteen_id=canteen_id)
 
-    @log_decorator
     async def set_canteen(self, user: User, canteen_id: int, canteens_config_message_id: int) -> int:
         message_id = await self.authorization_use_case.set_canteen(
             user=user, canteen_id=canteen_id, canteens_config_message_id=canteens_config_message_id,

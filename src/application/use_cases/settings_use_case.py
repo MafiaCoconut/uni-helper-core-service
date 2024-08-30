@@ -26,6 +26,7 @@ class SettingsUseCase:
         self.settings_keyboards = settings_keyboards
         self.update_user_data_use_case = update_user_data_use_case
 
+    @log_decorator(print_args=False)
     async def get_settings_text(self, user_id: int, locale: str):
         user = await self.users_service.get_user(user_id=user_id)
         ic(user)
@@ -46,7 +47,7 @@ class SettingsUseCase:
 
         return text
 
-    @log_decorator
+    @log_decorator(print_args=False)
     async def menu_settings(self, callback, user_id: int, locale: str):
         await self.telegram_interface.edit_message_with_callback(
             callback=callback,
@@ -54,16 +55,16 @@ class SettingsUseCase:
             keyboard=await self.settings_keyboards.get_menu(locale=locale),
         )
 
-    @log_decorator
+    @log_decorator(print_args=False)
     async def change_locale(self, callback, user_id: int, new_locale: str):
         await self.update_user_data_use_case.update_locale(user_id=user_id, new_locale=new_locale)
 
         try:
-            await self.menu_settings(callback=callback, user_id=user_id, locale=new_locale)
+            await self.menu_settings(callback, user_id=user_id, locale=new_locale)
         except Exception as e:
             ic(e)
 
-    @log_decorator
+    @log_decorator(print_args=False)
     async def menu_change_mailing_time(self, callback, locale: str):
         await self.telegram_interface.edit_message_with_callback(
             callback=callback,
@@ -74,15 +75,15 @@ class SettingsUseCase:
             keyboard=await self.settings_keyboards.get_change_mailing_time(locale=locale)
         )
 
-    @log_decorator
+    @log_decorator(print_args=False)
     async def change_mailing_time(self, callback, user_id: int, new_mailing_time: str, locale: str):
         await self.update_user_data_use_case.update_mailing_time(user_id=user_id, new_mailing_time=new_mailing_time)
         try:
-            await self.menu_settings(callback=callback, user_id=user_id, locale=locale)
+            await self.menu_settings(callback, user_id=user_id, locale=locale)
         except Exception as e:
             ic(e)
 
-    @log_decorator
+    @log_decorator(print_args=False)
     async def change_mailing_status(self, callback, user_id: int, locale: str):
         user = await self.users_service.get_user(user_id=user_id)
         ic(user)
@@ -94,11 +95,11 @@ class SettingsUseCase:
             await self.update_user_data_use_case.disable_mailing(user_id=user_id)
 
         try:
-            await self.menu_settings(callback=callback, user_id=user_id, locale=locale)
+            await self.menu_settings(callback, user_id=user_id, locale=locale)
         except Exception as e:
             ic(e)
 
-    @log_decorator
+    @log_decorator(print_args=False)
     async def menu_change_canteen(self, callback, user_id: int, locale: str):
         await self.telegram_interface.edit_message_with_callback(
             callback=callback,
@@ -108,11 +109,11 @@ class SettingsUseCase:
             keyboard=await self.settings_keyboards.get_canteens_list_to_change(locale=locale),
         )
 
-    @log_decorator
+    @log_decorator(print_args=False)
     async def change_canteen(self, callback, user_id: int, new_canteen_id: int, locale: str):
         await self.update_user_data_use_case.update_canteen_id(new_canteen_id=new_canteen_id, user_id=user_id)
 
         try:
-            await self.menu_settings(callback=callback, user_id=user_id, locale=locale)
+            await self.menu_settings(callback, user_id=user_id, locale=locale)
         except Exception as e:
             ic(e)

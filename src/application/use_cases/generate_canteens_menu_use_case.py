@@ -6,6 +6,7 @@ from application.services.translation_service import TranslationService
 from application.use_cases.refactor_canteens_menu_to_text_use_case import RefactorCanteensMenuToTextUseCase
 from application.use_cases.send_canteens_menu_use_case import SendCanteensMenuUseCase
 from domain.entities.user import User
+from infrastructure.config.logs_config import log_decorator
 
 
 class GenerateCanteenMenuUseCase:
@@ -30,6 +31,7 @@ class GenerateCanteenMenuUseCase:
         #     telegram_interface=telegram_interface
         # )
 
+    @log_decorator(print_args=False, print_kwargs=False)
     async def execute(self, canteen_id: int, locale: str,
                       test_time: int = None, test_day: int = None) -> str:
         """

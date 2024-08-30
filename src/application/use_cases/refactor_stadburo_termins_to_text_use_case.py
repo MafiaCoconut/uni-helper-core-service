@@ -11,7 +11,7 @@ class RefactorStadburoTerminsToTextUseCase:
                  ):
         self.translation_service = translation_service
 
-    @log_decorator
+    @log_decorator(print_args=False, print_kwargs=False)
     async def execute(self, termins: list[Termin], category_of_termins: CategoryOfTermins, locale: str) -> dict:
         """
 

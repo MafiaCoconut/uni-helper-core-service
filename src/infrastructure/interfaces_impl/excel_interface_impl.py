@@ -6,7 +6,7 @@ from infrastructure.config.logs_config import log_decorator
 
 class ExcelInterfaceImpl(ExcelInterface):
     @staticmethod
-    @log_decorator
+    @log_decorator(print_args=False, print_kwargs=False)
     async def save_to_excel(headers: list, rows: list, path: str):
         wb = Workbook()
         ws = wb.active
@@ -24,7 +24,7 @@ class ExcelInterfaceImpl(ExcelInterface):
         wb.save(path)
 
     @staticmethod
-    @log_decorator
+    @log_decorator(print_args=False, print_kwargs=False)
     async def clear(path: str):
         wb = Workbook()
         ws = wb.active

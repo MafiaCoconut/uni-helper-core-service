@@ -7,6 +7,7 @@ from application.interfaces.telegram_interface import TelegramInterface
 from application.telegram.keyboards.admin_keyboards import AdminKeyboardsBuilder
 from application.telegram.keyboards.admin_menu_keyboards import AdminMenuKeyboardsBuilder
 from application.telegram.models.states import GetPersonById
+from infrastructure.config.logs_config import log_decorator
 
 
 class AdminMenuUsersUseCase:
@@ -25,6 +26,7 @@ class AdminMenuUsersUseCase:
 
         self.path_to_tmp_file = "data/users.xlsx"
 
+    @log_decorator(print_args=False, print_kwargs=False)
     async def menu(self, callback):
         await self.telegram_interface.edit_message_with_callback(
             callback=callback,
@@ -32,6 +34,7 @@ class AdminMenuUsersUseCase:
             keyboard=await self.admin_menu_keyboards.menu_users(),
         )
 
+    @log_decorator(print_args=False, print_kwargs=False)
     async def get_all_users_data_in_xslx(self, callback):
         users = await self.users_gateway.get_users_all()
         headers = list(users[0].model_fields.keys())
@@ -39,8 +42,8 @@ class AdminMenuUsersUseCase:
         rows = []
         for user in users:
             rows.append([getattr(user, field) for field in headers[:-2]])
-            rows[-1].append(self.refactor_created_datetime(getattr(user, headers[-2])))
-            rows[-1].append(self.refactor_created_datetime(getattr(user, headers[-1])))
+            rows[-1].append(await self.refactor_created_datetime(getattr(user, headers[-2])))
+            rows[-1].append(await self.refactor_created_datetime(getattr(user, headers[-1])))
 
         await self.excel_interface.save_to_excel(headers=headers, rows=rows, path=self.path_to_tmp_file)
 
@@ -49,11 +52,13 @@ class AdminMenuUsersUseCase:
 
         await self.excel_interface.clear(path=self.path_to_tmp_file)
 
-    def refactor_created_datetime(self, data: datetime):
+    @log_decorator(print_args=False, print_kwargs=False)
+    async def refactor_created_datetime(self, data: datetime):
         time = f"{str(data.hour).zfill(2)}:{str(data.minute).zfill(2)}"
         day = f"{str(data.day).zfill(2)}.{str(data.month).zfill(2)}.{str(data.year).zfill(2)}"
         return f"{time} - {day}"
 
+    @log_decorator(print_args=False, print_kwargs=False)
     async def get_count_users(self, callback):
         users = await self.users_gateway.get_users_all()
         await self.telegram_interface.edit_message_with_callback(
@@ -62,6 +67,7 @@ class AdminMenuUsersUseCase:
             keyboard=await self.admin_menu_keyboards.menu_users(),
         )
 
+    @log_decorator(print_args=False, print_kwargs=False)
     async def request_to_user_data(self, callback, state):
         callback_message = await callback.message.edit_text(
             text="Введи id пользователя, ссылку на которого хочешь получить",
@@ -70,6 +76,7 @@ class AdminMenuUsersUseCase:
         await state.update_data(last_admin_menu_message=callback_message.message_id)
         await state.set_state(GetPersonById.last_help_message_id)
 
+    @log_decorator(print_args=False, print_kwargs=False)
     async def get_user_data(self, message, state, user_id):
         data = await state.get_data()
         last_admin_menu_message = data.get('last_admin_menu_message')

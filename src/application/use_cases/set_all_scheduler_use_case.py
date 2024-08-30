@@ -16,11 +16,11 @@ class SetAllSchedulersJobsUseCase:
         self.scheduler_interface = scheduler_interface
         self.set_s3_jobs_use_case = set_s3_jobs_use_case
 
-    @log_decorator
+    @log_decorator(print_args=False, print_kwargs=False)
     async def execute(self):
         await self.set_s3_upload_logs()
         await self.scheduler_interface.start()
 
-    @log_decorator
+    @log_decorator(print_args=False, print_kwargs=False)
     async def set_s3_upload_logs(self):
         await self.set_s3_jobs_use_case.execute()

@@ -9,6 +9,7 @@ from application.services.users_service import UsersService
 from application.telegram.keyboards.authorization_keyboards import AuthorizationKeyboardsBuilder
 from application.telegram.keyboards.menu_main_keyboards import MenuMainKeyboardsBuilder
 from domain.entities.user import User
+from infrastructure.config.logs_config import log_decorator
 
 
 class AuthorizationUseCase:
@@ -34,6 +35,7 @@ class AuthorizationUseCase:
         self.authorization_keyboards = authorization_keyboards
         self.menu_main_keyboards = menu_main_keyboards
 
+    @log_decorator(print_args=False)
     async def start_authorization(self,
                                   user_id: int, name: str = "-",
                                   username: str = "-", locale: str = "en"
@@ -58,6 +60,7 @@ class AuthorizationUseCase:
 
         return message_id
 
+    @log_decorator(print_args=False)
     async def start_canteen_config(self, menu_authorization_message_id: int, user: User) -> int:
         try:
             await self.telegram_interface.delete_keyboard(chat_id=user.user_id,
@@ -73,6 +76,7 @@ class AuthorizationUseCase:
         )
         return message_id
 
+    @log_decorator(print_args=False, print_kwargs=False)
     async def refresh_menu_authorization(self, callback, user: User):
         await self.telegram_interface.edit_message_with_callback(
             callback=callback,
@@ -80,6 +84,7 @@ class AuthorizationUseCase:
             keyboard=await self.authorization_keyboards.get_languages_list_from_start(locale=user.locale)
         )
 
+    @log_decorator(print_args=False, print_kwargs=False)
     async def user_already_exist(self, user: User) -> int:
         message_id = await self.telegram_interface.send_message(
             user_id=user.user_id,
@@ -90,6 +95,7 @@ class AuthorizationUseCase:
 
         # await message.answer(await self.translation_service.translate(message_id='reactivating-the-bot', locale=locale))
 
+    @log_decorator(print_args=False, print_kwargs=False)
     async def check_canteen(self, callback, user: User, canteen_id: int):
         if canteen_id == 0:
             await self.telegram_interface.edit_message_with_callback(
@@ -112,6 +118,7 @@ class AuthorizationUseCase:
 
             )
 
+    @log_decorator(print_args=False, print_kwargs=False)
     async def set_canteen(self, user: User, canteen_id: int, canteens_config_message_id: int) -> int:
         await self.telegram_interface.delete_message(chat_id=user.user_id, message_id=canteens_config_message_id)
         await self.users_service.update_user(

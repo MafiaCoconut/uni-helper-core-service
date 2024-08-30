@@ -17,7 +17,7 @@ class RefactorCanteensMenuToTextUseCase:
                  ):
         self.translation_service = translation_service
 
-    @log_decorator
+    @log_decorator(print_args=False, print_kwargs=False)
     async def execute(
             self,
             canteen: Canteen, main_dishes: list[MainDish], side_dishes: list[SideDish],
@@ -47,7 +47,6 @@ class RefactorCanteensMenuToTextUseCase:
 
         return result
 
-    @log_decorator
     async def check_errors(self, canteen: Canteen, main_dishes: list, locale: str, test_time=None, test_day=None):
 
         """
@@ -112,7 +111,6 @@ class RefactorCanteensMenuToTextUseCase:
 
         return {'error': error_type, 'text': error_text}
 
-    @log_decorator
     async def set_text(self, canteen: Canteen, main_dishes: list, side_dishes: list, locale: str):
         header = await self.get_header(created_at=canteen.last_parsing_time, locale=locale, canteen=canteen)
         main_dishes_text = await self.get_main_dishes_text(main_dishes=main_dishes, locale=locale)
@@ -120,7 +118,6 @@ class RefactorCanteensMenuToTextUseCase:
 
         return header + main_dishes_text + side_dishes_text
 
-    @log_decorator
     async def get_header(self, created_at: datetime, locale: str, canteen: Canteen):
         time_parser = created_at
         day = f"{str(time_parser.day).zfill(2)}.{str(time_parser.month).zfill(2)}"
@@ -135,7 +132,6 @@ class RefactorCanteensMenuToTextUseCase:
         ) + '\n\n\n'
         return text
 
-    @log_decorator
     async def get_main_dishes_text(self, main_dishes: list, locale: str):
         text = await self.translation_service.translate(
             message_id='main-dishes-title',
@@ -160,7 +156,6 @@ class RefactorCanteensMenuToTextUseCase:
 
         return text
 
-    @log_decorator
     async def get_side_dishes_text(self, side_dishes: list, locale: str):
         if not side_dishes:
             return ""

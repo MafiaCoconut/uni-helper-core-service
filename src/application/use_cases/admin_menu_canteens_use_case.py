@@ -6,6 +6,7 @@ from application.gateways.canteens_gateway import CanteensGateway
 from application.interfaces.telegram_interface import TelegramInterface
 from application.telegram.keyboards.admin_menu_keyboards import AdminMenuKeyboardsBuilder
 from application.use_cases.refactor_canteens_menu_to_text_use_case import RefactorCanteensMenuToTextUseCase
+from infrastructure.config.logs_config import log_decorator
 
 
 class AdminMenuCanteensUseCase:
@@ -27,6 +28,7 @@ class AdminMenuCanteensUseCase:
             keyboard=await self.admin_menu_keyboards.menu_canteens(),
         )
 
+    @log_decorator(print_args=False, print_kwargs=False)
     async def parse(self, callback, canteen_id: int):
         await self.canteens_gateway.parse_canteen(canteen_id=canteen_id)
         try:
@@ -41,6 +43,7 @@ class AdminMenuCanteensUseCase:
             pass
         await callback.answer()
 
+    @log_decorator(print_args=False, print_kwargs=False)
     async def parse_all(self, callback):
         await self.canteens_gateway.parse_canteen_all()
         try:
@@ -53,8 +56,9 @@ class AdminMenuCanteensUseCase:
             )
         except:
             pass
-        await callback.answer()
+        # await callback.answer()
 
+    @log_decorator(print_args=False, print_kwargs=False)
     async def get_menu(self, callback, canteen_id: int):
         data = await self.canteens_gateway.get_canteens_data(canteen_id=canteen_id)
         canteen = data.get("canteen")
@@ -85,6 +89,7 @@ class AdminMenuCanteensUseCase:
             keyboard=await self.admin_menu_keyboards.menu_canteens(),
         )
 
+    @log_decorator(print_args=False, print_kwargs=False)
     async def change_canteen_status(self, callback, canteen_id: int):
         canteen = await self.canteens_gateway.get_canteens_info(canteen_id=canteen_id)
         if canteen.status == "active":

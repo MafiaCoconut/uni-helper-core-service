@@ -14,7 +14,7 @@ error_logger = logging.getLogger('error_logger')
 class UsersGatewayImpl(UsersGateway):
     users_address = os.getenv('USERS_ADDRESS')
     
-    @log_decorator
+    @log_decorator(print_args=False)
     async def create_user(self, user: User):
         async with aiohttp.ClientSession() as session:
             async with session.post(
@@ -28,7 +28,7 @@ class UsersGatewayImpl(UsersGateway):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
-    @log_decorator
+    @log_decorator(print_args=False)
     async def update_user_data(
             self, user_id: int,
             new_status: str = None, new_mailing_time: str = None, new_locale: str = None, new_canteen_id: int = None,
@@ -50,7 +50,7 @@ class UsersGatewayImpl(UsersGateway):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
-    @log_decorator
+    @log_decorator(print_args=False)
     async def deactivate_user(self, user_id):
         async with aiohttp.ClientSession() as session:
             async with session.put(
@@ -63,7 +63,7 @@ class UsersGatewayImpl(UsersGateway):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
-    @log_decorator
+    @log_decorator(print_args=False)
     async def reactivate_user(self, user_id):
         async with aiohttp.ClientSession() as session:
             async with session.put(
@@ -76,7 +76,7 @@ class UsersGatewayImpl(UsersGateway):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
-    @log_decorator
+    @log_decorator(print_args=False)
     async def get_users_all(self) -> list[User]:
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -102,7 +102,7 @@ class UsersGatewayImpl(UsersGateway):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
-    @log_decorator
+    @log_decorator(print_args=False)
     async def get_user(self, user_id: int) -> User:
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -128,7 +128,7 @@ class UsersGatewayImpl(UsersGateway):
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
-    @log_decorator
+    @log_decorator(print_args=False)
     async def get_users_mailing_time(self, user_id: int) -> str:
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -136,12 +136,12 @@ class UsersGatewayImpl(UsersGateway):
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
-                    ic(response_json)
+                    # ic(response_json)
                     return response_json
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
-    @log_decorator
+    @log_decorator(print_args=False)
     async def get_users_locale(self, user_id: int) -> str:
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -149,12 +149,12 @@ class UsersGatewayImpl(UsersGateway):
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
-                    ic(response_json)
+                    # ic(response_json)
                     return response_json
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
-    @log_decorator
+    @log_decorator(print_args=False)
     async def get_users_canteen_id(self, user_id: int) -> int:
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -162,12 +162,12 @@ class UsersGatewayImpl(UsersGateway):
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
-                    ic(response_json)
+                    # ic(response_json)
                     return response_json
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
 
-    @log_decorator
+    @log_decorator(print_args=False)
     async def user_check_existence(self, user_id: int) -> bool:
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -175,7 +175,7 @@ class UsersGatewayImpl(UsersGateway):
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
-                    ic(response_json)
+                    # ic(response_json)
                     return response_json
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")

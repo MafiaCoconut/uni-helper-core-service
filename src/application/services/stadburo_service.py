@@ -19,7 +19,6 @@ class StadburoService:
             translation_service=translation_service
         )
 
-    @log_decorator
     async def get_termins_text(self, category_id: int, locale: str) -> str:
         """
         Функция возвращает текст терминов выбранной столовой на выбранном языке
@@ -29,10 +28,8 @@ class StadburoService:
         """
         return await self.generate_termins_list_use_case.execute(category_of_termins_id=category_id, locale=locale)
 
-    @log_decorator
     async def parse_category(self, category_id: str):
         pass
 
-    @log_decorator
     async def parse_all(self):
         pass

@@ -1,6 +1,7 @@
 from application.interfaces.scheduler_interface import SchedulerInterface
 from application.services.s3_service import S3Service
 from domain.entities.job import Job
+from infrastructure.config.logs_config import log_decorator
 
 
 class SetS3JobUseCase:
@@ -11,6 +12,7 @@ class SetS3JobUseCase:
         self.scheduler_interface = scheduler_interface
         self.s3_service = s3_service
 
+    @log_decorator(print_args=False, print_kwargs=False)
     async def execute(self):
         await self.scheduler_interface.add_job(
             Job(
