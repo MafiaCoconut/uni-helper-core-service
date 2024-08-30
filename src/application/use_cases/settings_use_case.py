@@ -1,4 +1,5 @@
 from icecream import ic
+from sqlalchemy.testing.plugin.plugin_base import logging
 
 from application.interfaces.telegram_interface import TelegramInterface
 from application.services.canteens_service import CanteensService
@@ -8,6 +9,9 @@ from application.telegram.keyboards.settings_keyboards import SettingsKeyboardsB
 from application.use_cases.settings_user_data_use_case import SettingsUserDataUseCase
 from domain.entities.user import User
 from infrastructure.config.logs_config import log_decorator
+
+user_logger = logging.getLogger("user_logger")
+error_logger = logging.getLogger("error_logger")
 
 
 class SettingsUseCase:
@@ -64,6 +68,11 @@ class SettingsUseCase:
         except Exception as e:
             ic(e)
 
+        user_logger.info(
+            message=f"User: {callback.message.chat.username}/{callback.message.chat.id} "
+                    f"Changed Locale to {new_locale}"
+        )
+
     @log_decorator(print_args=False)
     async def menu_change_mailing_time(self, callback, locale: str):
         await self.telegram_interface.edit_message_with_callback(
@@ -83,21 +92,36 @@ class SettingsUseCase:
         except Exception as e:
             ic(e)
 
+        user_logger.info(
+            message=f"User: {callback.message.chat.username}/{callback.message.chat.id} "
+                    f"Changed MailingTime to {new_mailing_time}"
+        )
+
+
     @log_decorator(print_args=False)
     async def change_mailing_status(self, callback, user_id: int, locale: str):
         user = await self.users_service.get_user(user_id=user_id)
         ic(user)
+
         if user.mailing_time == '-':
             await self.update_user_data_use_case.enable_mailing(user_id=user_id, new_mailing_time='11:45')
             if user.canteen_id == 0:
                 await self.update_user_data_use_case.update_canteen_id(user_id=user_id, new_canteen_id=1)
+            user_logger.info(
+                message=f"User: {callback.message.chat.username}/{callback.message.chat.id} "
+                        f"Turn on the mailing"
+            )
         else:
             await self.update_user_data_use_case.disable_mailing(user_id=user_id)
+            user_logger.info(
+                message=f"User: {callback.message.chat.username}/{callback.message.chat.id} "
+                        f"Turn off the mailing"
+            )
 
         try:
             await self.menu_settings(callback, user_id=user_id, locale=locale)
         except Exception as e:
-            ic(e)
+            error_logger.error(message=e)
 
     @log_decorator(print_args=False)
     async def menu_change_canteen(self, callback, user_id: int, locale: str):
@@ -117,3 +141,8 @@ class SettingsUseCase:
             await self.menu_settings(callback, user_id=user_id, locale=locale)
         except Exception as e:
             ic(e)
+
+        user_logger.info(
+            message=f"User: {callback.message.chat.username}/{callback.message.chat.id} "
+                    f"Changed CanteenID to {new_canteen_id}"
+        )
