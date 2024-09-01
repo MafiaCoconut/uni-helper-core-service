@@ -13,6 +13,7 @@ from application.use_cases.settings_user_data_use_case import SettingsUserDataUs
 from infrastructure.config.logs_config import log_decorator
 
 error_logger = logging.getLogger("error_logger")
+system_logger = logging.getLogger("system_logger")
 
 
 class NotificationSendCanteensMenuUseCase:
@@ -47,6 +48,7 @@ class NotificationSendCanteensMenuUseCase:
             await self.send_canteens_menu_use_case.execute(user_id=user_id, message=message, keyboard=None)
         except Exception as e:
             error_logger.error(f"The menu could not be sent to the user. Error: {e}")
+            system_logger.error(f"The menu could not be sent to the user. Error: {e}")
             await self.settings_user_data_use_case.disable_user(user_id=user_id)
 
     """

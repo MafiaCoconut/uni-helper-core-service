@@ -123,6 +123,7 @@ class MenuSettingsUseCase:
             await self.menu_settings(callback, user_id=user_id, locale=locale)
         except Exception as e:
             error_logger.error(msg=e)
+            error_logger.error(msg=e)
 
     @log_decorator(print_args=False)
     async def menu_change_canteen(self, callback, user_id: int, locale: str):

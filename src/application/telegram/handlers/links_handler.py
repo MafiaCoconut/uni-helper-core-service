@@ -35,13 +35,13 @@ class LinksHandler:
         await call.message.edit_text(
             text=await self.translation_service.translate(message_id='menu-links', locale=locale),
             reply_markup=await self.links_keyboards.get_first_page_links(locale=locale))
-        await call.answer()
+        # await call.answer()
 
     async def menu_links_second_page(self, call: CallbackQuery, locale: str = 'ru'):
         await call.message.edit_text(
             text=await self.translation_service.translate(message_id='menu-links', locale=locale),
             reply_markup=await self.links_keyboards.get_second_page_links(locale=locale))
-        await call.answer()
+        # await call.answer()
 
     # async def show_main_links_handler(self, call: CallbackQuery, locale: str = 'ru'):
     #     await call.message.edit_reply_markup(reply_markup=inline.get_main_links(l10n))

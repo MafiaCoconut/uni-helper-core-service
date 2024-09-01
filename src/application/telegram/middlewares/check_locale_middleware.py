@@ -12,6 +12,7 @@ from application.services.users_service import UsersService
 # from models.postgres.users import get_info_from_user
 # from utils.fluent_main import list_of_l10n
 error_logger = logging.getLogger('error_logger')
+system_logger = logging.getLogger('system_logger')
 
 class CheckLocaleMiddleware(BaseMiddleware):
     def __init__(self, redis_client: redis.Redis, users_service: UsersService):
@@ -55,6 +56,7 @@ class CheckLocaleMiddleware(BaseMiddleware):
 
         except Exception as e:
             error_logger.error(e)
+            system_logger.error(e)
             # data['language'] = 'en'
             # data['l10n'] = list_of_l10n['en']
 

@@ -29,4 +29,4 @@ class DonationsHandler:
             reply_markup=await self.navigator_keyboards.get_go_to_menu_main(locale=locale),
             parse_mode=ParseMode.MARKDOWN
         )
-        await call.answer()
+        # await call.answer()

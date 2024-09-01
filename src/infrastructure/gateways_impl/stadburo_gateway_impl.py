@@ -7,7 +7,7 @@ from icecream import ic
 from application.gateways.stadburo_gateway import StadburoGateway
 from domain.entities.category_of_termin import CategoryOfTermins
 from domain.entities.termin import Termin
-from infrastructure.config.logs_config import log_decorator
+from infrastructure.config.logs_config import log_decorator, system_logger
 
 error_logger = logging.getLogger('error_logger')
 
@@ -28,6 +28,7 @@ class StadburoGatewayImpl(StadburoGateway):
                     return response_json
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
+                    system_logger.error(f"Failed to get data. Response code: {resp.status}")
 
     @log_decorator(print_args=False)
     async def parse_stadburo_all(self):

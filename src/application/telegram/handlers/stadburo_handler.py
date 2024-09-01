@@ -47,7 +47,7 @@ class StadburoHandler:
         await call.message.edit_text(
             await self.translation_service.translate(message_id='menu-stadburo', locale=locale),
             reply_markup=await self.stadburo_keyboards.get_menu_stadburo(locale=locale))
-        await call.answer()
+        # await call.answer()
 
     async def menu_immigration_handler(self, call: CallbackQuery, locale: str = 'ru'):
         """
@@ -58,7 +58,7 @@ class StadburoHandler:
         await call.message.edit_text(
             await self.translation_service.translate(message_id='menu-immigration', locale=locale),
             reply_markup=await self.stadburo_keyboards.get_menu_immigration_office(locale=locale))
-        await call.answer()
+        # await call.answer()
 
     async def category_of_termins_handler(self, call: CallbackQuery, locale: str = 'ru'):
         """
@@ -75,4 +75,4 @@ class StadburoHandler:
             text=text,
             reply_markup=await self.navigator_keyboards.get_go_to(locale=locale, where=where)
         )
-        await call.answer()
+        # await call.answer()

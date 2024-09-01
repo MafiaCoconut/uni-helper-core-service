@@ -51,37 +51,37 @@ class SettingsHandler:
 
     async def menu_settings_handler(self, call: CallbackQuery, locale: str):
         await self.settings_service.menu_settings(callback=call, user_id=call.message.chat.id, locale=locale)
-        await call.answer()
+        # await call.answer()
 
     async def change_locale_handler(self, call: CallbackQuery, locale: str):
         new_locale = call.data[call.data.find(' ') + 1:]
         await self.settings_service.change_locale(callback=call, user_id=call.message.chat.id, new_locale=new_locale)
-        await call.answer()
+        # await call.answer()
 
     async def menu_change_mailing_time_handler(self, call: CallbackQuery, locale: str):
         await self.settings_service.menu_change_mailing_time(callback=call, locale=locale)
-        await call.answer()
+        # await call.answer()
 
     async def change_mailing_time_handler(self, call: CallbackQuery, locale: str):
         new_mailing_time = call.data[call.data.find(' ') + 1:]
-        ic(new_mailing_time)
+        # ic(new_mailing_time)
         await self.settings_service.change_mailing_time(callback=call, user_id=call.message.chat.id,
                                                         locale=locale, new_mailing_time=new_mailing_time)
-        await call.answer()
+        # await call.answer()
 
     async def change_mailing_status_handler(self, call: CallbackQuery, locale: str):
         await self.settings_service.change_mailing_status(callback=call, user_id=call.message.chat.id, locale=locale)
-        await call.answer()
+        # await call.answer()
 
     async def menu_change_canteen_handler(self, call: CallbackQuery, locale: str):
         await self.settings_service.menu_change_canteen(callback=call, user_id=call.message.chat.id, locale=locale)
-        await call.answer()
+        # await call.answer()
 
     async def change_canteen_handler(self, call: CallbackQuery, locale: str):
         new_canteen_id = call.data[call.data.find(' ') + 1:]
         await self.settings_service.change_canteen(callback=call, user_id=call.message.chat.id,
                                                    locale=locale, new_canteen_id=new_canteen_id)
-        await call.answer()
+        # await call.answer()
 
     # async def set_new_locale(self, callback: CallbackQuery, state: FSMContext, locale: str):
     #     pass

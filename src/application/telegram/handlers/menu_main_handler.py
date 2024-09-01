@@ -30,7 +30,7 @@ class MenuMainHandler:
             reply_markup=await self.menu_main_keyboards.get_menu_main(locale=locale),
             parse_mode=ParseMode.HTML
         )
-        await call.answer()
+        # await call.answer()
 
     async def send_menu_main_handler(self, call: CallbackQuery, locale: str = 'ru'):
         await call.message.answer(

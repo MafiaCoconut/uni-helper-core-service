@@ -156,7 +156,6 @@ lack-of-terms = للأسف لايوجد مواعيد متاحة حاليًا(((
 # Settings (внутреннее)
 enter-appropriate-time-for-your-daily-mailing =
     أدخل الأوقات المناسبة لتلقي العروض اليومية.
-    صيغة الإدخال: <b>hh:mm</b>
 
 cancel-button = للإلغاء أضغط على زر "رجوع".
 

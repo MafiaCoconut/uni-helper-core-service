@@ -19,6 +19,7 @@ from infrastructure.config.dispatcher_config import dp
 from infrastructure.web.api import router
 
 system_logger = logging.getLogger("system_logger")
+error_logger = logging.getLogger("error_logger")
 
 
 @asynccontextmanager
@@ -53,7 +54,11 @@ async def bot_webhook(request: Request):
     data = await request.json()
     update = Update(**data)
     # ic(update)
-    await dp.feed_update(bot=bot, update=update)
+    try:
+        await dp.feed_update(bot=bot, update=update)
+    except Exception as e:
+        error_logger.error(e)
+        system_logger.error(e)
 
 
 @app.post("/")

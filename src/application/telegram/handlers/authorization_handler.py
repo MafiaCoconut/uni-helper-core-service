@@ -58,7 +58,7 @@ class AuthorizationHandler:
             )
             await state.update_data(menu_authorization_message_id=message_id)
         elif await self.users_service.check_status(user_id=user_id) == "deactivated":
-            await self.settings_service.enable_mailing(user_id=user_id)
+            await self.settings_service.enable_user(user_id=user_id)
             await self.authorization_service.user_already_exist(user=User(user_id=user_id, locale=locale))
         else:
             await self.authorization_service.user_already_exist(user=User(user_id=user_id, locale=locale))

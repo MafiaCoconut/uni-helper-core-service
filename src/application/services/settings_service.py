@@ -77,6 +77,9 @@ class SettingsService:
     async def disable_user(self, user_id: int):
         await self.settings_user_data_use_case.disable_user(user_id=user_id)
 
+    async def enable_user(self, user_id: int):
+        await self.settings_user_data_use_case.enable_user(user_id=user_id)
+
 
 
 

@@ -155,7 +155,6 @@ lack-of-terms = Leider sind keine Termine verfügbar :(
 # Einstellungen (innere)
 enter-appropriate-time-for-your-daily-mailing =
     Geben Sie die für das Mailing passende Zeit ein.
-    Eingabeformat: <b>hh:mm</b>
 
 cancel-button = Klicken Sie auf "Zurück", um abzubrechen.
 

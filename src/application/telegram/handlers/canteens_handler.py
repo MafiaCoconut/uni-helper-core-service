@@ -62,7 +62,12 @@ class CanteensHandler:
                 reply_markup=await self.canteens_keyboards.get_canteens(locale=locale))
         except Exception as e:
             error_logger = logging.getLogger('error_logger')
-            error_logger.error('The text canteens menu has not changed')
-            error_logger.error(e)
+            system_logger = logging.getLogger('system_logger')
 
-        await call.answer()
+            error_logger.error('The text canteens menu has not changed')
+            system_logger.error('The text canteens menu has not changed')
+
+            error_logger.error(e)
+            system_logger.error(e)
+
+        # await call.answer()

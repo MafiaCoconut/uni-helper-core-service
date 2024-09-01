@@ -155,7 +155,6 @@ lack-of-terms = Unfortunately, there are no available Terminen right now(((
 # Settings (внутреннее)
 enter-appropriate-time-for-your-daily-mailing =
     Enter the appropriate time for your daily mailing.
-    Input format: <b>hh:mm</b>
 
 cancel-button = To cancel, click the "Back" button.
 
