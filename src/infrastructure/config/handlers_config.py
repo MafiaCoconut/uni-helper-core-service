@@ -20,6 +20,7 @@ miss_message_handler = MissMessageHandler(translation_service=translation_servic
 
 authorization_handler = AuthorizationHandler(
     users_service=users_service,
+    settings_service=settings_service,
     translation_service=translation_service,
     authorization_service=authorization_service
 )
@@ -67,8 +68,3 @@ logs_handler = LogsHandler()
 admin_menu_handler = AdminMenuHandler(
     admins_service=admins_service
 )
-
-
-
-
-

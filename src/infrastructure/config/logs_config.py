@@ -58,13 +58,13 @@ def config():
         system_logger.setLevel(logging.INFO)
         user_logger.setLevel(logging.DEBUG)
         error_logger.setLevel(logging.ERROR)
+        error_logs_config(formatter=formatter)
 
     system_logger.addHandler(system_handler)
 
     user_logger.addHandler(user_handler)
 
     error_logger.addHandler(error_handler)
-    # error_logs_config(formatter=formatter)
 
     apscheduler_logger.setLevel(logging.DEBUG)
     apscheduler_logger.addHandler(system_handler)

@@ -13,27 +13,35 @@ from infrastructure.config.gateways_config import canteens_gateway, users_gatewa
 
 from infrastructure.config.interfaces_config import telegram_interface, excel_interface
 from infrastructure.config.keyboards_config import settings_keyboards, authorization_keyboards, admin_keyboards, \
-    admin_menu_keyboards
+    admin_menu_keyboards, menu_main_keyboards
 from infrastructure.config.providers_config import keyboards_provider
 from infrastructure.config.redis_config import redis_service
 from infrastructure.config.s3_config import s3client
 from infrastructure.config.scheduler_interfaces_config import get_scheduler_interface
 from infrastructure.config.translation_config import translation_service
 
+users_service = UsersService(
+    users_gateway=users_gateway
+)
+
+notification_service = NotificationService(
+    notification_gateway=notification_gateway
+)
+
 canteens_service = CanteensService(
-    users_gateway=users_gateway,
+    users_service=users_service,
     canteens_gateway=canteens_gateway,
     telegram_interface=telegram_interface,
-    translation_service=translation_service
+    translation_service=translation_service,
+    redis_service=redis_service,
+    notification_service=notification_service
 )
+
 stadburo_service = StadburoService(
     stadburo_gateway=stadburo_gateway,
     translation_service=translation_service
 )
 
-users_service = UsersService(
-    users_gateway=users_gateway
-)
 
 admins_service = AdminsService(
     admin_keyboards=admin_keyboards,
@@ -45,9 +53,7 @@ admins_service = AdminsService(
     stadburo_gateway=stadburo_gateway,
 )
 
-notification_service = NotificationService(
-    notification_gateway=notification_gateway
-)
+
 
 settings_service = SettingsService(
     users_service=users_service,
@@ -67,6 +73,7 @@ authorization_service = AuthorizationService(
     settings_service=settings_service,
     authorization_keyboards=authorization_keyboards,
     translation_service=translation_service,
+    menu_main_keyboards=menu_main_keyboards
 )
 
 s3_service = S3Service(
@@ -79,7 +86,3 @@ def get_scheduler_service() -> SchedulerService:
         scheduler_interface=get_scheduler_interface(),
         s3_service=s3_service
     )
-
-
-
-

@@ -1,20 +1,30 @@
+import logging
+
+
 from application.gateways.canteens_gateway import CanteensGateway
 from application.gateways.users_gateway import UsersGateway
 from application.interfaces.telegram_interface import TelegramInterface
+from application.services.notification_service import NotificationService
 from application.services.translation_service import TranslationService
+from application.services.users_service import UsersService
 from application.use_cases.generate_canteens_menu_use_case import GenerateCanteenMenuUseCase
 from application.use_cases.send_canteens_menu_use_case import SendCanteensMenuUseCase
+from application.use_cases.settings_user_data_use_case import SettingsUserDataUseCase
 from infrastructure.config.logs_config import log_decorator
+
+error_logger = logging.getLogger("error_logger")
 
 
 class NotificationSendCanteensMenuUseCase:
     def __init__(self,
-                 users_gateway: UsersGateway,
+                 users_service: UsersService,
                  canteens_gateway: CanteensGateway,
                  telegram_interface: TelegramInterface,
                  translation_service: TranslationService,
+                 settings_user_data_use_case: SettingsUserDataUseCase,
                  ):
-        self.users_gateway = users_gateway
+        self.users_service = users_service
+        self.settings_user_data_use_case = settings_user_data_use_case
         self.generate_canteens_menu_use_case = GenerateCanteenMenuUseCase(
             canteens_gateway=canteens_gateway,
             telegram_interface=telegram_interface,
@@ -31,10 +41,13 @@ class NotificationSendCanteensMenuUseCase:
         преобразует текущие данные столовой в текст и возвращает их в виде текста
         :param user_id: ID юзера в базе данных
         """
-        user = await self.users_gateway.get_user(user_id=user_id)
+        user = await self.users_service.get_user(user_id=user_id)
         message = await self.generate_canteens_menu_use_case.execute(canteen_id=user.canteen_id, locale=user.locale)
-        await self.send_canteens_menu_use_case.execute(user_id=user_id, message=message, keyboard=None)
-
+        try:
+            await self.send_canteens_menu_use_case.execute(user_id=user_id, message=message, keyboard=None)
+        except Exception as e:
+            error_logger.error(f"The menu could not be sent to the user. Error: {e}")
+            await self.settings_user_data_use_case.disable_user(user_id=user_id)
 
     """
     TODO:

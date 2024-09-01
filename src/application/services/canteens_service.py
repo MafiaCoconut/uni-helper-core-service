@@ -3,19 +3,25 @@ from icecream import ic
 from application.gateways.canteens_gateway import CanteensGateway
 from application.gateways.users_gateway import UsersGateway
 from application.interfaces.telegram_interface import TelegramInterface
+from application.services.notification_service import NotificationService
+from application.services.redis_service import RedisService
 from application.services.translation_service import TranslationService
+from application.services.users_service import UsersService
 from application.use_cases.generate_canteens_menu_use_case import GenerateCanteenMenuUseCase
 from application.use_cases.notification_send_canteens_menu_use_case import NotificationSendCanteensMenuUseCase
 from application.use_cases.refactor_canteens_menu_to_text_use_case import RefactorCanteensMenuToTextUseCase
+from application.use_cases.settings_user_data_use_case import SettingsUserDataUseCase
 from domain.entities.canteen import Canteen
 
 
 class CanteensService:
     def __init__(self,
-                 users_gateway: UsersGateway,
+                 users_service: UsersService,
+                 notification_service: NotificationService,
                  canteens_gateway: CanteensGateway,
                  telegram_interface: TelegramInterface,
                  translation_service: TranslationService,
+                 redis_service: RedisService,
                  ):
         self.canteens_gateway = canteens_gateway
         self.telegram_interface = telegram_interface
@@ -25,11 +31,17 @@ class CanteensService:
             telegram_interface=self.telegram_interface,
             translation_service=self.translation_service,
         )
+        self.settings_user_data_use_case = SettingsUserDataUseCase(
+            redis_service=redis_service,
+            users_service=users_service,
+            notification_service=notification_service
+        )
         self.notification_send_canteens_menu_use_case = NotificationSendCanteensMenuUseCase(
-            users_gateway=users_gateway,
+            users_service=users_service,
             canteens_gateway=canteens_gateway,
             telegram_interface=telegram_interface,
             translation_service=translation_service,
+            settings_user_data_use_case=self.settings_user_data_use_case
         )
 
     async def get_canteens_menu(self, canteen_id: int, locale: str) -> str:

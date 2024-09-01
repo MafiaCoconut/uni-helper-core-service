@@ -23,7 +23,7 @@ class UsersGatewayImpl(UsersGateway):
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
-                    ic(response_json)
+                    # ic(response_json)
                     return response_json
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
@@ -45,7 +45,7 @@ class UsersGatewayImpl(UsersGateway):
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
-                    ic(response_json)
+                    # ic(response_json)
                     return response_json
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
@@ -58,7 +58,7 @@ class UsersGatewayImpl(UsersGateway):
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
-                    ic(response_json)
+                    # ic(response_json)
                     return response_json
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")
@@ -71,7 +71,7 @@ class UsersGatewayImpl(UsersGateway):
             ) as resp:
                 if resp.status == 200:
                     response_json = await resp.json()
-                    ic(response_json)
+                    # ic(response_json)
                     return response_json
                 else:
                     error_logger.error(f"Failed to get data. Response code: {resp.status}")

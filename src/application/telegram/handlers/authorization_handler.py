@@ -6,6 +6,7 @@ from icecream import ic
 
 from application.providers.keyboards_provider import KeyboardsProvider
 from application.services.authorization_service import AuthorizationService
+from application.services.settings_service import SettingsService
 from application.services.translation_service import TranslationService
 from application.services.users_service import UsersService
 from application.telegram.keyboards.authorization_keyboards import AuthorizationKeyboardsBuilder
@@ -15,10 +16,12 @@ from domain.entities.user import User
 class AuthorizationHandler:
     def __init__(self,
                  users_service: UsersService,
+                 settings_service: SettingsService,
                  translation_service: TranslationService,
                  authorization_service: AuthorizationService,
                  ):
         self.users_service = users_service
+        self.settings_service = settings_service
         self.translation_service = translation_service
         self.authorization_service = authorization_service
 
@@ -47,13 +50,6 @@ class AuthorizationHandler:
                 message.from_user.last_name if message.from_user.last_name is not None else ""
             )
 
-            # user = User(
-            #     user_id=user_id,
-            #     username=users_username if users_username is not None else "-",
-            #     name=users_name if users_name is not None else "-",
-            #     mailing_time="11:45",
-            #     locale=users_language if users_language in await self.translation_service.get_list_of_languages() else 'en',
-            # )
             message_id = await self.authorization_service.start_authorization(
                 user_id=user_id,
                 name=users_name if users_name is not None else "-",
@@ -61,6 +57,9 @@ class AuthorizationHandler:
                 locale=users_language if users_language in await self.translation_service.get_list_of_languages() else 'en'
             )
             await state.update_data(menu_authorization_message_id=message_id)
+        elif await self.users_service.check_status(user_id=user_id) == "deactivated":
+            await self.settings_service.enable_mailing(user_id=user_id)
+            await self.authorization_service.user_already_exist(user=User(user_id=user_id, locale=locale))
         else:
             await self.authorization_service.user_already_exist(user=User(user_id=user_id, locale=locale))
 

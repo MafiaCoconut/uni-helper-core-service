@@ -6,11 +6,9 @@ from application.services.settings_service import SettingsService
 from application.services.translation_service import TranslationService
 from application.services.users_service import UsersService
 from application.telegram.keyboards.authorization_keyboards import AuthorizationKeyboardsBuilder
+from application.telegram.keyboards.menu_main_keyboards import MenuMainKeyboardsBuilder
 from application.use_cases.authorization_use_case import AuthorizationUseCase
 from domain.entities.user import User
-from infrastructure.config.keyboards_config import menu_main_keyboards
-from infrastructure.config.logs_config import log_decorator
-
 
 class AuthorizationService:
     def __init__(self,
@@ -21,6 +19,7 @@ class AuthorizationService:
                  settings_service: SettingsService,
                  notification_service: NotificationService,
                  authorization_keyboards: AuthorizationKeyboardsBuilder,
+                 menu_main_keyboards: MenuMainKeyboardsBuilder,
                  translation_service: TranslationService,
                  ):
         self.users_service = users_service
