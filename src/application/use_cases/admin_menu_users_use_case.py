@@ -98,3 +98,5 @@ class AdminMenuUsersUseCase:
             message=text,
             keyboard=await self.admin_keyboards.get_link_to_person(user_id=user_id)
         )
+
+        await state.set_state(None)
