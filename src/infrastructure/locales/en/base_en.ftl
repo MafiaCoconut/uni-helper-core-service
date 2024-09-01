@@ -2,13 +2,13 @@
 welcome-message =
     Hi! 👋 This is your personal assistant. Here's what it can do for you:
 
-    1. 🍽 <b>Mensa Menu:</b> You can find out the current menu to always be aware of the offers for today.
+    🍽 <b>Mensa Menu:</b> You can find out the current menu to always be aware of the offers for today.
 
-    2. 📬 <b>Mailing of the menu:</b> Get the daily menu from the dining room of your choice.
+    📬 <b>Mailing of the menu:</b> Get the daily menu from the dining room of your choice.
 
-    3. 📅 <b>Application in Stadbüro:</b> Easily check the available slots for appointment in Stadbüro.
+    📅 <b>Application in Stadbüro:</b> Easily check the available slots for appointment in Stadbüro.
 
-    4. 🔗 <b>Links:</b> Get quick access to useful links to university websites and more.
+    🔗 <b>Links:</b> Get quick access to useful links to university websites and more.
 
     Please select the preferred language of the bot using the appropriate flags.
 

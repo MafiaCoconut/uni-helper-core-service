@@ -2,13 +2,13 @@
 welcome-message =
     Hallo! 👋 Das ist dein persönlicher Helfer. Hier ist, was er für dich tun kann:
 
-    1. 🍽 <b>Speisekarte:</b> Du kannst das aktuelle Mensa-Menü erhalten, um immer über die Angebote für heute informiert zu sein.
+    🍽 <b>Speisekarte:</b> Du kannst das aktuelle Mensa-Menü erhalten, um immer über die Angebote für heute informiert zu sein.
 
-    2. 📬 <b>Menü-Mailing:</b> Holen Sie sich ein tägliches Menü aus dem von Ihnen gewählten Mensa.
+    📬 <b>Menü-Mailing:</b> Holen Sie sich ein tägliches Menü aus dem von Ihnen gewählten Mensa.
 
-    3. 📅 <b>Terminvereinbarung in Stadtbüro:</b> Überprüfe einfach die verfügbaren Termine in Stadbüro.
+    📅 <b>Terminvereinbarung in Stadtbüro:</b> Überprüfe einfach die verfügbaren Termine in Stadbüro.
 
-    4. 🔗 <b>Links:</b> Erhalten Sie schnellen Zugriff auf nützliche Links zu Websites der Universität und mehr.
+    🔗 <b>Links:</b> Erhalten Sie schnellen Zugriff auf nützliche Links zu Websites der Universität und mehr.
 
     Bitte wählen Sie Ihre bevorzugte Sprache für den Bot, indem Sie die entsprechenden Flaggen auswählen.
 
