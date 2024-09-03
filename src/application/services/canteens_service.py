@@ -38,6 +38,7 @@ class CanteensService:
         )
         self.notification_send_canteens_menu_use_case = NotificationSendCanteensMenuUseCase(
             users_service=users_service,
+            redis_service=redis_service,
             canteens_gateway=canteens_gateway,
             telegram_interface=telegram_interface,
             translation_service=translation_service,
@@ -56,7 +57,7 @@ class CanteensService:
     async def parse_canteen_all(self):
         await self.canteens_gateway.parse_canteen_all()
 
-    async def send_canteens_menu_to_user(self, user_id: int):
-        await self.notification_send_canteens_menu_use_case.execute(user_id=user_id)
+    async def send_canteens_menu_to_user(self):
+        await self.notification_send_canteens_menu_use_case.execute()
 
 

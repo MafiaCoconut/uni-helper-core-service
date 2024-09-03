@@ -39,6 +39,9 @@ class UsersService:
     async def get_user(self, user_id: int):
         return await self.users_gateway.get_user(user_id=user_id)
 
+    async def get_users(self):
+        return await self.users_gateway.get_users_all()
+
     async def reactivate_user(self, user_id: int):
         await self.users_gateway.reactivate_user(user_id=user_id)
 

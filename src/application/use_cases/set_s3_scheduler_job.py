@@ -21,6 +21,6 @@ class SetS3JobUseCase:
                 hour='0',
                 minute='0',
                 id='s3_upload_logs',
-                day_of_week='mon,fri'
+                day_of_week='mon-fri'
             )
         )

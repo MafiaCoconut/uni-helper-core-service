@@ -12,3 +12,12 @@ class RedisService:
 
     async def ttl(self, key):
         return self.redis_client.ttl(name=key)
+
+    async def get(self, key):
+        return self.redis_client.get(key)
+
+    async def check_exist(self, key):
+        if await self.get(key=key) != -2:
+            return False
+        return True
+
