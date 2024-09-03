@@ -1,6 +1,9 @@
+from sqlalchemy.testing.suite.test_reflection import users
+
 from application.services.admin_service import AdminsService
 from application.services.authorization_service import AuthorizationService
 from application.services.canteens_service import CanteensService
+from application.services.mailing_service import MailingService
 from application.services.notification_service import NotificationService
 from application.services.s3_service import S3Service
 from application.services.scheduler_service import SchedulerService
@@ -25,23 +28,19 @@ users_service = UsersService(
 )
 
 notification_service = NotificationService(
-    notification_gateway=notification_gateway
+    notification_gateway=notification_gateway,
 )
 
 canteens_service = CanteensService(
-    users_service=users_service,
     canteens_gateway=canteens_gateway,
     telegram_interface=telegram_interface,
     translation_service=translation_service,
-    redis_service=redis_service,
-    notification_service=notification_service
 )
 
 stadburo_service = StadburoService(
     stadburo_gateway=stadburo_gateway,
     translation_service=translation_service
 )
-
 
 admins_service = AdminsService(
     admin_keyboards=admin_keyboards,
@@ -53,8 +52,6 @@ admins_service = AdminsService(
     stadburo_gateway=stadburo_gateway,
 )
 
-
-
 settings_service = SettingsService(
     users_service=users_service,
     redis_service=redis_service,
@@ -62,6 +59,10 @@ settings_service = SettingsService(
     settings_keyboards=settings_keyboards,
     notification_service=notification_service,
     telegram_interface=telegram_interface,
+)
+
+s3_service = S3Service(
+    s3client=s3client
 )
 
 authorization_service = AuthorizationService(
@@ -76,9 +77,16 @@ authorization_service = AuthorizationService(
     menu_main_keyboards=menu_main_keyboards
 )
 
-s3_service = S3Service(
-    s3client=s3client
-)
+
+async def get_mailing_service() -> MailingService:
+    return MailingService(
+        redis_service=redis_service,
+        users_service=users_service,
+        canteens_service=canteens_service,
+        settings_service=settings_service,
+        telegram_interface=telegram_interface,
+        translation_service=translation_service,
+    )
 
 
 def get_scheduler_service() -> SchedulerService:
