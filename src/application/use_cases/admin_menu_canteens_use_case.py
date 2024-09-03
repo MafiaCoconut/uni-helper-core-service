@@ -1,22 +1,34 @@
 from datetime import datetime
-
+import logging
 from icecream import ic
 
-from application.gateways.canteens_gateway import CanteensGateway
 from application.interfaces.telegram_interface import TelegramInterface
+from application.services.canteens_service import CanteensService
+from application.services.settings_service import SettingsService
+from application.services.translation_service import TranslationService
+from application.services.users_service import UsersService
 from application.telegram.keyboards.admin_menu_keyboards import AdminMenuKeyboardsBuilder
 from application.use_cases.refactor_canteens_menu_to_text_use_case import RefactorCanteensMenuToTextUseCase
 from infrastructure.config.logs_config import log_decorator
 
+error_logger = logging.getLogger('error_logger')
+system_logger = logging.getLogger('system_logger')
+
 
 class AdminMenuCanteensUseCase:
     def __init__(self,
-                 canteens_gateway: CanteensGateway,
+                 canteens_service: CanteensService,
+                 users_service: UsersService,
+                 settings_service: SettingsService,
                  telegram_interface: TelegramInterface,
+                 translation_service: TranslationService,
                  admin_menu_keyboards: AdminMenuKeyboardsBuilder,
                  refactor_canteen_to_text: RefactorCanteensMenuToTextUseCase,
                  ):
-        self.canteens_gateway = canteens_gateway
+        self.canteens_service = canteens_service
+        self.users_service = users_service
+        self.settings_service = settings_service
+        self.translation_service = translation_service
         self.telegram_interface = telegram_interface
         self.admin_menu_keyboards = admin_menu_keyboards
         self.refactor_canteen_to_text = refactor_canteen_to_text
@@ -30,7 +42,7 @@ class AdminMenuCanteensUseCase:
 
     @log_decorator(print_args=False, print_kwargs=False)
     async def parse(self, callback, canteen_id: int):
-        await self.canteens_gateway.parse_canteen(canteen_id=canteen_id)
+        await self.canteens_service.parse_canteen(canteen_id=canteen_id)
         try:
             await self.telegram_interface.edit_message_with_callback(
                 callback=callback,
@@ -45,7 +57,7 @@ class AdminMenuCanteensUseCase:
 
     @log_decorator(print_args=False, print_kwargs=False)
     async def parse_all(self, callback):
-        await self.canteens_gateway.parse_canteen_all()
+        await self.canteens_service.parse_canteen_all()
         try:
             await self.telegram_interface.edit_message_with_callback(
                 callback=callback,
@@ -60,7 +72,7 @@ class AdminMenuCanteensUseCase:
 
     @log_decorator(print_args=False, print_kwargs=False)
     async def get_menu(self, callback, canteen_id: int):
-        data = await self.canteens_gateway.get_canteens_data(canteen_id=canteen_id)
+        data = await self.canteens_service.get_canteens_data(canteen_id=canteen_id)
         canteen = data.get("canteen")
         text = ""
         text += (f"Столовая: {canteen.name}\n"
@@ -91,13 +103,15 @@ class AdminMenuCanteensUseCase:
 
     @log_decorator(print_args=False, print_kwargs=False)
     async def change_canteen_status(self, callback, canteen_id: int):
-        canteen = await self.canteens_gateway.get_canteens_info(canteen_id=canteen_id)
+        canteen = await self.canteens_service.get_canteens_info(canteen_id=canteen_id)
         if canteen.status == "active":
-            await self.canteens_gateway.deactivate(canteen_id=canteen_id)
+            await self.canteens_service.deactivate(canteen_id=canteen_id)
+            message_id = "canteen-deactivated"
         else:
-            await self.canteens_gateway.reactivate(canteen_id=canteen_id)
+            await self.canteens_service.reactivate(canteen_id=canteen_id)
+            message_id = "canteen-reactivated"
 
-        updated_canteen = await self.canteens_gateway.get_canteens_info(canteen_id=canteen_id)
+        updated_canteen = await self.canteens_service.get_canteens_info(canteen_id=canteen_id)
 
         await self.telegram_interface.edit_message_with_callback(
             callback=callback,
@@ -111,7 +125,21 @@ class AdminMenuCanteensUseCase:
                     f"     {updated_canteen.times.get('v3').get('hour')}:{updated_canteen.times.get('v3').get('minute')}\n"
                     f"Время открытия: {updated_canteen.opened_time}\n"
                     f"Время закрытия: {updated_canteen.closed_time}",
-            keyboard = await self.admin_menu_keyboards.menu_canteens()
+            keyboard=await self.admin_menu_keyboards.menu_canteens()
         )
+
+        users = await self.users_service.get_users()
+        for user in users:
+            if user.canteen_id == canteen_id:
+                try:
+                    await self.telegram_interface.send_message(
+                        user_id=user.user_id,
+                        message=await self.translation_service.translate(message_id, user.locale)
+                    )
+                except Exception as e:
+                    error_logger.error(f"The deactivate/reactivate canteen message could not be sent to the user. Error: {e}")
+                    system_logger.error(f"The deactivate/reactivate canteen message could not be sent to the user. Error: {e}")
+                    await self.settings_service.disable_user(user_id=user.user_id)
+
 
 

@@ -4,6 +4,10 @@ from application.gateways.users_gateway import UsersGateway
 from application.interfaces.excel_interface import ExcelInterface
 from application.interfaces.telegram_interface import TelegramInterface
 from application.providers.keyboards_provider import KeyboardsProvider
+from application.services.canteens_service import CanteensService
+from application.services.settings_service import SettingsService
+from application.services.stadburo_service import StadburoService
+from application.services.users_service import UsersService
 from application.telegram.keyboards.admin_keyboards import AdminKeyboardsBuilder
 from application.telegram.keyboards.admin_menu_keyboards import AdminMenuKeyboardsBuilder
 from application.use_cases.admin_menu_canteens_use_case import AdminMenuCanteensUseCase
@@ -24,12 +28,11 @@ class AdminsService:
                  admin_menu_keyboards: AdminMenuKeyboardsBuilder,
                  telegram_interface: TelegramInterface,
                  excel_interface: ExcelInterface,
-                 users_gateway: UsersGateway,
-                 canteens_gateway: CanteensGateway,
-                 stadburo_gateway: StadburoGateway,
-
+                 users_service: UsersService,
+                 canteens_service: CanteensService,
+                 stadburo_service: StadburoService,
+                 settings_service: SettingsService,
                  ):
-        # self.keyboards_provider = keyboards_provider
         self.refactor_canteen_to_text = RefactorCanteensMenuToTextUseCase(
             translation_service=translation_service
         )
@@ -42,21 +45,24 @@ class AdminsService:
             admin_menu_keyboards=admin_menu_keyboards,
         )
         self.admin_menu_users_use_case = AdminMenuUsersUseCase(
-            users_gateway=users_gateway,
+            users_service=users_service,
             telegram_interface=telegram_interface,
             excel_interface=excel_interface,
             admin_keyboards=admin_keyboards,
             admin_menu_keyboards=admin_menu_keyboards,
         )
         self.admin_menu_canteens_use_case = AdminMenuCanteensUseCase(
-            canteens_gateway=canteens_gateway,
+            canteens_service=canteens_service,
+            settings_service=settings_service,
             telegram_interface=telegram_interface,
+            translation_service=translation_service,
+            users_service=users_service,
             admin_menu_keyboards=admin_menu_keyboards,
-            refactor_canteen_to_text=self.refactor_canteen_to_text
+            refactor_canteen_to_text=self.refactor_canteen_to_text,
         )
 
         self.admin_menu_stadburo_use_case = AdminMenuStadburoUseCase(
-            stadburo_gateway=stadburo_gateway,
+            stadburo_service=stadburo_service,
             telegram_interface=telegram_interface,
             admin_menu_keyboards=admin_menu_keyboards,
         )

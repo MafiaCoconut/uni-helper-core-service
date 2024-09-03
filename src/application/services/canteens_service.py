@@ -26,11 +26,22 @@ class CanteensService:
     async def get_canteens_info(self, canteen_id: int) -> Canteen:
         return await self.canteens_gateway.get_canteens_info(canteen_id)
 
+    async def get_canteens_data(self, canteen_id: int) -> dict:
+        return await self.canteens_gateway.get_canteens_data(canteen_id=canteen_id)
+
     async def parse_canteen(self, canteen_id: int) -> str:
         return await self.canteens_gateway.parse_canteen(canteen_id)
 
     async def parse_canteen_all(self):
         await self.canteens_gateway.parse_canteen_all()
+
+    async def deactivate(self, canteen_id: int) -> None:
+        await self.canteens_gateway.deactivate(canteen_id=canteen_id)
+
+    async def reactivate(self, canteen_id: int) -> None:
+        await self.canteens_gateway.reactivate(canteen_id=canteen_id)
+
+
 
 
 

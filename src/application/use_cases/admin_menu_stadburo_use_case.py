@@ -1,16 +1,17 @@
 from application.gateways.stadburo_gateway import StadburoGateway
 from application.interfaces.telegram_interface import TelegramInterface
+from application.services.stadburo_service import StadburoService
 from application.telegram.keyboards.admin_menu_keyboards import AdminMenuKeyboardsBuilder
 from infrastructure.config.logs_config import log_decorator
 
 
 class AdminMenuStadburoUseCase:
     def __init__(self,
-                 stadburo_gateway: StadburoGateway,
+                 stadburo_service: StadburoService,
                  telegram_interface: TelegramInterface,
                  admin_menu_keyboards: AdminMenuKeyboardsBuilder,
                  ):
-        self.stadburo_gateway = stadburo_gateway
+        self.stadburo_service = stadburo_service
         self.telegram_interface = telegram_interface
         self.admin_menu_keyboards = admin_menu_keyboards
 
@@ -24,7 +25,7 @@ class AdminMenuStadburoUseCase:
 
     @log_decorator(print_args=False, print_kwargs=False)
     async def parse_all(self, callback):
-        await self.stadburo_gateway.parse_stadburo_all()
+        await self.stadburo_service.parse_all()
         await callback.answer()
         try:
             await self.telegram_interface.edit_message_with_callback(

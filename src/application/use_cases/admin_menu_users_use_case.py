@@ -4,6 +4,7 @@ from datetime import datetime
 from application.gateways.users_gateway import UsersGateway
 from application.interfaces.excel_interface import ExcelInterface
 from application.interfaces.telegram_interface import TelegramInterface
+from application.services.users_service import UsersService
 from application.telegram.keyboards.admin_keyboards import AdminKeyboardsBuilder
 from application.telegram.keyboards.admin_menu_keyboards import AdminMenuKeyboardsBuilder
 from application.telegram.models.states import GetPersonById
@@ -12,13 +13,13 @@ from infrastructure.config.logs_config import log_decorator
 
 class AdminMenuUsersUseCase:
     def __init__(self,
-                 users_gateway: UsersGateway,
+                 users_service: UsersService,
                  telegram_interface: TelegramInterface,
                  excel_interface: ExcelInterface,
                  admin_keyboards: AdminKeyboardsBuilder,
                  admin_menu_keyboards: AdminMenuKeyboardsBuilder,
                  ):
-        self.users_gateway = users_gateway
+        self.users_service = users_service
         self.telegram_interface = telegram_interface
         self.excel_interface = excel_interface
         self.admin_keyboards = admin_keyboards
@@ -36,7 +37,7 @@ class AdminMenuUsersUseCase:
 
     @log_decorator(print_args=False, print_kwargs=False)
     async def get_all_users_data_in_xslx(self, callback):
-        users = await self.users_gateway.get_users_all()
+        users = await self.users_service.get_users()
         headers = list(users[0].model_fields.keys())
 
         rows = []
@@ -60,7 +61,7 @@ class AdminMenuUsersUseCase:
 
     @log_decorator(print_args=False, print_kwargs=False)
     async def get_count_users(self, callback):
-        users = await self.users_gateway.get_users_all()
+        users = await self.users_service.get_users()
         await self.telegram_interface.edit_message_with_callback(
             callback=callback,
             message=f"<b>Количество пользователей: {len(users)}</b>",
@@ -81,7 +82,7 @@ class AdminMenuUsersUseCase:
         data = await state.get_data()
         last_admin_menu_message = data.get('last_admin_menu_message')
 
-        user = await self.users_gateway.get_user(user_id=user_id)
+        user = await self.users_service.get_user(user_id=user_id)
 
         text = ("Информация о пользователе\n\n"
                 f"ID: {user.user_id}\n"

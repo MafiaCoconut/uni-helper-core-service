@@ -37,12 +37,10 @@ class SettingsUserDataUseCase:
     @log_decorator(print_args=False)
     async def disable_mailing(self, user_id: int):
         await self.users_service.update_user(user_id=user_id, new_mailing_time='-')
-        await self.notification_service.delete_canteens_menu_mailing(user_id=user_id)
 
     @log_decorator(print_args=False)
     async def enable_mailing(self, user_id: int, new_mailing_time: str = "11:45"):
         await self.users_service.update_user(user_id=user_id, new_mailing_time=new_mailing_time)
-        await self.notification_service.set_canteens_menu_mailing(user_id=user_id, mailing_time=new_mailing_time)
 
     @log_decorator(print_args=False)
     async def disable_user(self, user_id: int):

@@ -42,16 +42,6 @@ stadburo_service = StadburoService(
     translation_service=translation_service
 )
 
-admins_service = AdminsService(
-    admin_keyboards=admin_keyboards,
-    admin_menu_keyboards=admin_menu_keyboards,
-    telegram_interface=telegram_interface,
-    excel_interface=excel_interface,
-    users_gateway=users_gateway,
-    canteens_gateway=canteens_gateway,
-    stadburo_gateway=stadburo_gateway,
-)
-
 settings_service = SettingsService(
     users_service=users_service,
     redis_service=redis_service,
@@ -59,6 +49,17 @@ settings_service = SettingsService(
     settings_keyboards=settings_keyboards,
     notification_service=notification_service,
     telegram_interface=telegram_interface,
+)
+
+admins_service = AdminsService(
+    admin_keyboards=admin_keyboards,
+    admin_menu_keyboards=admin_menu_keyboards,
+    telegram_interface=telegram_interface,
+    excel_interface=excel_interface,
+    users_service=users_service,
+    canteens_service=canteens_service,
+    stadburo_service=stadburo_service,
+    settings_service=settings_service,
 )
 
 s3_service = S3Service(
