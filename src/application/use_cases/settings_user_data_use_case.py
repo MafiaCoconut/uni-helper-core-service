@@ -8,11 +8,9 @@ class SettingsUserDataUseCase:
     def __init__(self,
                  users_service: UsersService,
                  redis_service: RedisService,
-                 notification_service: NotificationService
                  ):
         self.users_service = users_service
         self.redis_service = redis_service
-        self.notification_service = notification_service
 
     @log_decorator(print_args=False)
     async def update_locale(self, user_id: int, new_locale: str):
@@ -28,7 +26,6 @@ class SettingsUserDataUseCase:
     @log_decorator(print_args=False)
     async def update_mailing_time(self, user_id: int, new_mailing_time: str):
         await self.users_service.update_user(user_id=user_id, new_mailing_time=new_mailing_time)
-        await self.notification_service.update_canteens_menu_mailing(user_id=user_id, new_mailing_time=new_mailing_time)
 
     @log_decorator(print_args=False)
     async def update_canteen_id(self, user_id: int, new_canteen_id: int):

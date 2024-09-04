@@ -25,7 +25,6 @@ class SettingsService:
         self.settings_user_data_use_case = SettingsUserDataUseCase(
             redis_service=redis_service,
             users_service=users_service,
-            notification_service=notification_service
         )
         self.menu_settings_use_case = MenuSettingsUseCase(
             users_service=users_service,

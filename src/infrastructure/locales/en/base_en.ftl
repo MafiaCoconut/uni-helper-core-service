@@ -200,3 +200,12 @@ save = Save
 choose-canteen-for-mailing = Select the canteen whose mailing you want to receive
 is-sure-to-save-canteen = Are you sure you want to choose canteen {$canteen}?
 is-sure-to-disable-mailing-canteen = Are you sure you want to disable the mailing of the canteen menus?
+
+canteen-deactivated =
+    The dining room you selected has been temporarily disabled.
+    You can select a different dining room for mailing in the settings menu.
+
+    When the dining room is available again, you will receive a notification.
+
+canteen-reactivated =
+    The dining room {$canteen_name} is available for mailing again.

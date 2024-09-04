@@ -46,7 +46,7 @@ class AdminMenuCanteensUseCase:
         try:
             await self.telegram_interface.edit_message_with_callback(
                 callback=callback,
-                message=f"<b>Меню работы с пользователями</b>\n\n"
+                message=f"<b>Меню работы со столовыми</b>\n\n"
                         f"Успешно прошёл парсинг\n\n"
                         f"Время парсинга: {datetime.now()}",
                 keyboard=await self.admin_menu_keyboards.menu_canteens(),
@@ -61,9 +61,9 @@ class AdminMenuCanteensUseCase:
         try:
             await self.telegram_interface.edit_message_with_callback(
                 callback=callback,
-                message=f"<b>Меню работы с пользователями</b>\n\n"
-                        f"Успешно прошёл парсинг\n\n"
-                        f"Время парсинга: {datetime.now()}",
+                message=f"<b>Меню работы со столовыми</b>\n\n"
+                        f"Парсинг запущен в автономном режиме\n\n"
+                        f"Время начала парсинга: {datetime.now()}",
                 keyboard=await self.admin_menu_keyboards.menu_canteens(),
             )
         except:

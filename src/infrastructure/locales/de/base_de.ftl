@@ -200,3 +200,12 @@ save = Speichern
 choose-canteen-for-mailing = Wählen Sie die Mensa aus, deren Mailing Sie erhalten möchten.
 is-sure-to-save-canteen = Sie sind sicher, dass Sie {$canteen} wählen möchten?
 is-sure-to-disable-mailing-canteen = Sind Sie sicher, dass Sie das Versendung von Speisekarte deaktivieren möchten?
+
+canteen-deactivated =
+    Die von Ihnen ausgewählte Kantine wurde vorübergehend abgeschaltet.
+    Sie können im Einstellungsmenü einen anderen Speisesaal zum Versenden auswählen.
+
+    Wenn der Speisesaal wieder verfügbar ist, erhalten Sie eine Benachrichtigung.
+
+canteen-reactivated =
+    Der Speisesaal {$canteen_name} steht wieder zum Versand zur Verfügung.

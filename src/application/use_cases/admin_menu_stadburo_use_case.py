@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from application.gateways.stadburo_gateway import StadburoGateway
 from application.interfaces.telegram_interface import TelegramInterface
 from application.services.stadburo_service import StadburoService
@@ -30,7 +32,9 @@ class AdminMenuStadburoUseCase:
         try:
             await self.telegram_interface.edit_message_with_callback(
                 callback=callback,
-                message="<b>Меню работы с stadburo</b>\n\nПарсинг прошёл успешно",
+                message="<b>Меню работы с stadburo</b>\n\n"
+                        "Парсинг запущен в автономном режиме"
+                        f"Время начала парсинга: {datetime.now()}",
                 keyboard=await self.admin_menu_keyboards.menu_stadburo(),
             )
         except:
