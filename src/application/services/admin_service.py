@@ -70,6 +70,10 @@ class AdminsService:
             telegram_interface=telegram_interface,
             admin_menu_keyboards=admin_menu_keyboards,
         )
+        self.admin_menu_mailing_use_case = AdminMenuMailingUseCase(
+            telegram_interface=telegram_interface,
+            admin_menu_keyboards=admin_menu_keyboards,
+        )
 
     async def send_message_to_admin_about_new_user(self, user: User):
         await self.send_message_to_admin_use_case.new_users_info(user=user)
@@ -124,6 +128,9 @@ class AdminsService:
 
     async def clear_logs(self, callback):
         await self.admin_menu_logs_use_case.clear_logs(callback=callback)
+
+    async def menu_mailing(self, callback):
+        await self.admin_menu_use_case.
 
 
 

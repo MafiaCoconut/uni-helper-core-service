@@ -208,4 +208,4 @@ canteen-deactivated =
     Wenn der Speisesaal wieder verfügbar ist, erhalten Sie eine Benachrichtigung.
 
 canteen-reactivated =
-    Der Speisesaal {$canteen_name} steht wieder zum Versand zur Verfügung.
+    Der Speisesaal <b>{$canteen_name}</b> steht wieder zum Versand zur Verfügung.

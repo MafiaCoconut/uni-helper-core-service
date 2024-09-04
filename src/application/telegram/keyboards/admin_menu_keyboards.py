@@ -99,4 +99,38 @@ class AdminMenuKeyboardsBuilder:
         return keyboard
 
     async def menu_mailing(self):
-        pass
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text="Создать сообщение", callback_data="admin_start_create_mailing")],
+
+                [InlineKeyboardButton(text="В главное меню", callback_data="admin_menu help")],
+
+            ]
+        )
+        return keyboard
+
+    async def menu_get_mailing_text(self):
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text="В главное меню", callback_data="admin_menu help")]
+            ]
+        )
+        return keyboard
+
+    async def menu_refactor_mailing_text(self):
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text="Отправить", callback_data="admin_mailing check_send_mailing")],
+                [InlineKeyboardButton(text="Изменить", callback_data="admin_mailing edit_mailing")],
+            ]
+        )
+        return keyboard
+
+    async def menu_mailing_check_send_mailing(self):
+        keyboard = InlineKeyboardMarkup(
+            inline_keyboard=[
+                [InlineKeyboardButton(text="Да", callback_data="admin_mailing send_mailing")],
+                [InlineKeyboardButton(text="Вернуться", callback_data="admin_mailing menu_refactor_mailing")],
+            ]
+        )
+        return keyboard

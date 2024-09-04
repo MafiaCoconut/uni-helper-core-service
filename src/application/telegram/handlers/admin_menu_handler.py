@@ -31,6 +31,7 @@ class AdminMenuHandler:
         router.callback_query.register(self.menu_canteens, F.data.startswith("admin_menu canteens"))
         router.callback_query.register(self.menu_stadburo, F.data.startswith("admin_menu stadburo"))
         router.callback_query.register(self.menu_logs, F.data.startswith("admin_menu logs"))
+        router.callback_query.register(self.menu_mailing, F.data.startswith("admin_menu admin_menu mailing"))
 
         router.callback_query.register(self.get_all_users_data, F.data.startswith("admin_get_all_users"))
         router.callback_query.register(self.get_count_users, F.data.startswith("admin_get_count_users"))
@@ -103,5 +104,9 @@ class AdminMenuHandler:
 
     async def clear_logs(self, callback: CallbackQuery):
         await self.admins_service.clear_logs(callback=callback)
+
+    async def menu_mailing(self, callback: CallbackQuery):
+        await self.admins_service.menu_mailing(callback)
+
 
 

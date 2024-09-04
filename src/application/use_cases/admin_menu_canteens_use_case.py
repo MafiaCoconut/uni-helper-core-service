@@ -104,12 +104,14 @@ class AdminMenuCanteensUseCase:
     @log_decorator(print_args=False, print_kwargs=False)
     async def change_canteen_status(self, callback, canteen_id: int):
         canteen = await self.canteens_service.get_canteens_info(canteen_id=canteen_id)
+        kwargs = {}
         if canteen.status == "active":
             await self.canteens_service.deactivate(canteen_id=canteen_id)
             message_id = "canteen-deactivated"
         else:
             await self.canteens_service.reactivate(canteen_id=canteen_id)
             message_id = "canteen-reactivated"
+            kwargs["canteen_name"] = canteen.name
 
         updated_canteen = await self.canteens_service.get_canteens_info(canteen_id=canteen_id)
 
@@ -134,7 +136,7 @@ class AdminMenuCanteensUseCase:
                 try:
                     await self.telegram_interface.send_message(
                         user_id=user.user_id,
-                        message=await self.translation_service.translate(message_id, user.locale)
+                        message=await self.translation_service.translate(message_id, user.locale, **kwargs)
                     )
                 except Exception as e:
                     error_logger.error(f"The deactivate/reactivate canteen message could not be sent to the user. Error: {e}")

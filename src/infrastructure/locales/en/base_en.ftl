@@ -208,4 +208,4 @@ canteen-deactivated =
     When the dining room is available again, you will receive a notification.
 
 canteen-reactivated =
-    The dining room {$canteen_name} is available for mailing again.
+    The dining room <b>{$canteen_name}</b> is available for mailing again.

@@ -28,13 +28,13 @@ class TelegramInterfaceImpl(TelegramInterface):
 
     @staticmethod
     @log_decorator(print_args=False, print_kwargs=False)
-    async def edit_message_with_callback(callback: CallbackQuery, message: str, keyboard=None) -> int:
+    async def edit_message_with_callback(callback: CallbackQuery, message: str, keyboard=None, parse_mode: str = "HTML") -> int:
         message = await callback.message.edit_text(text=message, reply_markup=keyboard)
         return message.message_id
 
     @staticmethod
     @log_decorator(print_args=False, print_kwargs=False)
-    async def edit_message(chat_id: int, message_id: int, message: str, keyboard=None) -> int:
+    async def edit_message(chat_id: int, message_id: int, message: str, keyboard=None, parse_mode: str = "HTML") -> int:
         message = await bot.edit_message_text(chat_id=chat_id, message_id=message_id, text=message, reply_markup=keyboard)
         return message.message_id
 

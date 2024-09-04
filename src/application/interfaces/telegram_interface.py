@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class TelegramInterface(ABC):
     @staticmethod
     @abstractmethod
-    async def send_message(user_id: int, message: str, keyboard=None):
+    async def send_message(user_id: int, message: str, keyboard=None, parse_mode: str = None):
         pass
 
     @staticmethod
@@ -14,17 +14,17 @@ class TelegramInterface(ABC):
 
     @staticmethod
     @abstractmethod
-    async def send_message_to_admin(message: str, keyboard=None):
+    async def send_message_to_admin(message: str, keyboard=None, parse_mode: str = None):
         pass
 
     @staticmethod
     @abstractmethod
-    async def edit_message_with_callback(callback, message: str, keyboard=None):
+    async def edit_message_with_callback(callback, message: str, keyboard=None, parse_mode: str = None):
         pass
 
     @staticmethod
     @abstractmethod
-    async def edit_message(chat_id: int, message_id: int, message: str, keyboard=None) -> int:
+    async def edit_message(chat_id: int, message_id: int, message: str, keyboard=None, parse_mode: str = None) -> int:
         pass
 
     @staticmethod
