@@ -12,10 +12,12 @@ from application.telegram.keyboards.admin_keyboards import AdminKeyboardsBuilder
 from application.telegram.keyboards.admin_menu_keyboards import AdminMenuKeyboardsBuilder
 from application.use_cases.admin_menu_canteens_use_case import AdminMenuCanteensUseCase
 from application.use_cases.admin_menu_logs_use_case import AdminMenuLogsUseCase
+from application.use_cases.admin_menu_mailing_use_case import AdminMenuMailingUseCase
 from application.use_cases.admin_menu_stadburo_use_case import AdminMenuStadburoUseCase
 from application.use_cases.admin_menu_use_case import AdminMenuUseCase
 from application.use_cases.admin_menu_users_use_case import AdminMenuUsersUseCase
 from application.use_cases.refactor_canteens_menu_to_text_use_case import RefactorCanteensMenuToTextUseCase
+from application.use_cases.send_admins_mailing_text_use_case import SendAdminsMailingTextUseCase
 from application.use_cases.send_message_to_admin_use_case import SendMessageToAdminUseCase
 from domain.entities.user import User
 from infrastructure.config.translation_config import translation_service
@@ -70,9 +72,15 @@ class AdminsService:
             telegram_interface=telegram_interface,
             admin_menu_keyboards=admin_menu_keyboards,
         )
+        self.send_admins_mailing_text_use_case = SendAdminsMailingTextUseCase(
+            users_service=users_service,
+            telegram_interface=telegram_interface,
+            settings_service=settings_service,
+        )
         self.admin_menu_mailing_use_case = AdminMenuMailingUseCase(
             telegram_interface=telegram_interface,
             admin_menu_keyboards=admin_menu_keyboards,
+            send_admins_mailing_text_use_case=self.send_admins_mailing_text_use_case
         )
 
     async def send_message_to_admin_about_new_user(self, user: User):
@@ -130,7 +138,25 @@ class AdminsService:
         await self.admin_menu_logs_use_case.clear_logs(callback=callback)
 
     async def menu_mailing(self, callback):
-        await self.admin_menu_use_case.
+        await self.admin_menu_mailing_use_case.menu_mailing(callback)
+
+    async def menu_get_mailing_text(self, callback, state):
+        await self.admin_menu_mailing_use_case.menu_get_mailing_text(callback, state)
+
+    async def menu_refactor_mailing_text_after_message(self, message, state, mailing_text: str):
+        await self.admin_menu_mailing_use_case.menu_refactor_mailing_text_after_message(message, state, mailing_text)
+
+    async def menu_refactor_mailing_text_after_callback(self, callback, state):
+        await self.admin_menu_mailing_use_case.menu_refactor_mailing_text_after_callback(callback, state)
+
+
+    async def menu_check_send_mailing_text(self, callback, state):
+        await self.admin_menu_mailing_use_case.menu_check_send_mailing_text(callback, state)
+
+    async def send_admin_mailing_text(self, callback, state):
+        await self.admin_menu_mailing_use_case.send_admin_mailing_text(callback, state)
+
+
 
 
 

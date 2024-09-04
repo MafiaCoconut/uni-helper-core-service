@@ -70,8 +70,8 @@ class MailingSendCanteensMenuUseCase:
                 try:
                     await self.send_canteens_menu_use_case.execute(user_id=user.user_id, message=message, keyboard=None)
                 except Exception as e:
-                    error_logger.error(f"The menu could not be sent to the user. Error: {e}")
-                    system_logger.error(f"The menu could not be sent to the user. Error: {e}")
+                    error_logger.error(f"The menu could not be sent to the user {user.id}. Error: {e}")
+                    system_logger.error(f"The menu could not be sent to the user {user.id}. Error: {e}")
                     await self.settings_service.disable_user(user_id=user.user_id)
 
     """
