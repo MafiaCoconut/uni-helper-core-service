@@ -69,6 +69,13 @@ class AdminMenuKeyboardsBuilder:
                     InlineKeyboardButton(text=on_off, callback_data="admin_change_canteen_status 6")
                 ],
 
+                [
+                    InlineKeyboardButton(text="CampusTor", callback_data="admin_start_canteen_parser 7"),
+                    InlineKeyboardButton(text=menu, callback_data="admin_get_canteen 7"),
+                    InlineKeyboardButton(text=on_off, callback_data="admin_change_canteen_status 7")
+                ],
+
+
                 [InlineKeyboardButton(text="В главное меню", callback_data="admin_menu help")],
 
             ]

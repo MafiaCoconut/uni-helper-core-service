@@ -58,7 +58,9 @@ class SettingsKeyboardsBuilder:
                                          callback_data="settings_canteen_change 3")
                 ],
                 [
-                    InlineKeyboardButton(text="THM", callback_data="settings_canteen_change 6")
+                    InlineKeyboardButton(text="THM", callback_data="settings_canteen_change 6"),
+                    InlineKeyboardButton(text="CampusTor", callback_data="settings_canteen_change 7"),
+
                 ],
                 [
                     # InlineKeyboardButton(

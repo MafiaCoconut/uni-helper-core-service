@@ -29,7 +29,11 @@ class CanteensKeyboardsBuilder:
 
                 [
                     InlineKeyboardButton(text="THM",
-                                         callback_data="canteen_menu 6")
+                                         callback_data="canteen_menu 6"),
+                    InlineKeyboardButton(text="CampusTor",
+                                         callback_data="canteen_menu 7")
+
+
 
                     # InlineKeyboardButton(text="Mo's Diner",
                     #                      callback_data="canteen_menu 5"),
