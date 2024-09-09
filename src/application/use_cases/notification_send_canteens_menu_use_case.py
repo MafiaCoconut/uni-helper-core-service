@@ -52,27 +52,34 @@ class MailingSendCanteensMenuUseCase:
         :param user_id: ID юзера в базе данных
         """
         users = await self.users_service.get_users()
+        system_logger.info(users)
         for user in users:
+            system_logger.info('===================================')
+            system_logger.info(user)
+
             if (
                     await self.check_status_user(user=user) and
                     await self.check_is_now_users_mailing_time(user=user) and
                     await self.check_status_canteen(canteen_id=user.canteen_id)
             ):
-                local_key = f"canteen_menu:{user.canteen_id}/{user.locale}"
-                if await self.redis_service.get(key=local_key):
-                    ic(f'Canteen menu from Redis user{user.username}, canteen_id{user.canteen_id}, locale{user.locale}')
-                    message = await self.redis_service.get(key=local_key)
-                else:
-                    ic(f'Canteen menu from DB user{user.username}, canteen_id{user.canteen_id}, locale{user.locale}')
-                    message = await self.generate_canteens_menu_use_case.execute(canteen_id=user.canteen_id, locale=user.locale)
-                    await self.redis_service.setex(key=local_key, value=message, time=3600)
-
                 try:
-                    await self.send_canteens_menu_use_case.execute(user_id=user.user_id, message=message, keyboard=None)
+                    local_key = f"canteen_menu:{user.canteen_id}/{user.locale}"
+                    if await self.redis_service.get(key=local_key):
+                        system_logger.info(f'Canteen menu from Redis user{user.username}, canteen_id{user.canteen_id}, locale{user.locale}')
+                        message = await self.redis_service.get(key=local_key)
+                    else:
+                        system_logger.info(f'Canteen menu from DB user{user.username}, canteen_id{user.canteen_id}, locale{user.locale}')
+                        message = await self.generate_canteens_menu_use_case.execute(canteen_id=user.canteen_id, locale=user.locale)
+                        await self.redis_service.setex(key=local_key, value=message, time=3600)
+
+                    try:
+                        await self.send_canteens_menu_use_case.execute(user_id=user.user_id, message=message, keyboard=None)
+                    except Exception as e:
+                        error_logger.error(f"The menu could not be sent to the user {user.user_id}. Error: {e}")
+                        system_logger.error(f"The menu could not be sent to the user {user.user_id}. Error: {e}")
+                        await self.settings_service.disable_user(user_id=user.user_id)
                 except Exception as e:
-                    error_logger.error(f"The menu could not be sent to the user {user.id}. Error: {e}")
-                    system_logger.error(f"The menu could not be sent to the user {user.id}. Error: {e}")
-                    await self.settings_service.disable_user(user_id=user.user_id)
+                    system_logger.error(f"Случилась ошибка на пользователе: {user}")
 
     """
     TODO:
@@ -82,10 +89,11 @@ class MailingSendCanteensMenuUseCase:
     4. Полученный текст отдаём TelegramInterface для отправки конкретному User +
     """
     async def check_status_canteen(self, canteen_id: int):
+        system_logger.info(f'check_status_canteen: {canteen_id}')
         local_key = f'canteen_status:{canteen_id}'
         canteen_status = await self.redis_service.get(key=local_key)
         if canteen_status is not None:
-            ic(f'From redis: {local_key}:{canteen_status}')
+            system_logger.info(f'From redis: {local_key}:{canteen_status}')
             if canteen_status == "active":
                 return True
             else:
@@ -93,18 +101,21 @@ class MailingSendCanteensMenuUseCase:
         else:
             canteen = await self.canteens_service.get_canteens_info(canteen_id=canteen_id)
             await self.redis_service.setex(key=local_key, value=canteen.status, time=3600)
-            ic(f'From DB: {local_key}:{canteen_status}')
+            system_logger.info(f'From DB: {local_key}:{canteen_status}')
             if canteen.status == 'active':
                 return True
             else:
                 return False
 
     async def check_status_user(self, user: User):
+        system_logger.info(f'check_status_user: {user}')
         if user.status == "active" or user.mailing_time != '-':
             return True
         return False
 
     async def check_is_now_users_mailing_time(self, user: User):
+        system_logger.info(f'check_is_now_users_mailing_time: {user}')
+
         now = datetime.now()
         mailing_time_datetime_obj = datetime.strptime(user.mailing_time, "%H:%M")
 
@@ -114,6 +125,5 @@ class MailingSendCanteensMenuUseCase:
         ):
             return True
         return False
-
 
 

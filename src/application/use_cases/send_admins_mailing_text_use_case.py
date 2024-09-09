@@ -31,8 +31,8 @@ class SendAdminsMailingTextUseCase:
                         message=mailing_text,
                     )
                 except Exception as e:
-                    error_logger.error(f"The menu could not be sent to the could not be sent. Error: {e}")
-                    system_logger.error(f"The menu could not be sent to the user {user.id}. Error: {e}")
+                    error_logger.error(f"The menu could not be sent to the user {user.user_id}. Error: {e}")
+                    system_logger.error(f"The menu could not be sent to the user {user.user_id}. Error: {e}")
                     await self.settings_service.disable_user(user_id=user.user_id)
 
 

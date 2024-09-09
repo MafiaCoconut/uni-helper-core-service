@@ -12,6 +12,7 @@ from infrastructure.config.logs_config import log_decorator
 
 user_logger = logging.getLogger("user_logger")
 error_logger = logging.getLogger("error_logger")
+system_logger = logging.getLogger("system_logger")
 
 
 class MenuSettingsUseCase:
@@ -68,7 +69,8 @@ class MenuSettingsUseCase:
         try:
             await self.menu_settings(callback, user_id=user_id, locale=new_locale)
         except Exception as e:
-            ic(e)
+            system_logger.info(e)
+            error_logger.error(e)
 
         user_logger.info(
             msg=f"User: {callback.message.chat.username}/{callback.message.chat.id} "
@@ -92,7 +94,8 @@ class MenuSettingsUseCase:
         try:
             await self.menu_settings(callback, user_id=user_id, locale=locale)
         except Exception as e:
-            ic(e)
+            system_logger.info(e)
+            error_logger.error(e)
 
         user_logger.info(
             msg=f"User: {callback.message.chat.username}/{callback.message.chat.id} "
@@ -142,7 +145,8 @@ class MenuSettingsUseCase:
         try:
             await self.menu_settings(callback, user_id=user_id, locale=locale)
         except Exception as e:
-            ic(e)
+            system_logger.info(e)
+            error_logger.error(e)
 
         user_logger.info(
             msg=f"User: {callback.message.chat.username}/{callback.message.chat.id} "
