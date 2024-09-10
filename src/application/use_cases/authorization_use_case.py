@@ -40,8 +40,7 @@ class AuthorizationUseCase:
                                   user_id: int, name: str = "-",
                                   username: str = "-", locale: str = "en"
                                   ) -> int:
-        await self.users_service.create_user(
-            User(
+        user = User(
                 user_id=user_id,
                 name=name,
                 username=username,
@@ -50,13 +49,13 @@ class AuthorizationUseCase:
                 canteen_id="0",
                 status="active",
             )
-        )
+        await self.users_service.create_user(user=user)
         message_id = await self.telegram_interface.send_message(
             user_id=user_id,
             message=await self.translation_service.translate(message_id='welcome-message', locale=locale),
             keyboard=await self.authorization_keyboards.get_languages_list_from_start(locale=locale),
         )
-        # await self.admins_service.send_message_to_admin_about_new_user(user=user)
+        await self.admins_service.send_message_to_admin_about_new_user(user=user)
 
         return message_id
 
