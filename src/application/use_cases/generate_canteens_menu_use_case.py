@@ -51,7 +51,7 @@ class GenerateCanteenMenuUseCase:
             test_day=test_day,
             test_time=test_time,
         )
-        ic(result)
+        # ic(result)
         if result.get('error') is None:
             return result.get('text')
         else:

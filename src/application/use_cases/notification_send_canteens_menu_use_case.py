@@ -54,8 +54,6 @@ class MailingSendCanteensMenuUseCase:
         users = await self.users_service.get_users()
         system_logger.info(users)
         for user in users:
-            system_logger.info('===================================')
-            system_logger.info(user)
 
             if (
                     await self.check_status_user(user=user) and
@@ -89,7 +87,8 @@ class MailingSendCanteensMenuUseCase:
     4. Полученный текст отдаём TelegramInterface для отправки конкретному User +
     """
     async def check_status_canteen(self, canteen_id: int):
-        system_logger.info(f'check_status_canteen: {canteen_id}')
+        # system_logger.info(f'check_status_canteen: {canteen_id}')
+
         local_key = f'canteen_status:{canteen_id}'
         canteen_status = await self.redis_service.get(key=local_key)
         if canteen_status is not None:
@@ -108,13 +107,14 @@ class MailingSendCanteensMenuUseCase:
                 return False
 
     async def check_status_user(self, user: User):
-        system_logger.info(f'check_status_user: {user}')
         if user.status == "active" or user.mailing_time != '-':
             return True
+        # system_logger.info(f'Ошибка отправки меню по причине статуса юзера: {user}')
+
         return False
 
     async def check_is_now_users_mailing_time(self, user: User):
-        system_logger.info(f'check_is_now_users_mailing_time: {user}')
+        # system_logger.info(f'check_is_now_users_mailing_time: {user}')
 
         now = datetime.now()
         mailing_time_datetime_obj = datetime.strptime(user.mailing_time, "%H:%M")

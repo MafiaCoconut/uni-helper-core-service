@@ -39,15 +39,15 @@ class AuthorizationKeyboardsBuilder:
             inline_keyboard=[
                 [
                     InlineKeyboardButton(text="Mensa Erlenring",
-                                         callback_data="settings_canteen_change 1"),
+                                         callback_data="authorization_canteen_set_check 1"),
                     InlineKeyboardButton(text="Mensa Lahnberge",
-                                         callback_data="settings_canteen_change 2"),
+                                         callback_data="authorization_canteen_set_check 2"),
                     InlineKeyboardButton(text="Bistro",
-                                         callback_data="settings_canteen_change 3")
+                                         callback_data="authorization_canteen_set_check 3")
                 ],
                 [
-                    InlineKeyboardButton(text="THM", callback_data="settings_canteen_change 6"),
-                    InlineKeyboardButton(text="CampusTor", callback_data="settings_canteen_change 7"),
+                    InlineKeyboardButton(text="THM", callback_data="authorization_canteen_set_check 6"),
+                    InlineKeyboardButton(text="CampusTor", callback_data="authorization_canteen_set_check 7"),
 
                 ],
                 [

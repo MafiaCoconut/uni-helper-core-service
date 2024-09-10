@@ -130,7 +130,7 @@ class AuthorizationUseCase:
 
         message_id = await self.telegram_interface.send_message(
             user_id=user.user_id,
-            message=await self.translation_service.translate(message_id='menu_main', locale=user.locale),
+            message=await self.translation_service.translate(message_id='menu-main', locale=user.locale),
             keyboard=await self.menu_main_keyboards.get_menu_main(locale=user.locale)
         )
         return message_id
