@@ -53,7 +53,6 @@ class AdminMenuUsersUseCase:
 
         await self.excel_interface.clear(path=self.path_to_tmp_file)
 
-    @log_decorator(print_args=False, print_kwargs=False)
     async def refactor_created_datetime(self, data: datetime):
         time = f"{str(data.hour).zfill(2)}:{str(data.minute).zfill(2)}"
         day = f"{str(data.day).zfill(2)}.{str(data.month).zfill(2)}.{str(data.year).zfill(2)}"
