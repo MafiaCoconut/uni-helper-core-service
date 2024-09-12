@@ -36,7 +36,7 @@ class MenuSettingsUseCase:
         user = await self.users_service.get_user(user_id=user_id)
         # ic(user)
         text = await self.translation_service.translate(message_id='menu-settings-heading', locale=locale) + '\n'
-        if user.mailing_time != '-':
+        if user.mailing_time != '00:00':
             text += await self.translation_service.translate(message_id='menu-settings-mailing-on',
                                                              locale=locale) + '\n'
             text += await self.translation_service.translate(message_id='menu-settings-mailing-time', locale=locale,
@@ -107,7 +107,7 @@ class MenuSettingsUseCase:
         user = await self.users_service.get_user(user_id=user_id)
         # ic(user)
 
-        if user.mailing_time == '-':
+        if user.mailing_time == '00:00':
             await self.update_user_data_use_case.enable_mailing(user_id=user_id, new_mailing_time='11:45')
             if user.canteen_id == 0:
                 await self.update_user_data_use_case.update_canteen_id(user_id=user_id, new_canteen_id=1)

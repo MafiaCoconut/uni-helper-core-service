@@ -33,7 +33,7 @@ class SettingsUserDataUseCase:
 
     @log_decorator(print_args=False)
     async def disable_mailing(self, user_id: int):
-        await self.users_service.update_user(user_id=user_id, new_mailing_time='-')
+        await self.users_service.update_user(user_id=user_id, new_mailing_time='00:00')
 
     @log_decorator(print_args=False)
     async def enable_mailing(self, user_id: int, new_mailing_time: str = "11:45"):
