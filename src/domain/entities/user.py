@@ -6,7 +6,7 @@ class User(BaseModel):
     user_id: int
     username: str = Field(default="-")
     name: str = Field(default="-")
-    mailing_time: str = Field(default="-")
+    mailing_time: str = Field(default="00:00")
     locale: str = Field(default="-")
     canteen_id: int = Field(default=0)
     status: str = Field(default="active")

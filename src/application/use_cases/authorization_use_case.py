@@ -45,7 +45,7 @@ class AuthorizationUseCase:
                 name=name,
                 username=username,
                 locale=locale,
-                mailing_time="-",
+                mailing_time="00:00",
                 canteen_id="0",
                 status="active",
             )

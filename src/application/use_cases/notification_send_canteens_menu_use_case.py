@@ -52,7 +52,7 @@ class MailingSendCanteensMenuUseCase:
         :param user_id: ID юзера в базе данных
         """
         users = await self.users_service.get_users()
-        system_logger.info(users)
+        # system_logger.info(users)
         for user in users:
 
             if (
@@ -63,10 +63,10 @@ class MailingSendCanteensMenuUseCase:
                 try:
                     local_key = f"canteen_menu:{user.canteen_id}/{user.locale}"
                     if await self.redis_service.get(key=local_key):
-                        system_logger.info(f'Canteen menu from Redis user{user.username}, canteen_id{user.canteen_id}, locale{user.locale}')
+                        system_logger.info(f'Canteen menu from Redis user={user.username}, canteen_id={user.canteen_id}, locale={user.locale}')
                         message = await self.redis_service.get(key=local_key)
                     else:
-                        system_logger.info(f'Canteen menu from DB user{user.username}, canteen_id{user.canteen_id}, locale{user.locale}')
+                        system_logger.info(f'Canteen menu from DB user={user.username}, canteen_id={user.canteen_id}, locale={user.locale}')
                         message = await self.generate_canteens_menu_use_case.execute(canteen_id=user.canteen_id, locale=user.locale)
                         await self.redis_service.setex(key=local_key, value=message, time=3600)
 
@@ -77,7 +77,7 @@ class MailingSendCanteensMenuUseCase:
                         system_logger.error(f"The menu could not be sent to the user {user.user_id}. Error: {e}")
                         await self.settings_service.disable_user(user_id=user.user_id)
                 except Exception as e:
-                    system_logger.error(f"Случилась ошибка на пользователе: {user}")
+                    system_logger.error(f"Случилась ошибка на пользователе: {user} Error: {e}")
 
     """
     TODO:
@@ -92,7 +92,7 @@ class MailingSendCanteensMenuUseCase:
         local_key = f'canteen_status:{canteen_id}'
         canteen_status = await self.redis_service.get(key=local_key)
         if canteen_status is not None:
-            system_logger.info(f'From redis: {local_key}:{canteen_status}')
+            system_logger.debug(f'From redis: {local_key}:{canteen_status}')
             if canteen_status == "active":
                 return True
             else:
@@ -100,7 +100,7 @@ class MailingSendCanteensMenuUseCase:
         else:
             canteen = await self.canteens_service.get_canteens_info(canteen_id=canteen_id)
             await self.redis_service.setex(key=local_key, value=canteen.status, time=3600)
-            system_logger.info(f'From DB: {local_key}:{canteen_status}')
+            system_logger.debug(f'From DB: {local_key}:{canteen_status}')
             if canteen.status == 'active':
                 return True
             else:

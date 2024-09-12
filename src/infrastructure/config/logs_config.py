@@ -60,6 +60,11 @@ def config():
         error_logger.setLevel(logging.ERROR)
         error_logs_config(formatter=formatter)
 
+        system_logger.addHandler(console_handler)
+        user_logger.addHandler(console_handler)
+        error_logger.addHandler(console_handler)
+        apscheduler_logger.addHandler(console_handler)
+
     system_logger.addHandler(system_handler)
 
     user_logger.addHandler(user_handler)
